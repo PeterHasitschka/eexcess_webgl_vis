@@ -20,7 +20,7 @@ GLVIS.config = {
         },
         camera_perspective : {
             FOV: 60,
-            NEAR: 0.1,
+            NEAR: 50,
             FAR: 10000,
             DISTANCE: 1300
         },
