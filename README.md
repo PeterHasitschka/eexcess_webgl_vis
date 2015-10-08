@@ -1,2 +1,4 @@
-# eexcess_webgl_vis
-WebGL Plugin for the EEXCESS Project
+# WegGL-Visualization-Plugin
+## For the EEXCESS-Visualization-Widget-Dashboard
+
+Visualizing the search history collections or bookmark collections.
