@@ -610,6 +610,15 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
             function () {
                 this.vis_data_.is_currently_animated = false;
 
+                var recs = this.getRecommendations();
+
+                for (var i = 0; i < recs.length; i++) {
+                    /** @type {GLVIS.Recommendation} */
+                    var curr_rec = recs[i];
+                    curr_rec.setNodeType(GLVIS.Recommendation.NODETYPES.DETAILED);
+                }
+
+
             }.bind(this)
             );
     this.toggleRecRelevanceVisualization(true);
@@ -636,6 +645,14 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
 
     this.setRecPosHandler(new GLVIS.RecommendationPosDistributed(this));
     this.getRecPosHandler().calculatePositions();
+
+    var recs = this.getRecommendations();
+
+    for (var i = 0; i < recs.length; i++) {
+        /** @type {GLVIS.Recommendation} */
+        var curr_rec = recs[i];
+        curr_rec.setNodeType(GLVIS.Recommendation.NODETYPES.COMMON);
+    }
 
 };
 
