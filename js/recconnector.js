@@ -57,3 +57,8 @@ GLVIS.RecConnector.prototype.connectSameRecs = function (recommendation) {
  * Holding all collections that have activated connections on all their recs
  */
 GLVIS.RecConnector.activatedAtCollections = [];
+
+/*
+ * Holding all recs where the connections are activated
+ */
+GLVIS.RecConnector.activatedAtSingleRecs = [];

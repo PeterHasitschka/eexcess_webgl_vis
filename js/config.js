@@ -56,7 +56,7 @@ GLVIS.config = {
             radius: 5.0,
             color: 0x4444FF,
             highlight_color: 0xFF00FF,
-            init_z: 0, //-19,
+            init_z: 0.5, //-19,
             opacity_depth: {
                 strength: 0.01,
                 weakness: 0.5

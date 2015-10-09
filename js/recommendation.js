@@ -169,6 +169,15 @@ GLVIS.Recommendation.prototype.handleClick = function () {
     GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
 };
 
+
+GLVIS.Recommendation.prototype.handleMouseover = function () {
+
+    /** @type {GLVIS.RecConnector} **/
+    var connector = GLVIS.Scene.getCurrentScene().getRecConnector();
+    connector.connectSameRecs(this);
+    GLVIS.RecConnector.activatedAtSingleRecs.push(this);
+};
+
 /**
  * Swap the (no detailed) common node object with a Detail-Node.
  * Afterwards zoom and move in to the recommendation
@@ -527,7 +536,7 @@ GLVIS.Recommendation.prototype.setRelativePositionByRad = function (that, rad) {
     var init_distance = GLVIS.config.collection.recommendation.init_distance;
     var distance = that.vis_data_.distance_factor * init_distance;
     var pos = GLVIS.Tools.getPosFromRad(rad, distance);
-    that.setRelativePosition(pos.x, pos.y, 0);
+    that.setRelativePosition(pos.x, pos.y, GLVIS.config.collection.recommendation.init_z);
 };
 
 /**

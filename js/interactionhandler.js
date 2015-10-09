@@ -219,6 +219,14 @@ GLVIS.InteractionHandler.prototype.handleEmptyClick = function (interaction_type
                 return;
             coll.unconnectSameRecsFromOtherCollections();
         });
+
+        _.each(GLVIS.RecConnector.activatedAtSingleRecs, function (rec) {
+
+            if (!rec)
+                return;
+            rec.deleteAllRecSplines();
+        });
+        GLVIS.RecConnector.activatedAtSingleRecs = [];
     }
 };
 
