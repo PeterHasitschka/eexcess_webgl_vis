@@ -15,16 +15,16 @@ GLVIS.InteractionHandler = function (scene) {
     this.keyinteractions_ = {
         keydown: {
             37: function () {   // LEFT
-                this.scene_.getNavigationHandler().moveCameraAroundCircle(-5);
+                this.scene_.getNavigationHandler().moveCameraAroundCircle(-5, 0, true);
             }.bind(this),
             39: function () {   // RIGHT
-                this.scene_.getNavigationHandler().moveCameraAroundCircle(5);
+                this.scene_.getNavigationHandler().moveCameraAroundCircle(5, 0, true);
             }.bind(this),
             38: function () {   // UP
-                this.scene_.getNavigationHandler().moveCameraAroundCircle(0, 5);
+                this.scene_.getNavigationHandler().moveCameraAroundCircle(0, 5, true);
             }.bind(this),
             40: function () {   // DOWN
-                this.scene_.getNavigationHandler().moveCameraAroundCircle(0, -5);
+                this.scene_.getNavigationHandler().moveCameraAroundCircle(0, -5, true);
             }.bind(this)
         }
     };
@@ -54,7 +54,7 @@ GLVIS.InteractionHandler = function (scene) {
         }.bind(this));
 
 
-        //MOUSE-MOVE (DRAGGEDd)
+        //MOUSE-MOVE (DRAGGED)
         var is_mouse_down_in_canvas = false;
         var mouse_x_prev = null;
         var mouse_y_prev = null;
@@ -86,7 +86,8 @@ GLVIS.InteractionHandler = function (scene) {
             this.scene_.getNavigationHandler().resetAnimationMovement();
             this.scene_.getNavigationHandler().moveCameraAroundCircle(
                     curr_mouse_x_diff / config.mousesensitivy,
-                    curr_mouse_y_diff / config.mousesensitivy
+                    curr_mouse_y_diff / config.mousesensitivy,
+                    true
                     );
             mouse_x_prev = event.clientX;
             mouse_y_prev = event.clientY;
@@ -163,7 +164,7 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
                 GLVIS.Debugger.debug("InteractionHandler",
                         "Intersected Object has following interaction-type: '" + interaction_type + "'", 8);
                 curr_intersect_obj.interaction[interaction_type](curr_intersect_obj);
-                
+
                 //This flag prevents from executing any other interaction from this click
                 if (curr_intersect_obj.interaction.interaction_singleclick_exclusive)
                     break;
