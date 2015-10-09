@@ -51,7 +51,7 @@ GLVIS.config = {
             segments: 50
         },
         recommendation: {
-            init_distance: 150,
+            init_distance: 180,
             collapse_distance: 15,
             radius: 5.0,
             color: 0x4444FF,
@@ -71,6 +71,7 @@ GLVIS.config = {
                 }
             },
             detail_node: {
+                inner_static_rad : 10,
                 min_radius: 0.5,
                 active_radius: 10,
                 gap_inner_circle: 1,

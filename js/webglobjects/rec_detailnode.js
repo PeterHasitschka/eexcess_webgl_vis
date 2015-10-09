@@ -5,7 +5,7 @@ GLVIS = GLVIS || {};
 /**
  * Representing a detailed recommendation of a Collection in WebGl
  * @param {GLVIS.Recommendation} recommendation recommendation that node represents
- * @param {THREE.Object3D} mesh-parent
+ * @param {THREE.Object3D} mesh_parent
  */
 GLVIS.RecommendationDetailNode = function (recommendation, mesh_parent) {
 
@@ -29,6 +29,9 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
 
     var config = GLVIS.config.collection.recommendation.detail_node;
 
+    var inner_static_rad = config.inner_static_rad;
+
+
     var circle_outer_material =
             new THREE.MeshBasicMaterial(
                     {
@@ -39,7 +42,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
 
     var circle_outer = new THREE.Mesh(
             new THREE.CircleGeometry(
-                    this.init_radius_,
+                    this.init_radius_, //Changes at render
                     config.circle.segments
                     ),
             circle_outer_material);
@@ -56,6 +59,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
     mesh_parent.add(circle_outer);
 
     this.webgl_objects_.circle_outer = circle_outer;
+
 
 
     var eexcess_data = this.recommendation_.getEexcessData();
@@ -81,7 +85,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                             });
             var circle_inner = new THREE.Mesh(
                     new THREE.CircleGeometry(
-                            this.init_radius_ - config.gap_inner_circle,
+                            inner_static_rad,
                             config.circle.segments
                             ),
                     circle_inner_material);
@@ -132,7 +136,13 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
             pos.z
             );
 
-    var curr_radius = this.recommendation_.getRadius() * this.recommendation_.getSizeFactor();
+    //var curr_radius = this.recommendation_.getRadius() * this.recommendation_.getSizeFactor();
+    var curr_radius = GLVIS.config.collection.recommendation.detail_node.inner_static_rad +
+            GLVIS.config.collection.recommendation.detail_node.gap_inner_circle +
+            this.recommendation_.getSizeFactor() * 2;
+
+
+    console.log("curr-rad", curr_radius);
     var scale_factor = curr_radius / this.init_radius_;
 
     this.webgl_objects_.circle_outer.scale.set(scale_factor, scale_factor, scale_factor);
@@ -146,7 +156,7 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
                 pos.z + GLVIS.config.collection.recommendation.detail_node.z_diff_inner_circle
                 );
 
-        this.webgl_objects_.circle_inner.scale.set(scale_factor, scale_factor, scale_factor);
+        //this.webgl_objects_.circle_inner.scale.set(scale_factor, scale_factor, scale_factor);
         this.webgl_objects_.circle_inner.material.opacity = this.recommendation_.getOpacity(true);
     }
 };
@@ -165,19 +175,20 @@ GLVIS.RecommendationDetailNode.prototype.getIsDirty = function () {
  */
 GLVIS.RecommendationDetailNode.prototype.getCircle = function () {
     return this.webgl_objects_.circle_outer;
-},
-        /**
-         * Delete all GL-Objects and remove them from the scene
-         */
-        GLVIS.RecommendationDetailNode.prototype.delete = function () {
+};
 
-            //var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+/**
+ * Delete all GL-Objects and remove them from the scene
+ */
+GLVIS.RecommendationDetailNode.prototype.delete = function () {
 
-            this.mesh_parent_.remove(this.webgl_objects_.circle_outer);
-            if (this.webgl_objects_.circle_inner)
-                this.mesh_parent_.remove(this.webgl_objects_.circle_inner);
+    //var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
 
-            delete this.webgl_objects_.circle_outer;
-            if (this.webgl_objects_.circle_inner)
-                delete this.webgl_objects_.circle_inner;
-        };
+    this.mesh_parent_.remove(this.webgl_objects_.circle_outer);
+    if (this.webgl_objects_.circle_inner)
+        this.mesh_parent_.remove(this.webgl_objects_.circle_inner);
+
+    delete this.webgl_objects_.circle_outer;
+    if (this.webgl_objects_.circle_inner)
+        delete this.webgl_objects_.circle_inner;
+};
