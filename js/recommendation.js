@@ -275,8 +275,8 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
 
 
     if (GLVIS.Recommendation.current_selected_rec) {
-        GLVIS.Debugger.debug("Recommendation", "Setting node type to COMMON of FORMER FOCUSED", 5);
-        GLVIS.Recommendation.current_selected_rec.setNodeType(GLVIS.Recommendation.NODETYPES.COMMON);
+        //GLVIS.Debugger.debug("Recommendation", "Setting node type to COMMON of FORMER FOCUSED", 5);
+        //GLVIS.Recommendation.current_selected_rec.setNodeType(GLVIS.Recommendation.NODETYPES.COMMON);
     }
     GLVIS.Recommendation.current_selected_rec = this;
 };

@@ -69,7 +69,7 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
 
                 var half_length = (curr_x - last_x) / 2;
                 var calculated_y = half_length * gradient + last_y;
-                
+
                 var is_top = true;
                 if (calculated_y < 0)
                     is_top = false;
@@ -103,9 +103,23 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
         geometry.vertices.push(point);
     });
 
-    var line = new THREE.Line(geometry, material);
-    this.webgl_objects.spline = line;
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(line);
+    //var line = new THREE.Line(geometry, material);
+
+
+    var tube = new THREE.Mesh(
+            new THREE.TubeGeometry(spline, config.num_vertices, config.tube_radius, config.radius_segs),
+            new THREE.MeshBasicMaterial(
+                    {
+                        color: config.base_color - parseInt(Math.random() * config.color_diff),
+                        shading: THREE.SmoothShading,
+                        side: THREE.DoubleSide,
+                        wireframe: false,
+                        transparent: true
+                    }));
+
+
+    this.webgl_objects.spline = tube;
+    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(tube);
 };
 
 /**
@@ -134,7 +148,7 @@ GLVIS.ConnectionRecRecSpline.prototype.getRecs = function () {
 GLVIS.ConnectionRecRecSpline.prototype.delete = function () {
 
     GLVIS.Debugger.debug("ConnectionRecRecSpline", "Deleting a rec spline", 5);
-    
+
     var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
     three_scene.remove(this.webgl_objects.spline);
     delete this.webgl_objects.spline;
