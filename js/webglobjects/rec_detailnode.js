@@ -52,7 +52,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
     circle_outer.interaction = {
         "mouseclick": this.recommendation_.handleClick.bind(this.recommendation_),
         "interaction_singleclick_exclusive": true,
-        "mouseover": this.recommendation_.handleMouseover.bind(this.recommendation_)
+       // "mouseover": this.recommendation_.handleMouseover.bind(this.recommendation_)
     };
 
 

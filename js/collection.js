@@ -575,8 +575,9 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
  * Creating a @see{GLVIS.RingRepresentation} object.
  * It shows several data of the collection and recommendations as rings inside
  * the graph.
+ * @param {function} cb Callback
  */
-GLVIS.Collection.prototype.createRingRepresentation = function () {
+GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
 
     /**
      * Remove all other ringreps
@@ -600,7 +601,6 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
 
     this.unconnectSameRecsFromOtherCollections();
 
-    //this.setRotation(0, true);
 
     this.ring_representation_ = new GLVIS.RingRepresentation(this);
     this.setRecPosHandler(new GLVIS.RecommendationPosRingRepresentation(this));
@@ -617,6 +617,9 @@ GLVIS.Collection.prototype.createRingRepresentation = function () {
                     var curr_rec = recs[i];
                     curr_rec.setNodeType(GLVIS.Recommendation.NODETYPES.DETAILED);
                 }
+
+                if (cb)
+                    cb();
 
 
             }.bind(this)

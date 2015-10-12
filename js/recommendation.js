@@ -169,6 +169,22 @@ GLVIS.Recommendation.prototype.handleClick = function () {
     GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
 };
 
+/**
+ * If Click on common node: First create ring-rep (with detail nodes) then click on new detail node
+ */
+GLVIS.Recommendation.prototype.handleCommonNodeClick = function () {
+
+
+    if (this.getCollection().getStatus() === GLVIS.Collection.STATUSFLAGS.HIDDEN)
+        return;
+
+    if (!this.getCollection().getRingRepresentation())
+        this.getCollection().createRingRepresentation(function () {
+            this.handleClick();
+        }.bind(this));
+
+};
+
 
 GLVIS.Recommendation.prototype.handleMouseover = function () {
 
