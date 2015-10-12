@@ -165,7 +165,7 @@ GLVIS.config = {
                 label: {
                     font_size: 8,
                     color: "#000033",
-                    z_value: 0.1
+                    z_value: 1
                 }
             },
             replacements: {
@@ -245,7 +245,7 @@ GLVIS.config = {
         }
     },
     text: {
-        z_value: -1,
+        z_value: 1,
         render_factor: 3,
         font: "Arial",
         font_size: 20,

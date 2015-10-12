@@ -93,7 +93,7 @@ GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouselea
         var scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
         this.mesh_container_ = scene;
     }
-    
+
     this.updateWebGlObj();
 };
 
@@ -208,16 +208,21 @@ GLVIS.Text.prototype.createMesh = function (font, font_size, color, bg_color, op
     var material = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
     material.transparent = true;
     material.opacity = opacity;
-
+    
     /**
      * TRUE if background
      * FALSE if tansparent!!!
      */
+    /*
     if (bg_color)
         material.depthTest = true;
     else
         material.depthTest = false;
-
+    */
+    
+    //No depth-Test produces error on transparent textures
+    material.depthTest = true;
+    
     var x = this.pos_.x;
     var y = this.pos_.y;
     var z = this.pos_.z;
@@ -388,7 +393,7 @@ GLVIS.Text.prototype.setPosition = function (x, y, z) {
     if (x === this.pos_.x && y === this.pos_.y && z === this.pos_.z)
         return;
 
-    GLVIS.Debugger.debug("Text", "Setting pos: " + x + " " + y +" " + z, 8);
+    GLVIS.Debugger.debug("Text", "Setting pos: " + x + " " + y + " " + z, 8);
 
     if (x !== null)
         this.pos_.x = x;
