@@ -36,8 +36,8 @@ GLVIS.CollectionPlane.prototype.initAndRegisterGlObj = function (mesh_parent) {
                         opacity: plane_config.opacity
                     });
 
-
-    var mesh = new THREE.CircleGeometry(GLVIS.config.collection.recommendation.init_distance, plane_config.segments);
+    var rad = GLVIS.config.collection.recommendation.init_distance - GLVIS.config.collection.plane.inner_distance_to_recs;
+    var mesh = new THREE.CircleGeometry(rad, plane_config.segments);
 
     var circle = new THREE.Mesh(
             mesh,

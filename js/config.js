@@ -5,7 +5,7 @@ GLVIS.config = {
     scene: {
         queries_to_fetch: 21,
         skip_empty_queries: true,
-        circle_radius : 2000
+        circle_radius: 2000
     },
     debug: {
         active: true,
@@ -18,7 +18,7 @@ GLVIS.config = {
             FAR: 10000,
             Z_POS: 300
         },
-        camera_perspective : {
+        camera_perspective: {
             FOV: 60,
             NEAR: 50,
             FAR: 10000,
@@ -28,7 +28,7 @@ GLVIS.config = {
     },
     interaction: {
         raycaster_precision: 0.5,
-        mousesensitivy : 25
+        mousesensitivy: 25
     },
     collection: {
         init_distance: 400,
@@ -48,7 +48,8 @@ GLVIS.config = {
             color: 0x4488FF,
             opacity: 0.3,
             z_value: 0.1,
-            segments: 50
+            segments: 50,
+            inner_distance_to_recs: 0
         },
         recommendation: {
             init_distance: 180,
@@ -71,9 +72,9 @@ GLVIS.config = {
                 }
             },
             detail_node: {
-                inner_static_rad : 10,
+                inner_static_rad: 10,
                 min_radius: 0.5,
-                active_radius: 10,
+                //active_radius: 10,
                 gap_inner_circle: 1,
                 z_diff_inner_circle: 0.01,
                 color_positive: 0x00CC00,
@@ -123,10 +124,10 @@ GLVIS.config = {
                 pow: 0.01,
                 threshold: 0.01
             },
-            relevance : {
-                sizefactor : 2,
-                sizeoffset : 0.5,
-                distfactor : 0.2
+            relevance: {
+                sizefactor: 2,
+                sizeoffset: 0.5,
+                distfactor: 0.2
             }
         },
         ring: {
@@ -165,7 +166,7 @@ GLVIS.config = {
                 label: {
                     font_size: 8,
                     color: "#000033",
-                    z_value: 1
+                    z_value: 0.5
                 }
             },
             replacements: {
@@ -240,8 +241,8 @@ GLVIS.config = {
             color_diff: 0x00AA00,
             rec_color: 0xFF0000,
             num_vertices: 300,
-            tube_radius : 2,
-            radius_segs : 8
+            tube_radius: 2,
+            radius_segs: 8
         }
     },
     text: {

@@ -589,10 +589,10 @@ GLVIS.Recommendation.prototype.toggleVisualizeRelevance = function (visualize) {
         var config = GLVIS.config.collection.recommendation.relevance;
 
         this.setSizeFactor(relevance * config.sizefactor + config.sizeoffset, true);
-        this.setDistanceFactor(1 + relevance * config.distfactor, true);
+        //this.setDistanceFactor(1 + relevance * config.distfactor, true);
     }
     else {
-        this.setSizeFactor(1, false);
+        //this.setSizeFactor(1, false);
         this.setDistanceFactor(1, false);
     }
 };
