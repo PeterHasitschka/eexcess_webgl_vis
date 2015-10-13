@@ -67,8 +67,25 @@ GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
                         color = color_config[facet_name][facet_val];
             }
 
-            if (color === null)
-                color = 0xFF00FF;
+            /**
+             * Calculate a color from the config combined with some random brightness
+             */
+            if (color === null) {
+                var ring_base_color = color_config.rings["r" + (ring_count + 1)];
+                var rand_fact = parseInt((0.5 - Math.random()) * 255);
+
+                color = 0;
+
+                var min_val = 20;
+
+                for (var i = 0; i < 32; i += 8) {
+                    var cur_col = (ring_base_color & (0x0000FF << i)) >> i;
+                    cur_col += rand_fact;
+                    cur_col = parseInt(Math.max(min_val, Math.min(255, cur_col)));
+                    color += (cur_col << i);
+                }
+                color = parseInt(color);
+            }
 
             var seg_start = curr_ring_data_elm.position * 100;
 

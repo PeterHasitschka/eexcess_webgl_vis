@@ -64,7 +64,7 @@ GLVIS.config = {
                 language: {
                     cs: 0x1F77B4,
                     unknown: 0xFF7F0E,
-                    unkown : 0xFF7F0E, //(!)
+                    unkown: 0xFF7F0E, //(!)
                     en: 0x2CA02C,
                     es: 0xD62728,
                     da: 0x9467BD,
@@ -75,6 +75,13 @@ GLVIS.config = {
                     hu: 0x17BECF,
                     it: 0x1F77B4,
                     mul: 0xFF7F0E
+                },
+                rings: {
+                    r1: 0xe41a1c,
+                    r2: 0x377eb8,
+                    r3: 0x4daf4a,
+                    r4: 0x984ea3,
+                    r5: 0xff7f00
                 }
             },
             highlight_color: 0xFF00FF,
