@@ -123,8 +123,8 @@ GLVIS.InitHandler.initScene = function (scene, db_handler, cb) {
             scene.addCollection(queries_to_add[q_count]);
         }
 
-        scene.initCollectionNetwork();
-
+       scene.initCollectionNetwork();
+       GLVIS.Scene.getCurrentScene().getWebGlHandler().getCanvas().show();
 
         GLVIS.Scene.animate();
 

@@ -95,7 +95,7 @@ GLVIS.WebGlHandler.prototype.createRenderer = function () {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setClearColor(background_color);
     this.canvas_.html(renderer.domElement);
-
+    this.canvas_.hide();
     this.three_.renderer = renderer;
 };
 
