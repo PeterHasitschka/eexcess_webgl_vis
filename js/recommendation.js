@@ -43,6 +43,7 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
         },
         radius: GLVIS.config.collection.recommendation.radius,
         color: 0x000000,
+        color_data: GLVIS.Recommendation.COLORDATA.LANGUAGE,
         opacity: 1,
         distance_factor: 1,
         size_factor: 1,
@@ -120,36 +121,46 @@ GLVIS.Recommendation.prototype.initGlNode = function () {
     this.setRelativePositionByRad(0);
 };
 
+
+/**
+ * 
+ * @param {GLVIS.Recommendation.COLORDATA} colordata
+ * @returns {undefined}
+ */
+GLVIS.Recommendation.prototype.setColorData = function (colordata) {
+    this.vis_data_.color_data = colordata;
+};
+
 /**
  * Set node-color depending on the eexcess-data
  */
 GLVIS.Recommendation.prototype.setBaseColor = function () {
 
-    console.warn("Dummy colors");
 
     var color = 0;
 
-    switch (this.eexcess_data_.result.facets.provider) {
 
-        case "ZBW" :
-            color = 0xFF7F0E;
-            break;
+    var config = GLVIS.config.collection.recommendation.colors;
 
-        case "mendeley" :
-            color = 0x2CA02C;
-            break;
-
-        case "Europeana" :
-            color = 0x1F77B4;
-            break;
-
-
-
-
+    if (!config[this.vis_data_.color_data]) {
+        throw ("Color-data " + this.vis_data_.color_data + " not found");
     }
 
+    var facet_color_data = config[this.vis_data_.color_data];
+    var facets = this.eexcess_data_.result.facets;
+
+    if (facets[this.vis_data_.color_data] === undefined)
+        throw("Facet " + this.vis_data_.color_data + " not found");
+
+    var facet_val = facets[this.vis_data_.color_data];
+
+    console.log(this.vis_data_.color_data, facet_val);
+    if (config[this.vis_data_.color_data][facet_val] !== undefined)
+        color = config[this.vis_data_.color_data][facet_val];
+
     this.setColor(color);
-};
+}
+;
 
 
 /**
@@ -487,7 +498,7 @@ GLVIS.Recommendation.prototype.getPosition = function (physical) {
         var gl_node = this.vis_data_.gl_objects.center_node;
 
         if (!gl_node)
-            throw Exception("Could not find gl-node of recommendation");
+            throw ("Could not find gl-node of recommendation");
 
         //Necessary to update position of mesh
         gl_node.render();
@@ -660,7 +671,7 @@ GLVIS.Recommendation.prototype.setSizeFactor = function (factor, animate) {
 GLVIS.Recommendation.prototype.setRelevance = function (relevance) {
 
     if (relevance < 0 || relevance > 1)
-        throw Exception("Relevance must be between 0 and 1");
+        throw ("Relevance must be between 0 and 1");
 
     this.vis_data_.relevance = relevance;
 };
@@ -835,5 +846,10 @@ GLVIS.Recommendation.NODETYPES = {
     DETAILED: GLVIS.RecommendationDetailNode
 };
 
+
+GLVIS.Recommendation.COLORDATA = {
+    PROVIDER: "provider",
+    LANGUAGE: "language"
+};
 
 GLVIS.Recommendation.current_selected_rec = null;

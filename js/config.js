@@ -55,7 +55,28 @@ GLVIS.config = {
             init_distance: 180,
             collapse_distance: 15,
             radius: 5.0,
-            //color: 0x4444FF,
+            colors: {
+                provider: {
+                    ZBW: 0xFF7F0E,
+                    mendeley: 0x2CA02C,
+                    Europeana: 0x1F77B4
+                },
+                language: {
+                    cs: 0x1F77B4,
+                    unknown: 0xFF7F0E,
+                    unkown : 0xFF7F0E, //(!)
+                    en: 0x2CA02C,
+                    es: 0xD62728,
+                    da: 0x9467BD,
+                    de: 0x8C564B,
+                    et: 0xE377C2,
+                    ro: 0x7F7F7F,
+                    pl: 0xBCBD22,
+                    hu: 0x17BECF,
+                    it: 0x1F77B4,
+                    mul: 0xFF7F0E
+                }
+            },
             highlight_color: 0xFF00FF,
             init_z: 0.5, //-19,
             opacity_depth: {
