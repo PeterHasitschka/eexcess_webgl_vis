@@ -42,7 +42,7 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
             z: 0
         },
         radius: GLVIS.config.collection.recommendation.radius,
-        color: GLVIS.config.collection.recommendation.color,
+        color: 0x000000,
         opacity: 1,
         distance_factor: 1,
         size_factor: 1,
@@ -115,8 +115,42 @@ GLVIS.Recommendation.prototype.initGlNode = function () {
 
     var gl_connection = new GLVIS.ConnectionCollectionRecommendation(this, this.getCollection().getMeshContainerNode());
     this.vis_data_.gl_objects.connection_col = gl_connection;
+
+    this.setBaseColor();
     this.setRelativePositionByRad(0);
 };
+
+/**
+ * Set node-color depending on the eexcess-data
+ */
+GLVIS.Recommendation.prototype.setBaseColor = function () {
+
+    console.warn("Dummy colors");
+
+    var color = 0;
+
+    switch (this.eexcess_data_.result.facets.provider) {
+
+        case "ZBW" :
+            color = 0xFF7F0E;
+            break;
+
+        case "mendeley" :
+            color = 0x2CA02C;
+            break;
+
+        case "Europeana" :
+            color = 0x1F77B4;
+            break;
+
+
+
+
+    }
+
+    this.setColor(color);
+};
+
 
 /**
  * Render the collection and its subnodes
@@ -183,13 +217,19 @@ GLVIS.Recommendation.prototype.handleCommonNodeClick = function () {
 
     if (!this.getCollection().getRingRepresentation())
         this.getCollection().createRingRepresentation(function () {
-            this.handleClick();
+            this.handleDetailNodeClick();
         }.bind(this));
 
 };
 
 
 GLVIS.Recommendation.prototype.handleMouseover = function () {
+
+    //Do not show rec-splines when zoomed in to rec
+    if (GLVIS.Recommendation.current_selected_rec && GLVIS.Recommendation.current_selected_rec === this)
+        return;
+
+
 
     /** @type {GLVIS.RecConnector} **/
     var connector = GLVIS.Scene.getCurrentScene().getRecConnector();
@@ -310,7 +350,7 @@ GLVIS.Recommendation.prototype.defocusAndZoomOut = function () {
 
 
     GLVIS.Scene.getCurrentScene().getAnimation().finishCameraMovementAnimations();
-    
+
     this.getCollection().selectAndFocus(function () {
     });
 

@@ -54,8 +54,8 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
     //Register click-function
     circle_outer.interaction = {
         "mouseclick": this.recommendation_.handleDetailNodeClick.bind(this.recommendation_),
-        "interaction_singleclick_exclusive": true
-                // "mouseover": this.recommendation_.handleMouseover.bind(this.recommendation_)
+        "interaction_singleclick_exclusive": true,
+        "mouseover": this.recommendation_.handleMouseover.bind(this.recommendation_)
     };
 
 
@@ -93,7 +93,6 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                             ),
                     circle_inner_material);
 
-
             mesh_parent.add(circle_inner);
             this.webgl_objects_.circle_inner = circle_inner;
 
@@ -107,7 +106,10 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                 texture.minFilter = THREE.LinearFilter;
                 that.webgl_objects_.circle_inner.material = new THREE.MeshBasicMaterial({
                     map: texture,
-                    side: THREE.DoubleSide
+                    side: THREE.DoubleSide,
+                    transparent: true,
+                    opacity: 0.5,
+                    color: 0xFFFFFF
                 });
                 texture.flipY = true;
                 texture.needsUpdate = true;

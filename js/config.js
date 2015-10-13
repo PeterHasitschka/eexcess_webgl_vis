@@ -55,7 +55,7 @@ GLVIS.config = {
             init_distance: 180,
             collapse_distance: 15,
             radius: 5.0,
-            color: 0x4444FF,
+            //color: 0x4444FF,
             highlight_color: 0xFF00FF,
             init_z: 0.5, //-19,
             opacity_depth: {

@@ -155,6 +155,6 @@ GLVIS.ConnectionRecRecSpline.prototype.delete = function () {
 
     _.each(this.recs, function (rec) {
         rec.unregisterRecSpline(this);
-        rec.setColor(GLVIS.config.collection.recommendation.color);
+        rec.setBaseColor();
     });
 };
