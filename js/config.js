@@ -218,7 +218,7 @@ GLVIS.config = {
         labels: {
             columns: 3,
             column_distance: 100,
-            vertical_offset: 230,
+            vertical_offset: 260,
             title_color: "#CC0000",
             highlight_color: "#0000FF",
             distance: 25,
