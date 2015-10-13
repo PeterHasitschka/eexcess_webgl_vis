@@ -153,7 +153,7 @@ GLVIS.Recommendation.prototype.setCollection = function (collection) {
  * Called by interactionhandler. Function registered in mesh-objects
  * @returns {undefined}
  */
-GLVIS.Recommendation.prototype.handleClick = function () {
+GLVIS.Recommendation.prototype.handleDetailNodeClick = function () {
     if (this.getStatus() === GLVIS.Recommendation.STATUSFLAGS.HIDDEN)
         return;
 
@@ -161,9 +161,12 @@ GLVIS.Recommendation.prototype.handleClick = function () {
             ["RECOMMENDATION " + this.getId() + " clicked", this],
             3);
 
-    //Don't do focus etc. if clicked before
-    if (GLVIS.Recommendation.current_selected_rec && GLVIS.Recommendation.current_selected_rec === this)
+    //Don't do focus etc. if clicked before --> Zoom out to collection
+    if (GLVIS.Recommendation.current_selected_rec && GLVIS.Recommendation.current_selected_rec === this) {
+        this.defocusAndZoomOut();
         return;
+    }
+
 
     this.focusAndZoom();
     GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
@@ -209,7 +212,7 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
     var abs_pos_vec = new THREE.Vector3(abs_pos.x, abs_pos.y, abs_pos.z);
     // @TODO: Calculate accurate offset
 
-    var camera_distance = 100;
+    var camera_distance = GLVIS.config.collection.recommendation.camera_distance;
 
 
 
@@ -304,34 +307,12 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
 GLVIS.Recommendation.prototype.defocusAndZoomOut = function () {
 
     //Replace detail node with common node
-    GLVIS.Debugger.debug("Recommendation", "Setting node type to COMMON and zoom out afterwards", 5);
-    this.setNodeType(GLVIS.Recommendation.NODETYPES.COMMON);
 
-    var nav_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
 
-    var config = GLVIS.config.collection.recommendation.defocus_animation;
-    var zoom_out_threshold = config.threshold;
-    var zoom_out_pow = config.pow;
-    var zoom_out_speed = config.speed;
-    var zoom_goal = GLVIS.config.navigation.zoom.animated.zoom_in;
-    var zoom_out_getter = nav_handler.getZoomFactor;
-    var zoom_out_setter = nav_handler.zoomDelta;
-
-    var that = this;
-    GLVIS.Scene.getCurrentScene().getAnimation().register(
-            nav_handler.animation_.zoom_id,
-            zoom_goal,
-            null,
-            zoom_out_getter,
-            zoom_out_setter,
-            0,
-            zoom_out_speed,
-            zoom_out_pow,
-            zoom_out_threshold,
-            function () {
-                //that.getCollection().selectAndFocus();
-            }
-    );
+    GLVIS.Scene.getCurrentScene().getAnimation().finishCameraMovementAnimations();
+    
+    this.getCollection().selectAndFocus(function () {
+    });
 
     GLVIS.Recommendation.current_selected_rec = null;
 };

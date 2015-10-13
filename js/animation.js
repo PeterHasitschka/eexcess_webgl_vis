@@ -73,6 +73,15 @@ GLVIS.Animation.prototype.animate = function () {
     }
 };
 
+
+GLVIS.Animation.prototype.finishCameraMovementAnimations = function(){
+    
+  this.finishAnimation(GLVIS.config.navigation.animation_ids.move); 
+  this.finishAnimation(GLVIS.config.navigation.animation_ids.move_id_x); 
+  this.finishAnimation(GLVIS.config.navigation.animation_ids.move_id_y); 
+  this.finishAnimation(GLVIS.config.navigation.animation_ids.move_id_z); 
+};
+
 /**
  * Finish a specific animation by its identifier
  * @param {string} identifier 

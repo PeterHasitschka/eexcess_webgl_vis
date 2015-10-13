@@ -53,7 +53,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
 
     //Register click-function
     circle_outer.interaction = {
-        "mouseclick": this.recommendation_.handleClick.bind(this.recommendation_),
+        "mouseclick": this.recommendation_.handleDetailNodeClick.bind(this.recommendation_),
         "interaction_singleclick_exclusive": true
                 // "mouseover": this.recommendation_.handleMouseover.bind(this.recommendation_)
     };
@@ -129,7 +129,7 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
     GLVIS.Debugger.debug(
             "RecommendationDetailNode",
             "Rendering RECOMMENDATION DETAIL-NODE  for recommendation " + this.recommendation_.getId(),
-            5);
+            7);
 
     var pos = this.recommendation_.getRelativePosition();
 

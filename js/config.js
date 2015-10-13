@@ -62,6 +62,7 @@ GLVIS.config = {
                 strength: 0.01,
                 weakness: 0.5
             },
+            camera_distance: 100,
             common_node: {
                 min_radius: 0.5,
                 active_radius: 10,
@@ -100,8 +101,7 @@ GLVIS.config = {
                 zoom: {
                     speed: 2,
                     pow: 0.00001,
-                    threshold: 0.01,
-                    zoom_val: 50
+                    threshold: 0.01
                 }
             },
             defocus_animation: {
@@ -273,6 +273,13 @@ GLVIS.config = {
                 pow: 0.2,
                 speed_fct: 0.2
             }
+        },
+        animation_ids: {
+            zoom_id: 'nh_anim_zoom',
+            move: 'nh_anim_move',
+            move_id_x: 'nh_anim_move_x',
+            move_id_y: 'nh_anim_move_y',
+            move_id_z: 'nh_anim_move_z'
         }
     },
     rec_dashboard: {

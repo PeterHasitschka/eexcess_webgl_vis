@@ -388,7 +388,7 @@ GLVIS.Collection.prototype.unconnectSameRecsFromOtherCollections = function () {
 GLVIS.Collection.prototype.selectAndFocus = function (cb) {
 
     this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
-
+    
     GLVIS.Scene.getCurrentScene().getNavigationHandler().focusCollection(this, function () {
         GLVIS.Debugger.debug("Collection",
                 "FOCUSGRAPH: Callback finish!",

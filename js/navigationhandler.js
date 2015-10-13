@@ -12,13 +12,7 @@ GLVIS.NavigationHandler = function (scene) {
     /** @type {THREE.Vector3} **/
     this.lookat_lock_ = null;
 
-    this.animation_ = {
-        zoom_id: 'nh_anim_zoom',
-        move: 'nh_anim_move',
-        move_id_x: 'nh_anim_move_x',
-        move_id_y: 'nh_anim_move_y',
-        move_id_z: 'nh_anim_move_z'
-    };
+    this.animation_ = GLVIS.config.navigation.animation_ids;
 };
 
 /**
@@ -235,7 +229,7 @@ GLVIS.NavigationHandler.prototype.moveCameraToCircleSphere = function (animation
     }
     else {
         var anim = GLVIS.Scene.getCurrentScene().getAnimation();
-        anim.finishAnimation(this.animation_.move);
+        anim.finishCameraMovementAnimations();
 
         anim.register(
                 this.animation_.move,
@@ -341,6 +335,7 @@ GLVIS.NavigationHandler.prototype.unlockLookAt = function () {
  * @param {float} zoom_factor
  */
 GLVIS.NavigationHandler.prototype.zoom = function (zoom_factor) {
+
 
     if (zoom_factor < 0)
         zoom_factor = 0;
