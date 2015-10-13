@@ -154,7 +154,6 @@ GLVIS.Recommendation.prototype.setBaseColor = function () {
 
     var facet_val = facets[this.vis_data_.color_data];
 
-    console.log(this.vis_data_.color_data, facet_val);
     if (config[this.vis_data_.color_data][facet_val] !== undefined)
         color = config[this.vis_data_.color_data][facet_val];
 

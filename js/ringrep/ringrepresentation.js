@@ -56,7 +56,19 @@ GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
 
             var curr_ring_data_elm = curr_ring_data[seg_count];
 
-            var color = parseInt(Math.random() * 0xFFFFFF);
+            var color = null;
+
+            if (curr_ring_data_elm.my_id.type === "facet") {
+                var facet_name = curr_ring_data_elm.my_id.id;
+                var facet_val = curr_ring_data_elm.my_val;
+                var color_config = GLVIS.config.collection.recommendation.colors;
+                if (color_config[facet_name] !== undefined)
+                    if (color_config[facet_name][facet_val] !== undefined)
+                        color = color_config[facet_name][facet_val];
+            }
+
+            if (color === null)
+                color = 0xFF00FF;
 
             var seg_start = curr_ring_data_elm.position * 100;
 
@@ -86,7 +98,7 @@ GLVIS.RingRepresentation.prototype.render = function () {
     GLVIS.Debugger.debug("RingRepresentation",
             "Rendering RINGREPRESENTATION " + this.collection_.getId(),
             5);
-        
+
     for (var i = 0; i < this.ring_segments_.length; i++) {
         this.ring_segments_[i].render();
     }
