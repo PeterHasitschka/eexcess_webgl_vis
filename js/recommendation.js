@@ -550,7 +550,10 @@ GLVIS.Recommendation.prototype.setRelativePositionByRad = function (that, rad) {
         that = this;
 
     var init_distance = GLVIS.config.collection.recommendation.init_distance;
-    var distance = that.vis_data_.distance_factor * init_distance;
+
+    var node_type_secific_add_distance = this.vis_data_.gl_objects.center_node.add_distance;
+
+    var distance = that.vis_data_.distance_factor * init_distance + node_type_secific_add_distance;
     var pos = GLVIS.Tools.getPosFromRad(rad, distance);
     that.setRelativePosition(pos.x, pos.y, GLVIS.config.collection.recommendation.init_z);
 };

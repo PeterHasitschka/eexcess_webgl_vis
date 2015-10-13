@@ -49,7 +49,7 @@ GLVIS.config = {
             opacity: 0.3,
             z_value: 0.1,
             segments: 50,
-            inner_distance_to_recs: 0
+            radius: 150
         },
         recommendation: {
             init_distance: 180,
@@ -69,19 +69,22 @@ GLVIS.config = {
                 color_negative: 0xCC0000,
                 circle: {
                     segments: 15
-                }
+                },
+                add_dinstance: 0
             },
             detail_node: {
-                inner_static_rad: 10,
-                min_radius: 0.5,
+                inner_static_rad: 7,
+                size_factor_mult: 3,
+                //min_radius: 0.5,
                 //active_radius: 10,
-                gap_inner_circle: 1,
+                gap_inner_circle: 2,
                 z_diff_inner_circle: 0.01,
                 color_positive: 0x00CC00,
                 color_negative: 0xCC0000,
                 circle: {
                     segments: 40
-                }
+                },
+                add_dinstance: 50
             },
             animation: {
                 speed: 0.1,

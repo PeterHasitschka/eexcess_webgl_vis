@@ -23,6 +23,9 @@ GLVIS.RecommendationDetailNode = function (recommendation, mesh_parent) {
     this.init_radius_ = this.recommendation_.getRadius() * this.recommendation_.getSizeFactor();
 
     this.initAndRegisterGlObj(mesh_parent);
+
+
+    this.add_distance = GLVIS.config.collection.recommendation.detail_node.add_dinstance;
 };
 
 GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_parent) {
@@ -51,8 +54,8 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
     //Register click-function
     circle_outer.interaction = {
         "mouseclick": this.recommendation_.handleClick.bind(this.recommendation_),
-        "interaction_singleclick_exclusive": true,
-       // "mouseover": this.recommendation_.handleMouseover.bind(this.recommendation_)
+        "interaction_singleclick_exclusive": true
+                // "mouseover": this.recommendation_.handleMouseover.bind(this.recommendation_)
     };
 
 
@@ -121,6 +124,8 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
     if (!this.dirty_)
         return;
 
+    var config = GLVIS.config.collection.recommendation.detail_node;
+
     GLVIS.Debugger.debug(
             "RecommendationDetailNode",
             "Rendering RECOMMENDATION DETAIL-NODE  for recommendation " + this.recommendation_.getId(),
@@ -129,20 +134,18 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
     var pos = this.recommendation_.getRelativePosition();
 
 
-    var z_pos = GLVIS.config.collection.recommendation.detail_node.z_value;
+    var z_pos = config.z_value;
     this.webgl_objects_.circle_outer.position.set(
             pos.x,
             pos.y,
             pos.z
             );
 
-    //var curr_radius = this.recommendation_.getRadius() * this.recommendation_.getSizeFactor();
-    var curr_radius = GLVIS.config.collection.recommendation.detail_node.inner_static_rad +
-            GLVIS.config.collection.recommendation.detail_node.gap_inner_circle +
-            this.recommendation_.getSizeFactor() * 2;
+    var curr_radius = config.inner_static_rad +
+            config.gap_inner_circle +
+            this.recommendation_.getSizeFactor() * config.size_factor_mult;
 
 
-    console.log("curr-rad", curr_radius);
     var scale_factor = curr_radius / this.init_radius_;
 
     this.webgl_objects_.circle_outer.scale.set(scale_factor, scale_factor, scale_factor);
@@ -153,10 +156,9 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
         this.webgl_objects_.circle_inner.position.set(
                 pos.x,
                 pos.y,
-                pos.z + GLVIS.config.collection.recommendation.detail_node.z_diff_inner_circle
+                pos.z + config.z_diff_inner_circle
                 );
 
-        //this.webgl_objects_.circle_inner.scale.set(scale_factor, scale_factor, scale_factor);
         this.webgl_objects_.circle_inner.material.opacity = this.recommendation_.getOpacity(true);
     }
 };

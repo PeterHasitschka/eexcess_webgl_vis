@@ -22,6 +22,8 @@ GLVIS.RecommendationCommonNode = function (recommendation, mesh_parent) {
     this.mesh_parent_ = mesh_parent;
 
     this.initAndRegisterGlObj(mesh_parent);
+
+    this.add_distance = GLVIS.config.collection.recommendation.common_node.add_dinstance;
 };
 
 

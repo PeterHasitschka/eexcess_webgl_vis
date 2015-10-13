@@ -606,17 +606,20 @@ GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
     this.setRecPosHandler(new GLVIS.RecommendationPosRingRepresentation(this));
 
     this.vis_data_.is_currently_animated = true;
+
+    var recs = this.getRecommendations();
+
+    for (var i = 0; i < recs.length; i++) {
+        /** @type {GLVIS.Recommendation} */
+        var curr_rec = recs[i];
+        curr_rec.setNodeType(GLVIS.Recommendation.NODETYPES.DETAILED);
+    }
+
     this.getRecPosHandler().calculatePositions(
             function () {
                 this.vis_data_.is_currently_animated = false;
 
-                var recs = this.getRecommendations();
 
-                for (var i = 0; i < recs.length; i++) {
-                    /** @type {GLVIS.Recommendation} */
-                    var curr_rec = recs[i];
-                    curr_rec.setNodeType(GLVIS.Recommendation.NODETYPES.DETAILED);
-                }
 
                 if (cb)
                     cb();
@@ -647,7 +650,7 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
         this.getRecPosHandler().deleteCallback();
 
     this.setRecPosHandler(new GLVIS.RecommendationPosDistributed(this));
-    this.getRecPosHandler().calculatePositions();
+
 
     var recs = this.getRecommendations();
 
@@ -656,6 +659,11 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
         var curr_rec = recs[i];
         curr_rec.setNodeType(GLVIS.Recommendation.NODETYPES.COMMON);
     }
+    this.getRecPosHandler().calculatePositions();
+
+
+
+
 
 };
 

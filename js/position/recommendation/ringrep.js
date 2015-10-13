@@ -78,7 +78,7 @@ GLVIS.RecommendationPosRingRepresentation.prototype.calculatePositions = functio
                     curr_rad, //GOAL
                     curr_rec, //OBJECT (For getter and setter)
                     curr_rec.getRelativePositionRad, //GETTER
-                    curr_rec.setRelativePositionByRad, //SETTER
+                    curr_rec.setRelativePositionByRad.bind(curr_rec), //SETTER
                     0, //PARAMETER Nr.
                     anim_config.speed, //SPEED
                     anim_config.pow, //POW
