@@ -131,6 +131,10 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
             "HANDLING SCENE INTERACTION EVENT '" + interaction_type + "'", 6);
 
     var single_ids_already_clicked = [];
+    
+    //For flagging if some button was re-hovered
+    GLVIS.RecDetailNodeButton.new_hovered = false;
+
 
     for (var i = 0; i < intersected.length; i++) {
         var curr_intersect_obj = intersected[i].object;
@@ -171,6 +175,12 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
             }
         }
     }
+    
+    //Unhovering button if not hovered again.
+    if (!GLVIS.RecDetailNodeButton.new_hovered && GLVIS.RecDetailNodeButton.current_hovered) {
+        GLVIS.RecDetailNodeButton.current_hovered.unhover();
+        GLVIS.RecDetailNodeButton.current_hovered = null;
+    }
 
     if (!intersected.length)
         this.handleEmptyClick(interaction_type);
@@ -208,6 +218,8 @@ GLVIS.InteractionHandler.prototype.handleEmptyClick = function (interaction_type
         GLVIS.Text.current_selected.handleMouseleave();
         GLVIS.Text.current_selected = null;
     }
+
+
 
     /**
      * Remove rec-rec-splines when leaving objects with mouse

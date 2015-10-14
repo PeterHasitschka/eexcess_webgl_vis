@@ -5,7 +5,8 @@ GLVIS.config = {
     scene: {
         queries_to_fetch: 21,
         skip_empty_queries: true,
-        circle_radius: 2000
+        circle_radius: 2000,
+        media_folder: "/visualizations/WebGlVisualization/media/"
     },
     debug: {
         active: true,
@@ -113,7 +114,16 @@ GLVIS.config = {
                 circle: {
                     segments: 40
                 },
-                add_dinstance: 50
+                add_dinstance: 50,
+                
+                button: {
+                    y_offset : -9,
+                    z_offset: 1,
+                    size: 1.2,
+                    icon_size: 1.0,
+                    segments: 20,
+                    hovercolor: 0xFFFF55    
+                }
             },
             animation: {
                 speed: 0.1,

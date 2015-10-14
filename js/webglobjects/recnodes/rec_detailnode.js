@@ -13,8 +13,10 @@ GLVIS.RecommendationDetailNode = function (recommendation, mesh_parent) {
     this.recommendation_ = recommendation;
 
     this.webgl_objects_ = {
+        group: new THREE.Object3D(),
         circle_outer: null,
-        circle_inner: null
+        circle_inner: null,
+        buttons: []
     };
 
     this.mesh_parent_ = mesh_parent;
@@ -31,6 +33,9 @@ GLVIS.RecommendationDetailNode = function (recommendation, mesh_parent) {
 GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_parent) {
 
     var config = GLVIS.config.collection.recommendation.detail_node;
+
+
+    mesh_parent.add(this.webgl_objects_.group);
 
     var inner_static_rad = config.inner_static_rad;
 
@@ -59,7 +64,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
     };
 
 
-    mesh_parent.add(circle_outer);
+    this.webgl_objects_.group.add(circle_outer);
 
     this.webgl_objects_.circle_outer = circle_outer;
 
@@ -72,7 +77,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
 
         //DUMMY FOR EVERYONE!
         if (!preview_image)
-            preview_image = "/visualizations/WebGlVisualization/media/testtexture.jpg";
+            preview_image = GLVIS.config.scene.media_folder + "testtexture.jpg";
 
         if (preview_image) {
 
@@ -93,7 +98,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                             ),
                     circle_inner_material);
 
-            mesh_parent.add(circle_inner);
+            this.webgl_objects_.group.add(circle_inner);
             this.webgl_objects_.circle_inner = circle_inner;
 
 
@@ -118,7 +123,27 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                 that.recommendation_.setIsDirty(true);
             });
         }
+
+
+        //Add buttons
+
+        var button_options = {
+            action: this.testAction,
+            x_offset: 0,
+            icon: "button-icon-link.png",
+            visible: true
+        };
+
+        var buttonX = new GLVIS.RecDetailNodeButton(this, button_options);
+        this.webgl_objects_.buttons.push(buttonX);
     }
+};
+GLVIS.RecommendationDetailNode.prototype.testAction = function () {
+    alert("testaction");
+};
+
+GLVIS.RecommendationDetailNode.prototype.getGroupMesh = function () {
+    return this.webgl_objects_.group;
 };
 
 GLVIS.RecommendationDetailNode.prototype.render = function () {
@@ -137,7 +162,7 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
 
 
     var z_pos = config.z_value;
-    this.webgl_objects_.circle_outer.position.set(
+    this.webgl_objects_.group.position.set(
             pos.x,
             pos.y,
             pos.z
@@ -155,14 +180,18 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
     this.webgl_objects_.circle_outer.material.color.setHex(this.recommendation_.getColor());
 
     if (this.webgl_objects_.circle_inner) {
-        this.webgl_objects_.circle_inner.position.set(
-                pos.x,
-                pos.y,
+        this.webgl_objects_.circle_inner.position.setZ(
                 pos.z + config.z_diff_inner_circle
                 );
 
         this.webgl_objects_.circle_inner.material.opacity = this.recommendation_.getOpacity(true);
     }
+
+    for (var i = 0; i < this.webgl_objects_.buttons.length; i++) {
+        this.webgl_objects_.buttons[i].render();
+    }
+
+
 };
 
 GLVIS.RecommendationDetailNode.prototype.setIsDirty = function (dirty) {
@@ -186,12 +215,12 @@ GLVIS.RecommendationDetailNode.prototype.getCircle = function () {
  */
 GLVIS.RecommendationDetailNode.prototype.delete = function () {
 
-    //var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+    this.mesh_parent_.remove(this.webgl_objects_.group);
 
-    this.mesh_parent_.remove(this.webgl_objects_.circle_outer);
-    if (this.webgl_objects_.circle_inner)
-        this.mesh_parent_.remove(this.webgl_objects_.circle_inner);
+    for (var i = 0; i < this.webgl_objects_.buttons.length; i++)
+        this.webgl_objects_.buttons[i].delete();
 
+    delete this.webgl_objects_.group;
     delete this.webgl_objects_.circle_outer;
     if (this.webgl_objects_.circle_inner)
         delete this.webgl_objects_.circle_inner;
