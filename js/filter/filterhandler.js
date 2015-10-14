@@ -23,6 +23,7 @@ GLVIS.FilterHandler.prototype.addFilter = function (filter) {
 
         if (curr_f.getKey() === key) {
             this.filters_.splice(i, 1);
+            break;
         }
     }
 
@@ -31,10 +32,19 @@ GLVIS.FilterHandler.prototype.addFilter = function (filter) {
 
 /**
  * Remove filter.
- * @param {GLVIS.Filter || string} filter Filter-Object or string to identify
+ * @param {identifier} filter identifier string (e.g. 'language'
  */
-GLVIS.FilterHandler.prototype.removeFilter = function (filter) {
+GLVIS.FilterHandler.prototype.removeFilter = function (identifier) {
 
+
+    for (var i = 0; i < this.filters_.length; i++) {
+        var curr_f = this.filters_[i];
+
+        if (curr_f.getKey().identifier === identifier) {
+            this.filters_.splice(i, 1);
+            return;
+        }
+    }
 };
 
 /**
@@ -51,7 +61,6 @@ GLVIS.FilterHandler.prototype.apply = function () {
         for (var j = 0; j < recs.length; j++) {
             /** @type{GLVIS.Recommendation} **/
             var curr_rec = recs[j];
-            console.log("filtering rec " + curr_rec.getId());
 
             this.applyFiltersToRec_(curr_rec);
         }
@@ -95,7 +104,7 @@ GLVIS.FilterHandler.prototype.applyFiltersToRec_ = function (rec) {
                 throw ("Filter Type '" + curr_filter.getType().type + "' not supported yet!");
         }
     }
-
+    
     rec.setFilterPositive(true);
 
 };

@@ -179,7 +179,7 @@ GLVIS.ToolbarHandler.prototype.buttons = {
 
                     var fh = GLVIS.Scene.getCurrentScene().getFilterHandler();
                     
-                    var filter1 = new GLVIS.Filter(GLVIS.Filter.KEYS.LANG, "de");
+                    var filter1 = new GLVIS.Filter("provider", "de");
                     var filter2 = new GLVIS.Filter(GLVIS.Filter.KEYS.PROVIDER, "ZBW");
                     fh.addFilter(filter1);
                     fh.addFilter(filter2);

@@ -177,20 +177,52 @@ GLVIS.RingSegment.prototype.handleClick = function () {
             ["RING SEGMENT CLICKED", this],
             3);
 
-    this.is_selected_ = !this.is_selected_;
+    if (this.is_selected_)
+        this.deSelect();
+    else
+        this.select();
+
+};
+
+
+GLVIS.RingSegment.prototype.select = function () {
+
+    if (this.is_selected_ === true)
+        return;
+
+    GLVIS.Debugger.debug("RingSegment",
+            "Selecting ring segment",
+            6);
+
+
+    if (this.data_.key.type === "facet") {
+        var filter = new GLVIS.Filter(this.data_.key.id, this.data_.val);
+        GLVIS.Scene.getCurrentScene().getFilterHandler().addFilter(filter);
+        GLVIS.Scene.getCurrentScene().getFilterHandler().apply();
+    }
+
+    this.is_selected_ = true;
     this.setIsDirty(true);
 };
 
+
 GLVIS.RingSegment.prototype.deSelect = function () {
 
-    if (this.is_selected_ !== true)
+    if (this.is_selected_ === false)
         return;
 
     GLVIS.Debugger.debug("RingSegment",
             "Deselecting ring segment",
             6);
 
-    this.is_selected_ = true;
+
+    if (this.data_.key.type === "facet") {
+        
+        GLVIS.Scene.getCurrentScene().getFilterHandler().removeFilter(this.data_.key.id);
+        GLVIS.Scene.getCurrentScene().getFilterHandler().apply();
+    }
+
+    this.is_selected_ = false;
     this.setIsDirty(true);
 };
 
