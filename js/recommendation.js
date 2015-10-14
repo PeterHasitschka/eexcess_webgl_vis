@@ -48,6 +48,7 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
         distance_factor: 1,
         size_factor: 1,
         relevance: 1,
+        is_filter_positive: true,
         gl_objects: {
             center_node: null,
             connection_col: null
@@ -798,6 +799,38 @@ GLVIS.Recommendation.prototype.setOpacity = function (opacity, animate) {
                 );
     }
 };
+
+/**
+ * Apply a positive or negative match of the filter's result to visualize that.
+ * @param {bool} positive
+ */
+GLVIS.Recommendation.prototype.setFilterPositive = function (positive) {
+
+    if (this.vis_data_.is_filter_positive === positive)
+        return;
+
+    if (positive) {
+        this.setOpacity(1);
+        this.setDistanceFactor(1);
+    }
+    else {
+        this.setOpacity(0.3);
+        this.setDistanceFactor(0.9);
+    }
+
+    this.setIsDirty(true);
+    this.vis_data_.is_filter_positive = positive;
+};
+
+/**
+ * TRUE if applied filters are positive (not filtered out)
+ * Else FALSE
+ * @returns {bool}
+ */
+GLVIS.Recommendation.prototype.getFilterPositive = function () {
+    return this.vis_data_.is_filter_positive;
+};
+
 
 GLVIS.Recommendation.prototype.getOpacity = function (include_distance) {
 

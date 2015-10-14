@@ -125,12 +125,15 @@ GLVIS.RecDetailNodeButton.prototype.getIsDirty = function () {
 
 GLVIS.RecDetailNodeButton.prototype.render = function () {
 
-    console.log("rendering rec detail node button");
     if (!this.dirty_)
         return;
 
-    if (!this.webgl_objects_.circle)
+    if (!this.webgl_objects_.circle) {
+        this.dirty_ = false;
         return;
+    }
+
+
     var c = this.webgl_objects_.circle;
 
 

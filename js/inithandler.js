@@ -61,6 +61,8 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                     path + "js/webglobjects/recnodes/detailnode_button.js",
                                     path + "js/webglobjects/coll_ringsegment.js",
                                     path + "js/webglobjects/text.js",
+                                    path + "js/filter/filterhandler.js",
+                                    path + "js/filter/filter.js",
                                     path + "js/collection.js",
                                     path + "js/recommendation.js",
                                     path + "js/ringrep/ringrepresentation.js",
@@ -124,8 +126,8 @@ GLVIS.InitHandler.initScene = function (scene, db_handler, cb) {
             scene.addCollection(queries_to_add[q_count]);
         }
 
-       scene.initCollectionNetwork();
-       GLVIS.Scene.getCurrentScene().getWebGlHandler().getCanvas().show();
+        scene.initCollectionNetwork();
+        GLVIS.Scene.getCurrentScene().getWebGlHandler().getCanvas().show();
 
         GLVIS.Scene.animate();
 
