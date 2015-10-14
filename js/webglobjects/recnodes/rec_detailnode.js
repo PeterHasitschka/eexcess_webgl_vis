@@ -45,7 +45,8 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                     {
                         color: this.recommendation_.getColor(),
                         transparent: true,
-                        side: THREE.DoubleSide
+                        side: THREE.DoubleSide,
+                        opacity: 0.8
                     });
 
     var circle_outer = new THREE.Mesh(
@@ -89,7 +90,8 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                             {
                                 color: 0XFF0000,
                                 transparent: true,
-                                side: THREE.DoubleSide
+                                side: THREE.DoubleSide,
+                                opacity: 1
                             });
             var circle_inner = new THREE.Mesh(
                     new THREE.CircleGeometry(
@@ -113,7 +115,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                     map: texture,
                     side: THREE.DoubleSide,
                     transparent: true,
-                    opacity: 0.5,
+                    opacity: 1,
                     color: 0xFFFFFF
                 });
                 texture.flipY = true;
@@ -127,15 +129,28 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
 
         //Add buttons
 
-        var button_options = {
-            action: this.recommendation_.openLink.bind(this.recommendation_),
-            x_offset: 0,
-            icon: "button-icon-link.png",
-            visible: false
-        };
+        var button_options = [
+            {
+                action: this.recommendation_.openLink.bind(this.recommendation_),
+                x_offset: 0,
+                icon: "button-icon-link.png",
+                visible: false
+            },
+            {
+                action: null,
+                x_offset: -3,
+                icon: "button-icon-smiley.png",
+                visible: false
+            }
 
-        var buttonX = new GLVIS.RecDetailNodeButton(this, button_options);
-        this.webgl_objects_.buttons.push(buttonX);
+        ];
+
+        for (var i = 0; i < button_options.length; i++) {
+            var button = new GLVIS.RecDetailNodeButton(this, button_options[i]);
+            this.webgl_objects_.buttons.push(button);
+        }
+
+
     }
 };
 
