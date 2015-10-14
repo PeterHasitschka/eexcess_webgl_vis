@@ -84,7 +84,7 @@ GLVIS.RecDetailNodeButton.prototype.initAndRegisterGlObj = function (parent_node
         THREE.ImageUtils.loadTexture(icon_path, {}, function (texture) {
 
             GLVIS.Debugger.debug("RecDetailNodeButton", "Icon loaded. Creating texture", 5);
-            texture.minFilter = THREE.LinearFilter;
+            texture.minFilter = THREE.LinearMipMapLinearFilter;
             icon_mesh.material = new THREE.MeshBasicMaterial({
                 map: texture,
                 side: THREE.DoubleSide,
@@ -103,6 +103,14 @@ GLVIS.RecDetailNodeButton.prototype.initAndRegisterGlObj = function (parent_node
 
 };
 
+GLVIS.RecDetailNodeButton.prototype.setIsVisible = function (visible) {
+
+    console.log("RecDetail-Button: ", visible);
+    if (visible !== this.visible_)
+        this.setIsDirty(true);
+    this.visible_ = visible;
+};
+
 
 GLVIS.RecDetailNodeButton.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
@@ -117,6 +125,7 @@ GLVIS.RecDetailNodeButton.prototype.getIsDirty = function () {
 
 GLVIS.RecDetailNodeButton.prototype.render = function () {
 
+    console.log("rendering rec detail node button");
     if (!this.dirty_)
         return;
 
@@ -151,6 +160,8 @@ GLVIS.RecDetailNodeButton.prototype.render = function () {
             this.pos.y,
             this.pos.z + 0.1
             );
+
+    this.dirty_ = false;
 };
 
 

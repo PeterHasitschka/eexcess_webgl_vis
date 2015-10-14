@@ -347,7 +347,17 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
         //GLVIS.Debugger.debug("Recommendation", "Setting node type to COMMON of FORMER FOCUSED", 5);
         //GLVIS.Recommendation.current_selected_rec.setNodeType(GLVIS.Recommendation.NODETYPES.COMMON);
     }
+
+    if (GLVIS.Recommendation.current_selected_rec)
+        GLVIS.Recommendation.current_selected_rec.setDetailNodeVisibility(false);
+    this.vis_data_.gl_objects.center_node.setButtonsVisible(true);
+
+
     GLVIS.Recommendation.current_selected_rec = this;
+};
+
+GLVIS.Recommendation.prototype.setDetailNodeVisibility = function (visible) {
+    this.vis_data_.gl_objects.center_node.setButtonsVisible(visible);
 };
 
 /**
@@ -357,7 +367,7 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
 GLVIS.Recommendation.prototype.defocusAndZoomOut = function () {
 
     //Replace detail node with common node
-
+    this.vis_data_.gl_objects.center_node.setButtonsVisible(false);
 
     GLVIS.Scene.getCurrentScene().getAnimation().finishCameraMovementAnimations();
 
@@ -819,6 +829,11 @@ GLVIS.Recommendation.prototype.getId = function () {
 
 GLVIS.Recommendation.prototype.getEexcessData = function () {
     return this.eexcess_data_;
+};
+
+GLVIS.Recommendation.prototype.openLink = function () {
+
+    var win = window.open(this.eexcess_data_.result.uri, '_blank');
 };
 
 

@@ -128,22 +128,15 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
         //Add buttons
 
         var button_options = {
-            action: this.testAction,
+            action: this.recommendation_.openLink.bind(this.recommendation_),
             x_offset: 0,
             icon: "button-icon-link.png",
-            visible: true
+            visible: false
         };
 
         var buttonX = new GLVIS.RecDetailNodeButton(this, button_options);
         this.webgl_objects_.buttons.push(buttonX);
     }
-};
-GLVIS.RecommendationDetailNode.prototype.testAction = function () {
-    alert("testaction");
-};
-
-GLVIS.RecommendationDetailNode.prototype.getGroupMesh = function () {
-    return this.webgl_objects_.group;
 };
 
 GLVIS.RecommendationDetailNode.prototype.render = function () {
@@ -191,11 +184,30 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
         this.webgl_objects_.buttons[i].render();
     }
 
-
+    this.dirty_ = false;
 };
 
+
+
+GLVIS.RecommendationDetailNode.prototype.getGroupMesh = function () {
+    return this.webgl_objects_.group;
+};
+
+GLVIS.RecommendationDetailNode.prototype.setButtonsVisible = function (visible) {
+    for (var i = 0; i < this.webgl_objects_.buttons.length; i++) {
+        this.webgl_objects_.buttons[i].setIsVisible(visible);
+    }
+};
+
+
+
 GLVIS.RecommendationDetailNode.prototype.setIsDirty = function (dirty) {
+
+    if (this.dirty_ === dirty)
+        return;
+
     this.dirty_ = dirty;
+    this.recommendation_.setIsDirty(dirty);
 };
 
 GLVIS.RecommendationDetailNode.prototype.getIsDirty = function () {
