@@ -1,6 +1,11 @@
 var GLVIS = GLVIS || {};
 
-
+/**
+ * Create a button for rec-detail-nodes with actions, icons etc.
+ * 
+ * @param {GLVIS.RecommendationDetailNode} parent_node Detail node were button gets added
+ * @param {object} options key-values: action, x_offset, icon, visible
+ */
 GLVIS.RecDetailNodeButton = function (parent_node, options) {
 
     var config = GLVIS.config.collection.recommendation.detail_node.button;
@@ -26,10 +31,12 @@ GLVIS.RecDetailNodeButton = function (parent_node, options) {
     this.initAndRegisterGlObj(this.webgl_objects_.parent);
 
     this.dirty_ = true;
-
-
 };
 
+/**
+ * Callback for mouseover action.
+ * Button gets registered for unhovering (@see{GLVIS.InteractionHandler})
+ */
 GLVIS.RecDetailNodeButton.prototype.hover = function () {
     this.webgl_objects_.circle.material.color.setHex(GLVIS.config.collection.recommendation.detail_node.button.hovercolor);
     GLVIS.RecDetailNodeButton.current_hovered = this;
@@ -37,12 +44,18 @@ GLVIS.RecDetailNodeButton.prototype.hover = function () {
     this.setIsDirty(true);
 };
 
+/**
+ * Called by @see{GLVIS.InteractionHandler} if button is not registered as hovered in current raycast
+ */
 GLVIS.RecDetailNodeButton.prototype.unhover = function () {
     this.webgl_objects_.circle.material.color.setHex(0xFFFFFF);
     this.setIsDirty(true);
 };
 
-
+/**
+ * Create and add webgl-objects to scene
+ * @param {THREE.Mesh} parent_node ThreeJS Node handled as parent for the button. Comes from rec-detail-node
+ */
 GLVIS.RecDetailNodeButton.prototype.initAndRegisterGlObj = function (parent_node) {
 
     var config = GLVIS.config.collection.recommendation.detail_node.button;
@@ -54,26 +67,21 @@ GLVIS.RecDetailNodeButton.prototype.initAndRegisterGlObj = function (parent_node
                 side: THREE.DoubleSide
             });
 
-
-
     var circle = new THREE.Mesh(
             new THREE.CircleGeometry(
                     config.size,
                     config.segments),
             circleMaterial);
 
-
-
-
     this.webgl_objects_.circle = circle;
     parent_node.add(circle);
+
 
     var icon_mesh = new THREE.Mesh(
             new THREE.CircleGeometry(
                     config.icon_size,
                     config.segments),
             circleMaterial);
-
 
     this.webgl_objects_.icon = icon_mesh;
     parent_node.add(icon_mesh);
@@ -99,13 +107,13 @@ GLVIS.RecDetailNodeButton.prototype.initAndRegisterGlObj = function (parent_node
             this.setIsDirty(true);
         }.bind(this));
     }
-
-
 };
 
+/**
+ * Setting the visibility of the button
+ * @param {bool} visible
+ */
 GLVIS.RecDetailNodeButton.prototype.setIsVisible = function (visible) {
-
-    console.log("RecDetail-Button: ", visible);
     if (visible !== this.visible_)
         this.setIsDirty(true);
     this.visible_ = visible;
@@ -123,6 +131,11 @@ GLVIS.RecDetailNodeButton.prototype.getIsDirty = function () {
     return this.dirty_;
 };
 
+/**
+ * Rendering the button if dirty.
+ * The interactions are set here dynamically because they depend on the visibility
+ * of the button
+ */
 GLVIS.RecDetailNodeButton.prototype.render = function () {
 
     if (!this.dirty_)
@@ -136,9 +149,7 @@ GLVIS.RecDetailNodeButton.prototype.render = function () {
 
     var c = this.webgl_objects_.circle;
 
-
     c.visible = this.visible_;
-
 
     if (c.visible) {
         c.interaction = {
@@ -167,7 +178,9 @@ GLVIS.RecDetailNodeButton.prototype.render = function () {
     this.dirty_ = false;
 };
 
-
+/**
+ * Deleting webgl-objects
+ */
 GLVIS.RecDetailNodeButton.prototype.delete = function () {
     delete this.webgl_objects_.circle;
     delete this.webgl_objects_.icon;

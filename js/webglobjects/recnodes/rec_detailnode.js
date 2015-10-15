@@ -30,6 +30,14 @@ GLVIS.RecommendationDetailNode = function (recommendation, mesh_parent) {
     this.add_distance = GLVIS.config.collection.recommendation.detail_node.add_dinstance;
 };
 
+/**
+ * Create and add ThreeJS Objects to scene.
+ * All objects get added to a parent-mesh.
+ * These objects are an outer circle with variable size (for visualizing the relevance)
+ * an inner circle holding a preview image.
+ * And several buttons with different actions @see{GLVIS.RecDetailNodeButton}
+ * @param {THREE.Mesh} mesh_parent
+ */
 GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_parent) {
 
     var config = GLVIS.config.collection.recommendation.detail_node;
@@ -126,9 +134,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
             });
         }
 
-
         //Add buttons
-
         var button_options = [
             {
                 action: this.recommendation_.openLink.bind(this.recommendation_),
@@ -142,18 +148,18 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                 icon: "button-icon-smiley.png",
                 visible: false
             }
-
         ];
 
         for (var i = 0; i < button_options.length; i++) {
             var button = new GLVIS.RecDetailNodeButton(this, button_options[i]);
             this.webgl_objects_.buttons.push(button);
         }
-
-
     }
 };
 
+/**
+ * Rendering all webgl-objects if node is dirty.
+ */
 GLVIS.RecommendationDetailNode.prototype.render = function () {
 
     if (!this.dirty_)
@@ -202,18 +208,23 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
     this.dirty_ = false;
 };
 
-
-
+/**
+ * Returning the THREE-JS container holding all webgl-objects
+ * @returns {GLVIS.RecommendationDetailNode.webgl_objects_.group}
+ */
 GLVIS.RecommendationDetailNode.prototype.getGroupMesh = function () {
     return this.webgl_objects_.group;
 };
 
+/**
+ * Setting the node's buttons visible or not.
+ * @param {bool} visible
+ */
 GLVIS.RecommendationDetailNode.prototype.setButtonsVisible = function (visible) {
     for (var i = 0; i < this.webgl_objects_.buttons.length; i++) {
         this.webgl_objects_.buttons[i].setIsVisible(visible);
     }
 };
-
 
 
 GLVIS.RecommendationDetailNode.prototype.setIsDirty = function (dirty) {
