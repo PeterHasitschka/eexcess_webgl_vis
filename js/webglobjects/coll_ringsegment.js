@@ -123,8 +123,25 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
 
     var text = this.data_.val;
     text = text.replace(" ", "\n");
+    text = this.getShortText_(text);
     var label = new GLVIS.Text(text, label_options, null, null, null, null, collection);
     this.webgl_objects_.label = label;
+};
+
+/**
+ * If Text (the label for the ringsegment) is an URL, just return the last part
+ * of the URL
+ * @param {string} text
+ * @returns {string} cutted text
+ */
+GLVIS.RingSegment.prototype.getShortText_ = function (text) {
+
+    var re = /http[s]?:\/\/.*\/+([^\/]+)\/?/;
+    var result = re.exec(text);
+    if (!result)
+        return text;
+
+    return result[1];
 };
 
 /**
@@ -217,7 +234,7 @@ GLVIS.RingSegment.prototype.deSelect = function () {
 
 
     if (this.data_.key.type === "facet") {
-        
+
         GLVIS.Scene.getCurrentScene().getFilterHandler().removeFilter(this.data_.key.id);
         GLVIS.Scene.getCurrentScene().getFilterHandler().apply();
     }
