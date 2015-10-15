@@ -56,6 +56,10 @@ GLVIS.FilterHandler.prototype.apply = function () {
     var collections = GLVIS.Scene.getCurrentScene().getCollections();
 
     for (var i = 0; i < collections.length; i++) {
+
+        //Remove splines because of possible movement of recs
+        collections[i].unconnectSameRecsFromOtherCollections();
+
         var recs = collections[i].getRecommendations();
 
         for (var j = 0; j < recs.length; j++) {
