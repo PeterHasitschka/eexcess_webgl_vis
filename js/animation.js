@@ -170,7 +170,7 @@ GLVIS.Animation.prototype.register = function (identifier, goal, object, getter_
 
     //Check if already exists. If is so, remove old from list
     this.unregister(identifier);
-
+   
     if (!add_to_current)
         add_to_current = false;
 
