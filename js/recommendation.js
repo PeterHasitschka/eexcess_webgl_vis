@@ -653,6 +653,9 @@ GLVIS.Recommendation.prototype.toggleVisualizeRelevance = function (visualize) {
         //this.setDistanceFactor(1 + relevance * config.distfactor, true);
     }
     else {
+        var config = GLVIS.config.collection.recommendation;
+        GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(config.size_animation.id_prefix + this.getId());
+        GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(config.distfact_animation.id_prefix + this.getId());
         this.setSizeFactor(1, false);
         this.setDistanceFactor(1, false);
     }
