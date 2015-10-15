@@ -79,7 +79,6 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                     scene.getComparer().direct.activate();
                     var button = e.data.btn;
                     button.hide();
-
                     var rdbh = GLVIS.Scene.getCurrentScene().getRecDashboardHandler();
                     rdbh.toolbar.getButton("scene_directcompare_deactivate").show();
                 },
@@ -93,7 +92,6 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                     scene.getComparer().direct.deactivate();
                     var button = e.data.btn;
                     button.hide();
-
                     var rdbh = GLVIS.Scene.getCurrentScene().getRecDashboardHandler();
                     rdbh.toolbar.getButton("scene_directcompare_activate").show();
                 },
@@ -151,7 +149,6 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                     var pos_handler = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler();
                     pos_handler.setIsOneFocused(false);
                     pos_handler.calculatePositions();
-
                 },
                 label: "Reset Focus",
                 visible: true
@@ -161,14 +158,41 @@ GLVIS.ToolbarHandler.prototype.buttons = {
 
     },
     row2: {
-        cameracontrol: {
-            viewfromtop: {
+        anim_bug: {
+            ping: {
                 fct: function (e) {
-                    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
-                    camera.position.set(0,1500,-800);
-                    camera.lookAt(new THREE.Vector3(0, 0, -801));
+
+                    var recs = GLVIS.Scene.getCurrentScene().getCollections()[0].getRecommendations();
+
+                    for (var i = 0; i < recs.length; i++) {
+
+                        if ((Math.random() + 0.5) > 1)
+                            continue;
+
+                        var curr_rec = recs[i];
+                        curr_rec.setDistanceFactor(0.3, true);
+                        curr_rec.setOpacity(0, true);
+                    }
                 },
-                label: "View from top",
+                label: "PING",
+                visible: true
+            },
+            pong: {
+                fct: function (e) {
+
+                    var recs = GLVIS.Scene.getCurrentScene().getCollections()[0].getRecommendations();
+
+                    for (var i = 0; i < recs.length; i++) {
+
+                        if ((Math.random() + 0.5) > 1)
+                            continue;
+
+                        var curr_rec = recs[i];
+                        curr_rec.setDistanceFactor(1.5, true);
+                        curr_rec.setOpacity(1, true);
+                    }
+                },
+                label: "PONG",
                 visible: true
             }
         }
