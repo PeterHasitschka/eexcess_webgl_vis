@@ -653,7 +653,7 @@ GLVIS.Recommendation.prototype.toggleVisualizeRelevance = function (visualize) {
         //this.setDistanceFactor(1 + relevance * config.distfactor, true);
     }
     else {
-        //this.setSizeFactor(1, false);
+        this.setSizeFactor(1, false);
         this.setDistanceFactor(1, false);
     }
 };
