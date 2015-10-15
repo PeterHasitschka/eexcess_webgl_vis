@@ -258,7 +258,6 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
     GLVIS.Debugger.debug("Recommendation", "Setting node type to DETAILED and zoom in afterwards", 5);
     this.setNodeType(GLVIS.Recommendation.NODETYPES.DETAILED);
 
-    console.log("REC FOCUS ZOOM");
     var abs_pos = this.getPosition(true);
     var abs_pos_vec = new THREE.Vector3(abs_pos.x, abs_pos.y, abs_pos.z);
     // @TODO: Calculate accurate offset

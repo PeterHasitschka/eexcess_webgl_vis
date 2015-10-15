@@ -219,7 +219,7 @@ GLVIS.RingSegment.prototype.handleClick = function () {
         this.deSelect();
     else
         this.select();
-
+ 
 };
 
 

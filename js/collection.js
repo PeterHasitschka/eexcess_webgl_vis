@@ -529,7 +529,6 @@ GLVIS.Collection.prototype.setStatus = function (status) {
     //Status change also means change of visual representation
     this.setMyGlObjectsDirty_();
 
-    console.log("SET: ", status);
 };
 
 /**
