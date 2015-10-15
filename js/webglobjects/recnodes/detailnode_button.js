@@ -141,8 +141,12 @@ GLVIS.RecDetailNodeButton.prototype.render = function () {
     if (!this.dirty_)
         return;
 
-    if (!this.webgl_objects_.circle)
+    if (!this.webgl_objects_.circle) {
+        this.dirty_ = false;
         return;
+    }
+
+
     var c = this.webgl_objects_.circle;
 
     c.visible = this.visible_;

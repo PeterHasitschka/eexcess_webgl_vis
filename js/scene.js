@@ -9,6 +9,10 @@ GLVIS.Scene = function (canvas) {
 
     /** @type {GLVIS.NavigationHandler} **/
     this.navigation_handler_ = new GLVIS.NavigationHandler(this);
+
+    /** @type {GLVIS.Filterhandler} **/
+    this.filter_handler_ = new GLVIS.FilterHandler(this);
+
     this.db_handler_ = null;
 
     /** @type {GLVIS.RecDashboardHandler} **/
@@ -102,6 +106,14 @@ GLVIS.Scene.prototype.getWebGlHandler = function () {
  */
 GLVIS.Scene.prototype.getNavigationHandler = function () {
     return this.navigation_handler_;
+};
+
+/**
+ * Getter for the FilterHandler
+ * @returns {GLVIS.FilterHandler}
+ */
+GLVIS.Scene.prototype.getFilterHandler = function () {
+    return this.filter_handler_;
 };
 
 /**

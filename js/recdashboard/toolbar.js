@@ -162,6 +162,7 @@ GLVIS.ToolbarHandler.prototype.buttons = {
             ping: {
                 fct: function (e) {
 
+
                     var recs = GLVIS.Scene.getCurrentScene().getCollections()[0].getRecommendations();
 
                     for (var i = 0; i < recs.length; i++) {
@@ -191,12 +192,15 @@ GLVIS.ToolbarHandler.prototype.buttons = {
                         curr_rec.setDistanceFactor(1.5, true);
                         curr_rec.setOpacity(1, true);
                     }
+
                 },
                 label: "PONG",
                 visible: true
             }
         }
+
     }
+
 };
 /**
  * Returns the button with the given identifier or null.

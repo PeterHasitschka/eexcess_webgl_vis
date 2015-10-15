@@ -103,7 +103,8 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
 
     //Register click-function
     mesh.interaction = {
-        "mouseclick": this.handleClick.bind(this)
+        "mouseclick": this.handleClick.bind(this),
+        "interaction_singleclick_exclusive": true
     };
 
 
@@ -123,8 +124,45 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
 
     var text = this.data_.val;
     text = text.replace(" ", "\n");
+    text = this.getShortText_(text);
     var label = new GLVIS.Text(text, label_options, null, null, null, null, collection);
     this.webgl_objects_.label = label;
+
+
+    //Check if corresponding filter is set -> Select
+    if (this.data_.key.type === "facet") {
+        var filters = GLVIS.Scene.getCurrentScene().getFilterHandler().getFilters();
+        var f_id = this.data_.key.id;
+        var f_val = this.data_.val;
+
+        for (var i = 0; i < filters.length; i++) {
+            var curr_f = filters[i];
+            if (curr_f.getKey().identifier !== f_id)
+                continue;
+
+            if (curr_f.getValue() === f_val) {
+                this.select();
+                break;
+            }
+        }
+    }
+
+};
+
+/**
+ * If Text (the label for the ringsegment) is an URL, just return the last part
+ * of the URL
+ * @param {string} text
+ * @returns {string} cutted text
+ */
+GLVIS.RingSegment.prototype.getShortText_ = function (text) {
+
+    var re = /http[s]?:\/\/.*\/+([^\/]+)\/?/;
+    var result = re.exec(text);
+    if (!result)
+        return text;
+
+    return result[1];
 };
 
 /**
@@ -177,20 +215,66 @@ GLVIS.RingSegment.prototype.handleClick = function () {
             ["RING SEGMENT CLICKED", this],
             3);
 
-    this.is_selected_ = !this.is_selected_;
+    if (this.is_selected_)
+        this.deSelect();
+    else
+        this.select();
+ 
+};
+
+
+GLVIS.RingSegment.prototype.select = function () {
+    if (this.is_selected_ === true)
+        return;
+
+    GLVIS.Debugger.debug("RingSegment",
+            "Selecting ring segment",
+            6);
+
+    /**
+     * Deselect other ring-segments of this level
+     */
+    var other_ringsegs = this.ring_representation_.getRingSegments();
+    for (var i = 0; i < other_ringsegs.length; i++) {
+
+        /** @type{GLVIS.RingSegment} **/
+        var curr_ringseg = other_ringsegs[i];
+        if (this.getLevel() !== curr_ringseg.getLevel() || curr_ringseg.getValue() === this.getValue())
+            continue;
+        curr_ringseg.deSelect();
+    }
+
+    if (this.data_.key.type === "facet") {
+        var filter = new GLVIS.Filter(this.data_.key.id, this.data_.val);
+        GLVIS.Scene.getCurrentScene().getFilterHandler().addFilter(filter);
+        GLVIS.Scene.getCurrentScene().getFilterHandler().apply();
+    }
+
+
+
+
+    this.is_selected_ = true;
     this.setIsDirty(true);
 };
 
+
 GLVIS.RingSegment.prototype.deSelect = function () {
 
-    if (this.is_selected_ !== true)
+    if (this.is_selected_ === false)
         return;
 
     GLVIS.Debugger.debug("RingSegment",
             "Deselecting ring segment",
             6);
 
-    this.is_selected_ = true;
+
+    if (this.data_.key.type === "facet") {
+
+        GLVIS.Scene.getCurrentScene().getFilterHandler().removeFilter(this.data_.key.id);
+        GLVIS.Scene.getCurrentScene().getFilterHandler().apply();
+    }
+
+    this.is_selected_ = false;
     this.setIsDirty(true);
 };
 
@@ -214,6 +298,10 @@ GLVIS.RingSegment.prototype.getIsDirty = function () {
  */
 GLVIS.RingSegment.prototype.getLevel = function () {
     return this.level_;
+};
+
+GLVIS.RingSegment.prototype.getValue = function () {
+    return this.data_.val;
 };
 
 /**

@@ -76,7 +76,7 @@ GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
 
                 color = 0;
 
-                var min_val = 20;
+                var min_val = 0;
 
                 for (var i = 0; i < 32; i += 8) {
                     var cur_col = (ring_base_color & (0x0000FF << i)) >> i;

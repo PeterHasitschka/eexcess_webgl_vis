@@ -52,6 +52,7 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
         distance_factor: 1,
         size_factor: 1,
         relevance: 1,
+        is_filter_positive: true,
         gl_objects: {
             center_node: null,
             connection_col: null
@@ -274,7 +275,6 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
     GLVIS.Debugger.debug("Recommendation", "Setting node type to DETAILED and zoom in afterwards", 5);
     this.setNodeType(GLVIS.Recommendation.NODETYPES.DETAILED);
 
-    console.log("REC FOCUS ZOOM");
     var abs_pos = this.getPosition(true);
     var abs_pos_vec = new THREE.Vector3(abs_pos.x, abs_pos.y, abs_pos.z);
     // @TODO: Calculate accurate offset
@@ -815,6 +815,40 @@ GLVIS.Recommendation.prototype.setOpacity = function (opacity, animate) {
                 );
     }
 };
+
+/**
+ * Apply a positive or negative match of the filter's result to visualize that.
+ * @param {bool} positive
+ */
+GLVIS.Recommendation.prototype.setFilterPositive = function (positive) {
+
+    if (this.vis_data_.is_filter_positive === positive)
+        return;
+
+    //Only animate if current collection selected
+    var animate = this.getCollection().getStatus() === GLVIS.Collection.STATUSFLAGS.SELECTED ? true : false;
+    if (positive) {
+        this.setOpacity(1, animate);
+        this.setDistanceFactor(1, animate);
+    }
+    else {
+        this.setOpacity(0.3, animate);
+        this.setDistanceFactor(0.9, animate);
+    }
+
+    this.setIsDirty(true);
+    this.vis_data_.is_filter_positive = positive;
+};
+
+/**
+ * TRUE if applied filters are positive (not filtered out)
+ * Else FALSE
+ * @returns {bool}
+ */
+GLVIS.Recommendation.prototype.getFilterPositive = function () {
+    return this.vis_data_.is_filter_positive;
+};
+
 
 GLVIS.Recommendation.prototype.getOpacity = function (include_distance) {
 
