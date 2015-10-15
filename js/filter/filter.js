@@ -48,6 +48,18 @@ GLVIS.Filter.KEYS = {
     PROVIDER: {
         identifier: "provider",
         type: "eexcess"
+    },
+    YEAR: {
+        identifier: "year",
+        type: "eexcess"
+    },
+    TYPE: {
+        identifier: "type",
+        type: "eexcess"
+    },
+    LICENSE: {
+        identifier: "license",
+        type: "eexcess"
     }
 
 };
