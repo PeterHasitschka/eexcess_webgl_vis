@@ -93,7 +93,7 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
     var spline = new THREE.SplineCurve3(vecs);
 
     var material = new THREE.LineBasicMaterial({
-        color: config.base_color - parseInt(Math.random() * config.color_diff)
+        color: 0
     });
 
     var geometry = new THREE.Geometry();
@@ -110,7 +110,7 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
             new THREE.TubeGeometry(spline, config.num_vertices, config.tube_radius, config.radius_segs),
             new THREE.MeshBasicMaterial(
                     {
-                        color: config.base_color - parseInt(Math.random() * config.color_diff),
+                        color: this.recs[0].getSplineColor(),
                         shading: THREE.SmoothShading,
                         side: THREE.DoubleSide,
                         wireframe: false,

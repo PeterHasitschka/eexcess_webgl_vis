@@ -31,6 +31,9 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
      */
     this.dirty_ = true;
 
+
+
+
     /**
      * Everything related to visualization
      */
@@ -44,6 +47,7 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
         radius: GLVIS.config.collection.recommendation.radius,
         color: 0x000000,
         color_data: GLVIS.Recommendation.COLORDATA.LANGUAGE,
+        spline_color: null,
         opacity: 1,
         distance_factor: 1,
         size_factor: 1,
@@ -78,6 +82,19 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
 GLVIS.Recommendation.prototype.registerRecSpline = function (spline) {
     this.connections_.splines.push(spline);
 };
+
+/**
+ * Returns a (random) color value for a spline.
+ * @returns {integer}
+ */
+GLVIS.Recommendation.prototype.getSplineColor = function () {
+    if (!this.vis_data_.spline_color) {
+        var config = GLVIS.config.connection.rec_spline;
+        this.vis_data_.spline_color = config.base_color - parseInt(Math.random() * config.color_diff);
+    }
+    return this.vis_data_.spline_color;
+};
+
 
 /**
  * Remove a registered spline from the recommendation
