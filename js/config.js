@@ -6,7 +6,11 @@ GLVIS.config = {
         queries_to_fetch: 21,
         skip_empty_queries: true,
         circle_radius: 2000,
-        media_folder: "/visualizations/WebGlVisualization/media/"
+        media_folder: "/visualizations/WebGlVisualization/media/",
+        possible_vis_types: {
+            BOW: 0x1,
+            RING: 0x2
+        },
     },
     debug: {
         active: true,
@@ -63,21 +67,20 @@ GLVIS.config = {
                     Europeana: 0x1F77B4
                 },
                 language: {
-                    
-                     cs: 0x1F77B4,
-                     unknown: 0xFF7F0E,
-                     unkown: 0xFF7F0E, //(!)
-                     en: 0x2CA02C,
-                     es: 0xD62728,
-                     da: 0x9467BD,
-                     de: 0x8C564B,
-                     et: 0xE377C2,
-                     ro: 0x7F7F7F,
-                     pl: 0xBCBD22,
-                     hu: 0x17BECF,
-                     it: 0x1F77B4,
-                     mul: 0xFF7F0E
-                     
+                    cs: 0x1F77B4,
+                    unknown: 0xFF7F0E,
+                    unkown: 0xFF7F0E, //(!)
+                    en: 0x2CA02C,
+                    es: 0xD62728,
+                    da: 0x9467BD,
+                    de: 0x8C564B,
+                    et: 0xE377C2,
+                    ro: 0x7F7F7F,
+                    pl: 0xBCBD22,
+                    hu: 0x17BECF,
+                    it: 0x1F77B4,
+                    mul: 0xFF7F0E
+
                 },
                 rings: {
                     r1: 0xe41a1c,
