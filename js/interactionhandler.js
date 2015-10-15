@@ -106,24 +106,26 @@ GLVIS.InteractionHandler = function (scene) {
 /**
  * @TODO Check if needed anymore
  */
-GLVIS.InteractionHandler.prototype.deselectAllCollections = function () {
-    //Deselect all collections
-    for (var i = 0; i < this.scene_.getCollections().length; i++)
-    {
-        var curr_coll = this.scene_.getCollections()[i];
-        curr_coll.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
-    }
-};
-
+/*
+ GLVIS.InteractionHandler.prototype.deselectAllCollections = function () {
+ //Deselect all collections
+ for (var i = 0; i < this.scene_.getCollections().length; i++)
+ {
+ var curr_coll = this.scene_.getCollections()[i];
+ curr_coll.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
+ }
+ };
+ */
 /**
  * Calls interaction function on Three-Object if exists
  * @param {event} event 
  * @param {string} interaction_type e.g  'mouseclick', 'mouseover' ...
  */
 GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interaction_type) {
-
-    if (interaction_type === "mouseclick")
-        this.deselectAllCollections();
+    /*
+     if (interaction_type === "mouseclick")
+     this.deselectAllCollections();
+     */
 
     var intersected = this.getIntersectedObjects_(event);
 
@@ -131,7 +133,7 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
             "HANDLING SCENE INTERACTION EVENT '" + interaction_type + "'", 6);
 
     var single_ids_already_clicked = [];
-    
+
     //For flagging if some button was re-hovered
     GLVIS.RecDetailNodeButton.new_hovered = false;
 
@@ -175,7 +177,7 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
             }
         }
     }
-    
+
     //Unhovering button if not hovered again.
     if (!GLVIS.RecDetailNodeButton.new_hovered && GLVIS.RecDetailNodeButton.current_hovered) {
         GLVIS.RecDetailNodeButton.current_hovered.unhover();

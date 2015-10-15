@@ -809,13 +809,15 @@ GLVIS.Recommendation.prototype.setFilterPositive = function (positive) {
     if (this.vis_data_.is_filter_positive === positive)
         return;
 
+    //Only animate if current collection selected
+    var animate = this.getCollection().getStatus() === GLVIS.Collection.STATUSFLAGS.SELECTED ? true : false;
     if (positive) {
-        this.setOpacity(1);
-        this.setDistanceFactor(1);
+        this.setOpacity(1, animate);
+        this.setDistanceFactor(1, animate);
     }
     else {
-        this.setOpacity(0.3);
-        this.setDistanceFactor(0.9);
+        this.setOpacity(0.3, animate);
+        this.setDistanceFactor(0.9, animate);
     }
 
     this.setIsDirty(true);

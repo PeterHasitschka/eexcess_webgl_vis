@@ -104,7 +104,15 @@ GLVIS.FilterHandler.prototype.applyFiltersToRec_ = function (rec) {
                 throw ("Filter Type '" + curr_filter.getType().type + "' not supported yet!");
         }
     }
-    
+
     rec.setFilterPositive(true);
 
+};
+
+/**
+ * Get all registered filters
+ * @returns {[GLVIS.Filter]}
+ */
+GLVIS.FilterHandler.prototype.getFilters = function () {
+    return this.filters_;
 };

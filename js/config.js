@@ -63,19 +63,21 @@ GLVIS.config = {
                     Europeana: 0x1F77B4
                 },
                 language: {
-                    cs: 0x1F77B4,
-                    unknown: 0xFF7F0E,
-                    unkown: 0xFF7F0E, //(!)
-                    en: 0x2CA02C,
-                    es: 0xD62728,
-                    da: 0x9467BD,
-                    de: 0x8C564B,
-                    et: 0xE377C2,
-                    ro: 0x7F7F7F,
-                    pl: 0xBCBD22,
-                    hu: 0x17BECF,
-                    it: 0x1F77B4,
-                    mul: 0xFF7F0E
+                    
+                     cs: 0x1F77B4,
+                     unknown: 0xFF7F0E,
+                     unkown: 0xFF7F0E, //(!)
+                     en: 0x2CA02C,
+                     es: 0xD62728,
+                     da: 0x9467BD,
+                     de: 0x8C564B,
+                     et: 0xE377C2,
+                     ro: 0x7F7F7F,
+                     pl: 0xBCBD22,
+                     hu: 0x17BECF,
+                     it: 0x1F77B4,
+                     mul: 0xFF7F0E
+                     
                 },
                 rings: {
                     r1: 0xe41a1c,
@@ -115,14 +117,13 @@ GLVIS.config = {
                     segments: 40
                 },
                 add_dinstance: 50,
-                
                 button: {
-                    y_offset : -9,
+                    y_offset: -9,
                     z_offset: 1,
                     size: 1.2,
                     icon_size: 1.0,
                     segments: 20,
-                    hovercolor: 0xFFFF55    
+                    hovercolor: 0xFFFF55
                 }
             },
             animation: {
@@ -203,7 +204,7 @@ GLVIS.config = {
                 z_value: 0,
                 segments: 100,
                 phi_seg_num: 8,
-                opacity: 0.8,
+                opacity: 0.5,
                 label: {
                     font_size: 8,
                     color: "#000033",

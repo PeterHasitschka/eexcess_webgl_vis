@@ -387,8 +387,10 @@ GLVIS.Collection.prototype.unconnectSameRecsFromOtherCollections = function () {
  */
 GLVIS.Collection.prototype.selectAndFocus = function (cb) {
 
-    this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
-    
+
+
+    //this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
+
     GLVIS.Scene.getCurrentScene().getNavigationHandler().focusCollection(this, function () {
         GLVIS.Debugger.debug("Collection",
                 "FOCUSGRAPH: Callback finish!",
@@ -527,6 +529,7 @@ GLVIS.Collection.prototype.setStatus = function (status) {
     //Status change also means change of visual representation
     this.setMyGlObjectsDirty_();
 
+    console.log("SET: ", status);
 };
 
 /**
@@ -598,6 +601,7 @@ GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
     pos_handler.setIsOneFocused(true);
 
     this.selectAndFocus();
+    this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
 
     this.unconnectSameRecsFromOtherCollections();
 
@@ -628,6 +632,8 @@ GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
             }.bind(this)
             );
     this.toggleRecRelevanceVisualization(true);
+
+
 };
 
 /**
@@ -662,9 +668,7 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
     this.getRecPosHandler().calculatePositions();
 
 
-
-
-
+    this.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
 };
 
 /**
