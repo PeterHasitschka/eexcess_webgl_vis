@@ -50,15 +50,12 @@ GLVIS.CollectionPosCircular.prototype.getParentMapping_ = function (collections)
     }
 
     //Sort array
-    console.log(parent_mapping);
     parent_mapping.sort(function (a, b) {
         if (a[1] === null)
             return b;
 
         return a[1] - b[1];
     });
-    console.log(parent_mapping);
-
     return parent_mapping;
 };
 

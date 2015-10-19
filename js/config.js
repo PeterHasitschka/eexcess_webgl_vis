@@ -6,7 +6,8 @@ GLVIS.config = {
         queries_to_fetch: 21,
         skip_empty_queries: true,
         circle_radius_ring: 2000,
-        circle_radius_bow: 4000,
+        circle_radius_bow: 8000,
+        bow_empty_spaces_factor: 2,
         media_folder: "/visualizations/WebGlVisualization/media/",
         possible_vis_types: {
             BOW: 0x1,
@@ -21,7 +22,7 @@ GLVIS.config = {
     three: {
         camera_ortho: {
             NEAR: -1000,
-            FAR: 10000,
+            FAR: 17000,
             Z_POS: 300
         },
         camera_perspective: {

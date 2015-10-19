@@ -6,7 +6,7 @@ GLVIS.CollectionPosCircularTypeBow = function () {
 
 
 GLVIS.CollectionPosCircularTypeBow.prototype.getAddEmptySpaces = function (orig_num) {
-    return parseInt(orig_num * 1.4);
+    return parseInt(orig_num * GLVIS.config.scene.bow_empty_spaces_factor);
 };
 
 
