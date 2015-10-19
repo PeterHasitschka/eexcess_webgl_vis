@@ -48,6 +48,7 @@ GLVIS.CollectionCenterNode.prototype.initAndRegisterGlObj = function (mesh_paren
         "mouseclick": this.collection_.handleClick.bind(this.collection_),
         "mouseover": this.collection_.handleCenterMouseover.bind(this.collection_)
     };
+    sphere.scene_obj = this.collection_;
 
     if (!mesh_parent) {
         var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();

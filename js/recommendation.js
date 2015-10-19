@@ -224,14 +224,15 @@ GLVIS.Recommendation.prototype.handleDetailNodeClick = function () {
             3);
 
     //Don't do focus etc. if clicked before --> Zoom out to collection
-    if (GLVIS.Recommendation.current_selected_rec && GLVIS.Recommendation.current_selected_rec === this) {
-        this.defocusAndZoomOut();
-        return;
-    }
-
+    /*
+     if (GLVIS.Recommendation.current_selected_rec && GLVIS.Recommendation.current_selected_rec === this) {
+     this.defocusAndZoomOut();
+     return;
+     }
+     */
 
     this.focusAndZoom();
-    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
+
 };
 
 /**
@@ -371,6 +372,7 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
 
 
     GLVIS.Recommendation.current_selected_rec = this;
+    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
 };
 
 GLVIS.Recommendation.prototype.setDetailNodeVisibility = function (visible) {
@@ -392,53 +394,43 @@ GLVIS.Recommendation.prototype.defocusAndZoomOut = function () {
     });
 
     GLVIS.Recommendation.current_selected_rec = null;
+    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
 };
 
 /**
  * Swap the node type (e.g. common node or detailed node).
  * Each other registered type of node will be deleted from the gl list and will
  * be destroyed.
- * @param {type} Instance of @see{GLVIS.Recommendation.NODETYPES}
- * @returns {undefined}
+ * @param {Object} type Instance of @see{GLVIS.Recommendation.NODETYPES}
  */
 GLVIS.Recommendation.prototype.setNodeType = function (type) {
 
-    var rec_common_node_exists = false;
+    var rec_node_type_exists = false;
 
     GLVIS.Debugger.debug("Recommendation", "Creating new node type.", 5);
 
     //Check if that kind of node already exists
-    for (var key in this.vis_data_.gl_objects) {
-        if (this.vis_data_.gl_objects.hasOwnProperty(key)) {
-            if (this.vis_data_.gl_objects[key] instanceof type) {
-                rec_common_node_exists = true;
-                GLVIS.Debugger.debug("Recommendation", "Node of type " + type + " exists... skip creating it.", 6);
-            }
-        }
+    if (this.vis_data_.center_node instanceof type) {
+        rec_node_type_exists = true;
+        GLVIS.Debugger.debug("Recommendation", "Node of type " + type + " exists... skip creating it.", 6);
     }
-
-    if (rec_common_node_exists)
+    if (rec_node_type_exists)
         return;
 
-    //Go through all other nodetypes and delete them from the gl objects
-    //to make place for the wanted type
-    for (var key in GLVIS.Recommendation.NODETYPES) {
-        var curr_node_type = GLVIS.Recommendation.NODETYPES[key];
+    this.vis_data_.gl_objects.center_node.delete();
 
-        //Delete this kind of node from the gl list     
-        for (var key in this.vis_data_.gl_objects) {
-            if (this.vis_data_.gl_objects.hasOwnProperty(key)) {
-                if (this.vis_data_.gl_objects[key] instanceof curr_node_type) {
-                    this.vis_data_.gl_objects[key].delete();
-                    this.vis_data_.gl_objects[key] = null;
-                }
-            }
-        }
-    }
     //Create new node type
     var gl_node = new type(this, this.getCollection().getMeshContainerNode());
     this.vis_data_.gl_objects.center_node = gl_node;
     this.setIsDirty(true);
+};
+
+/**
+ * Returns the Node depending on the LOD
+ * @returns {GLVIS.RecommendationCommonNode | GLVIS.RecommendationDetailNode}
+ */
+GLVIS.Recommendation.prototype.getRecNode = function () {
+    return this.vis_data_.gl_objects.center_node;
 };
 
 /**

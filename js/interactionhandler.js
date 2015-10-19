@@ -10,21 +10,21 @@ GLVIS.InteractionHandler = function (scene) {
     this.scene_ = scene;
 
     var config = GLVIS.config.interaction;
-
+    var nh = this.scene_.getNavigationHandler();
 
     this.keyinteractions_ = {
         keydown: {
             37: function () {   // LEFT
-                this.scene_.getNavigationHandler().moveCameraAroundCircle(-5, 0, true);
+                nh.moveCameraAroundCircle(-5, 0, true);
             }.bind(this),
             39: function () {   // RIGHT
-                this.scene_.getNavigationHandler().moveCameraAroundCircle(5, 0, true);
+                nh.moveCameraAroundCircle(5, 0, true);
             }.bind(this),
             38: function () {   // UP
-                this.scene_.getNavigationHandler().moveCameraAroundCircle(0, 5, true);
+                nh.moveCameraAroundCircle(0, 5, true);
             }.bind(this),
             40: function () {   // DOWN
-                this.scene_.getNavigationHandler().moveCameraAroundCircle(0, -5, true);
+                nh.moveCameraAroundCircle(0, -5, true);
             }.bind(this)
         }
     };
@@ -79,12 +79,12 @@ GLVIS.InteractionHandler = function (scene) {
 
             if (!is_mouse_down_in_canvas)
                 return;
-            var zoom_factor = 1 / this.scene_.getNavigationHandler().getZoomFactor();
+            var zoom_factor = 1 / nh.getZoomFactor();
             var curr_mouse_x_diff = 0 - (event.clientX - mouse_x_prev) * zoom_factor;
             var curr_mouse_y_diff = (event.clientY - mouse_y_prev) * zoom_factor;
 
-            this.scene_.getNavigationHandler().resetAnimationMovement();
-            this.scene_.getNavigationHandler().moveCameraAroundCircle(
+            nh.resetAnimationMovement();
+            nh.moveCameraAroundCircle(
                     curr_mouse_x_diff / config.mousesensitivy,
                     curr_mouse_y_diff / config.mousesensitivy,
                     true
@@ -97,8 +97,14 @@ GLVIS.InteractionHandler = function (scene) {
 
         //MOUSE-WHEEL (ZOOM)
         jQuery(canvas).mousewheel(function (event) {
-            this.scene_.getNavigationHandler().resetAnimationZoom();
-            this.scene_.getNavigationHandler().zoomDelta(event.deltaY * 5);
+            if (false) {
+                nh.resetAnimationZoom();
+                nh.zoomDelta(event.deltaY * 5);
+            } else {
+                nh.onMouseWheelMove(event, this.getIntersectedObjects_(event));
+            }
+
+
         }.bind(this));
     }.bind(this));
 };

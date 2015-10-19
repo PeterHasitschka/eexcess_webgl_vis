@@ -454,6 +454,46 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
     this.zoom(2);
 };
 
+
+
+GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_objects) {
+    var is_positive = e.deltaY === 1 ? true : false;
+    console.log(is_positive);
+
+    for (var i = 0; i < intersected_objects.length; i++) {
+        if (intersected_objects[i].object && intersected_objects[i].object.scene_obj) {
+            var i_obj = intersected_objects[i].object.scene_obj;
+
+            if (i_obj instanceof GLVIS.Collection) {
+                console.log("C " + i_obj.getId());
+
+                if (is_positive) {
+                    if (!i_obj.getRingRepresentation())
+                        i_obj.createRingRepresentation();
+                }
+                else {
+                    if (i_obj.getRingRepresentation())
+                        i_obj.deleteRingRepresentation();
+                }
+
+
+                break;
+            } else if (i_obj instanceof GLVIS.Recommendation) {
+                console.log("R " + i_obj.getId());
+
+                if (is_positive) {
+                    i_obj.focusAndZoom();
+                }
+                else {
+                    i_obj.defocusAndZoomOut();
+                }
+                break;
+            }
+        }
+    }
+};
+
+
 /**
  * Single getter for animation
  * @returns {float}
