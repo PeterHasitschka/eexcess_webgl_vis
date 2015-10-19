@@ -26,17 +26,8 @@ GLVIS.Scene = function (canvas) {
     /** @type {GLVIS.InteractionHandler} **/
     this.interaction_handler_ = new GLVIS.InteractionHandler(this);
 
-    /** @type{GLVIS.CollectionPosCircular|GLVIS.CollectionPosBow} **/
-    this.collection_position_handler_;
-    if (this.vis_type_ === GLVIS.config.scene.possible_vis_types.RING) {
-        this.collection_position_handler_ = new GLVIS.CollectionPosCircular();
-    }
-    else if (this.vis_type_ === GLVIS.config.scene.possible_vis_types.BOW) {
-        this.collection_position_handler_ = new GLVIS.CollectionPosBow();
-    }
-    else
-        throw ("VIS TYPE " + this.vis_type_ + " NOT SUPPORTED!");
-    alert ("Good morning! (Scene constructor!) Vis types set. Create CollectionPosBow now!");
+    /** @type{GLVIS.CollectionPosCircular} **/
+    this.collection_position_handler_ = new GLVIS.CollectionPosCircular(GLVIS.config.scene.possible_vis_types.RING);
 
     /** @type{GLVIS.Animation} **/
     this.animation_ = new GLVIS.Animation();

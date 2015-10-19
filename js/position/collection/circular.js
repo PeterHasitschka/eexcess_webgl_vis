@@ -3,15 +3,30 @@ var GLVIS = GLVIS || {};
 /**
  * This position handler sets all collections on a circular path next to their parents.
  * This means that only one child per collections is supported.
+ * @type @see{GLVIS.config.scene.possible_vis_types} circle_type Ring or Bow
  * @returns {undefined}
  */
-GLVIS.CollectionPosCircular = function () {
+GLVIS.CollectionPosCircular = function (circle_type) {
 
     /** @type {GLVIS.Scene} **/
     this.scene_ = GLVIS.Scene.getCurrentScene();
 
-    this.is_onefocused_ = false;
+
     this.coll_to_focus_ = null;
+
+    this.circle_type_poscalculator_ = null;
+    switch (circle_type) {
+        case GLVIS.config.scene.possible_vis_types.RING :
+            this.circle_type_poscalculator_ = new GLVIS.CollectionPosCircularTypeRing();
+            break;
+
+        case GLVIS.config.scene.possible_vis_types.BOW :
+            this.circle_type_poscalculator_ = new GLVIS.CollectionPosCircularTypeBow();
+            break;
+
+        default:
+            throw ("Circle-Type +" + circle_type + " unknown!");
+    }
 
 };
 
@@ -81,8 +96,8 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
             mesh,
             sphereMaterial);
 
-    sphere.position.set(0,0,-GLVIS.config.scene.circle_radius);
-    
+    sphere.position.set(0, 0, -GLVIS.config.scene.circle_radius);
+
     GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(sphere);
 
 
@@ -94,51 +109,11 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
         var current_collection = collections[collection_key];
 
         var index = coll_count - center_id;
-        var pos = this.getPosAndRot(index, collections.length);
+        var pos = this.circle_type_poscalculator_.getPosAndRot(index, collections.length);
 
         current_collection.setPosition(pos.x, null, pos.z);
         current_collection.setRotation(pos.degree);
     }
-};
-
-/**
- * 
- * @param {integer} index Signed Int. 0 is center -1 is next left 1 is next right etc...
- * @param {integer} numindizies Maximum number of collections to set pos
- * @returns {array}
- */
-GLVIS.CollectionPosCircular.prototype.getPosAndRot = function (index, numindizies) {
-
-    //Let one free to see where it ends
-    //numindizies += 1;
-
-
-
-    var rad_step = (Math.PI * 2) / (numindizies);
-
-    var curr_rad = index * rad_step + Math.PI / 2;
-
-    var radius = GLVIS.config.scene.circle_radius;
-    var pos = GLVIS.Tools.getPosFromRad(curr_rad, radius);
-
-    var degree = (curr_rad - Math.PI / 2) * 180 / Math.PI * -1;
-    return {x: pos.x, z: pos.y - radius, degree: degree};
-};
-
-/**
- * 
- * @param {boolean} value True if a focus representation should be performed
- * @returns {undefined}
- */
-GLVIS.CollectionPosCircular.prototype.setIsOneFocused = function (value) {
-    this.is_onefocused_ = value;
-};
-
-/**
- * @returns {Boolean} True if onefocus flag is set
- */
-GLVIS.CollectionPosCircular.prototype.getIsOneFocused = function () {
-    return this.is_onefocused_;
 };
 
 /**
@@ -147,6 +122,13 @@ GLVIS.CollectionPosCircular.prototype.getIsOneFocused = function () {
  */
 GLVIS.CollectionPosCircular.prototype.setCollToFocus = function (coll) {
     this.coll_to_focus_ = coll;
+};
+
+/**
+ * Dummy
+ * @param {bool} val
+ */
+GLVIS.CollectionPosCircular.prototype.setIsOneFocused = function (val) {
 };
 
 /**
