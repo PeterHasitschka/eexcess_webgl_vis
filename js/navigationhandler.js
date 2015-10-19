@@ -451,9 +451,12 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
             callback_fct
             );
 
-    this.zoom(2);
+    //this.setDistanceFactor(3);
 };
 
+GLVIS.NavigationHandler.prototype.defocusCollection = function () {
+    //this.setDistanceFactor(1);
+};
 
 
 GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_objects) {
@@ -470,8 +473,10 @@ GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_ob
                 if (is_positive) {
                     if (!i_obj.getRingRepresentation())
                         i_obj.createRingRepresentation();
+
                 }
                 else {
+
                     if (i_obj.getRingRepresentation())
                         i_obj.deleteRingRepresentation();
                 }
