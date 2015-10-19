@@ -72,6 +72,7 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                     //path + "js/position/collection/linear.js",
                                     path + "js/position/collection/circular.js",
                                     path + "js/position/collection/circletype/ring.js",
+                                    path + "js/position/collection/circletype/bow.js",
                                     path + "js/webglobjects/connection/collection_rec_line.js",
                                     path + "js/webglobjects/connection/collection_collection_line.js",
                                     path + "js/webglobjects/connection/rec_rec_spline.js",

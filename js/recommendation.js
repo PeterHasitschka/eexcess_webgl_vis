@@ -290,7 +290,7 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
 
     var coll_pos = this.getCollection().getPosition();
     var coll_pos_vec = new THREE.Vector3(coll_pos.x, coll_pos.y, coll_pos.z);
-    var circle_center_vec = new THREE.Vector3(0, 0, -GLVIS.config.scene.circle_radius);
+    var circle_center_vec = new THREE.Vector3(0, 0, -GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius());
 
     var dir_vec = coll_pos_vec.clone().sub(circle_center_vec).normalize();
     var final_pos = abs_pos_vec.clone().add(dir_vec.multiplyScalar(camera_distance));

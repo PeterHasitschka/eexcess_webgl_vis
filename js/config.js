@@ -5,12 +5,13 @@ GLVIS.config = {
     scene: {
         queries_to_fetch: 21,
         skip_empty_queries: true,
-        circle_radius: 2000,
+        circle_radius_ring: 2000,
+        circle_radius_bow: 4000,
         media_folder: "/visualizations/WebGlVisualization/media/",
         possible_vis_types: {
             BOW: 0x1,
             RING: 0x2
-        },
+        }
     },
     debug: {
         active: true,

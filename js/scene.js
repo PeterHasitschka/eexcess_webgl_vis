@@ -27,7 +27,7 @@ GLVIS.Scene = function (canvas) {
     this.interaction_handler_ = new GLVIS.InteractionHandler(this);
 
     /** @type{GLVIS.CollectionPosCircular} **/
-    this.collection_position_handler_ = new GLVIS.CollectionPosCircular(GLVIS.config.scene.possible_vis_types.RING);
+    this.collection_position_handler_ = new GLVIS.CollectionPosCircular(GLVIS.config.scene.possible_vis_types.BOW);
 
     /** @type{GLVIS.Animation} **/
     this.animation_ = new GLVIS.Animation();
