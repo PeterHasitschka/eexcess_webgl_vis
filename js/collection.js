@@ -398,6 +398,9 @@ GLVIS.Collection.prototype.selectAndFocus = function (cb) {
     GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onCollectionClick(this);
 };
 
+/**
+ * Just moving the camera back a little bit
+ */
 GLVIS.Collection.prototype.deselect = function () {
     GLVIS.Scene.getCurrentScene().getNavigationHandler().defocusCollection();
 };

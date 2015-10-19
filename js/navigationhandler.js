@@ -451,7 +451,7 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
             callback_fct
             );
 
-    //this.setDistanceFactor(3);
+    //this.setDistanceFactor(10);
 };
 
 GLVIS.NavigationHandler.prototype.defocusCollection = function () {
