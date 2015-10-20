@@ -26,9 +26,9 @@ GLVIS.config = {
             Z_POS: 300
         },
         camera_perspective: {
-            FOV: 60,
+            FOV: 80,
             NEAR: 50,
-            FAR: 10000,
+            FAR: 20000,
             DISTANCE: 1300
         },
         canvas_color: 0xFBFFFD
@@ -38,7 +38,7 @@ GLVIS.config = {
         mousesensitivy: 25
     },
     collection: {
-        init_distance: 400,
+        init_distance_fct: 0.9,
         center_node: {
             transparency: {
                 inactive: 0.5
@@ -98,7 +98,7 @@ GLVIS.config = {
                 strength: 0.01,
                 weakness: 0.5
             },
-            camera_distance: 100,
+            camera_distance: 30,
             common_node: {
                 min_radius: 0.5,
                 active_radius: 10,
