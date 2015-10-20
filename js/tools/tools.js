@@ -72,3 +72,44 @@ GLVIS.Tools.getRotation = function (axis, degree, point) {
     }
 
 };
+
+
+
+GLVIS.Tools.MultVarOps = {
+    add: function (a, b) {
+
+        if (typeof a !== 'object' || typeof b !== 'object')
+            return a + b;
+
+        var c = {};
+        for (var k in a) {
+            c[k] = a[k] + b[k];
+        }
+
+        return c;
+    },
+    sub: function (a, b) {
+
+        if (typeof a !== 'object' || typeof b !== 'object')
+            return a - b;
+
+        var c = {};
+        for (var k in a) {
+            c[k] = a[k] - b[k];
+        }
+
+        return c;
+    },
+    length: function (a) {
+
+        if (typeof a !== 'object')
+            return a;
+
+        var c = 0;
+        for (var k in a) {
+            c += Math.pow(a[k], 2);
+        }
+        return Math.sqrt(c);
+    }
+
+};
