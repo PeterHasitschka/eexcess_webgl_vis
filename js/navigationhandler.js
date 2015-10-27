@@ -469,33 +469,8 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
             false
             );
 
-
-    this.setDistanceFactor(goal_dist_fct, true, function(){});
-
-
-
-
-//ZOOM OUT
-    /**
-     if (this.getDistanceFactor() < goal_dist_fct) {
-     this.setDistanceFactor(goal_dist_fct, true, function () {
-     this.setCameraToCircle(collection.getPosition().x, collection.getPosition().y, collection.getPosition().z,
-     null,
-     true,
-     cb
-     );
-     }.bind(this));
-     } else {    //ZOOM IN
-     this.setCameraToCircle(collection.getPosition().x, collection.getPosition().y, collection.getPosition().z,
-     null,
-     true,
-     cb
-     );
-     
-     }
-     **/
-
-
+    this.setDistanceFactor(goal_dist_fct, true, function () {
+    });
 
 };
 
@@ -606,11 +581,17 @@ GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_ob
                         i_obj.createRingRepresentation();
                 }
                 else {
-
-                    if (i_obj.getRingRepresentation())
-                        i_obj.deleteRingRepresentation();
+                    /**
+                     * Find the coll with ring-rep and defocus
+                     */
+                    var cs = GLVIS.Scene.getCurrentScene().getCollections();
+                    for (var i = 0; i < cs.length; i++) {
+                        if (cs[i].getRingRepresentation()) {
+                            cs[i].deleteRingRepresentation();
+                            break;
+                        }
+                    }
                 }
-
 
                 break;
             } else if (i_obj instanceof GLVIS.Recommendation) {
