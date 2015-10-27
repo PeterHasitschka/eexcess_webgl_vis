@@ -386,9 +386,6 @@ GLVIS.Collection.prototype.unconnectSameRecsFromOtherCollections = function () {
  * @param {function} cb Callback
  */
 GLVIS.Collection.prototype.selectAndFocus = function (cb) {
-
-
-
     //this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
 
     GLVIS.Scene.getCurrentScene().getNavigationHandler().focusCollection(this, function () {
@@ -399,6 +396,13 @@ GLVIS.Collection.prototype.selectAndFocus = function (cb) {
             cb();
     }.bind(this));
     GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onCollectionClick(this);
+};
+
+/**
+ * Just moving the camera back a little bit
+ */
+GLVIS.Collection.prototype.deselect = function () {
+    GLVIS.Scene.getCurrentScene().getNavigationHandler().defocusCollection();
 };
 
 /**
@@ -668,6 +672,7 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
 
 
     this.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
+    this.deselect();
 };
 
 /**

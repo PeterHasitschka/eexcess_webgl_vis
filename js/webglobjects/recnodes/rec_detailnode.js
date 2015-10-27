@@ -71,6 +71,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
         "interaction_singleclick_exclusive": true,
         "mouseover": this.recommendation_.handleMouseover.bind(this.recommendation_)
     };
+    circle_outer.scene_obj = this.recommendation_;
 
 
     this.webgl_objects_.group.add(circle_outer);
@@ -107,7 +108,9 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                             config.circle.segments
                             ),
                     circle_inner_material);
-
+            
+            circle_inner.scene_obj = this.recommendation_;
+            
             this.webgl_objects_.group.add(circle_inner);
             this.webgl_objects_.circle_inner = circle_inner;
 

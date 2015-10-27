@@ -12,7 +12,7 @@ GLVIS.NavigationHandler = function (scene) {
     /** @type {THREE.Vector3} **/
     this.lookat_lock_ = null;
 
-    this.animation_ = GLVIS.config.navigation.animation_ids;
+    this.animationconfig_ = GLVIS.config.navigation.animation_ids;
 };
 
 /**
@@ -24,10 +24,11 @@ GLVIS.NavigationHandler = function (scene) {
  * @param {float} x
  * @param {float} y
  * @param {float} z
+ * @param {float | null} distance_fact if not null distance factor gets set
  * @param {bool} animate
  * @param {function} cb Only called if animated
  */
-GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z, animate, cb) {
+GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z, distance_fact, animate, cb) {
 
     if (x === undefined)
         x = null;
@@ -40,35 +41,23 @@ GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z, animate
         throw Exception("All cordinate values needed!");
     }
 
-    if (true)
-    {
-        if (!animate) {
-            var missing_degrees = this.getMissingCameraDegrees(x, y, z);
-            this.moveCameraAroundCircle(missing_degrees.h, missing_degrees.v);
-        } else {
+    var missing_degrees = this.getMissingCameraDegrees(x, y, z);
+    this.moveCameraAroundCircle(missing_degrees.h, missing_degrees.v, true);
 
-            console.error("Set Camera To Circle ANIMATION not supported " +
-                    "due to problems at animation logic! (6.10.15 / 15:55");
+    if (distance_fact !== null)
+        this.setDistanceFactor(distance_fact, animate);
 
-            return;
-        }
-    }
-    else
-    {
-        var collection_circle_center = new THREE.Vector3(0, 0, 0 - GLVIS.config.scene.circle_radius);
-        var focus_point = new THREE.Vector3(x, y, z);
-
-        var view_dir = collection_circle_center.clone().sub(focus_point);
-        view_dir.normalize();
-
-        var distance = GLVIS.config.three.camera_perspective.DISTANCE;
-        var camera_pos = focus_point.clone().sub(view_dir.setLength(distance));
-
-        var camera = this.scene_.getWebGlHandler().getCamera();
-        camera.position.set(camera_pos.x, camera_pos.y, camera_pos.z);
-        camera.lookAt(focus_point);
-    }
 };
+
+
+/**
+ * Convert the current Camera position to a relative H and V degree to the zero point
+ * @returns {object} Holding 'h' (Horizontal degree), 'v' (Vertical degree)
+ */
+GLVIS.NavigationHandler.prototype.getCurrentHVDegree = function () {
+    return GLVIS.Tools.MultVarOps.mult(-1, this.getMissingCameraDegrees(0, 0, 0));
+};
+
 
 /**
  * Difference of the current degree  (@see{GLVIS.NavigationHandler.prototype.getDegreeOnCameraSphere_})
@@ -100,7 +89,8 @@ GLVIS.NavigationHandler.prototype.getMissingCameraDegrees = function (goal_x, go
  */
 GLVIS.NavigationHandler.prototype.getDegreeOnCameraSphere_ = function (x, y, z) {
 
-    var coll_circle_d = GLVIS.config.scene.circle_radius;
+    var coll_circle_d = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
+    ;
     var coll_circle_center_v = new THREE.Vector3(0, 0, 0 - coll_circle_d);
 
 
@@ -130,6 +120,11 @@ GLVIS.NavigationHandler.prototype.getDegreeOnCameraSphere_ = function (x, y, z) 
     return {h: h, v: v};
 };
 
+
+GLVIS.NavigationHandler.prototype.moveCameraAroundCircleWObj = function (h_v) {
+    GLVIS.NavigationHandler.prototype.moveCameraAroundCircle(h_v.h, h_v.v, true);
+};
+
 /**
  * Rotate the camera on a virtual sphere outside the circular-view circle by 2 delta values
  * 
@@ -145,7 +140,8 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
     if (degree_v_delta === null || degree_v_delta === undefined)
         degree_v_delta = 0;
 
-    var coll_circle_radius = GLVIS.config.scene.circle_radius;
+    var coll_circle_radius = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
+    ;
     var coll_circle_vec = new THREE.Vector3(0, 0, 0 - coll_circle_radius);
 
     var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
@@ -216,76 +212,84 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
  * Change distance from collection-circle center to a value that the camera
  * is on the sphere described by the coll-circle.
  * @param {bool} animation TRUE for animation
- * @param {function} cb Callback after performed animation
  */
-GLVIS.NavigationHandler.prototype.moveCameraToCircleSphere = function (animation, cb) {
-
-    var coll_circle_radius = GLVIS.config.scene.circle_radius;
-
-    var factor = this.getDistanceFactor();
-
-    if (!animation) {
-        this.setDistanceFactor(1 - factor);
-    }
-    else {
-        var anim = GLVIS.Scene.getCurrentScene().getAnimation();
-        anim.finishCameraMovementAnimations();
-
-        anim.register(
-                this.animation_.move,
-                1.0,
-                null,
-                this.getDistanceFactor.bind(this),
-                this.setDistanceFactor.bind(this),
-                0,
-                0.7,
-                1,
-                0.01,
-                function () {
-                    if (cb)
-                        cb();
-                },
-                false);
-    }
+GLVIS.NavigationHandler.prototype.moveCameraToCircleSphere = function (animation) {
+    this.setDistanceFactor(1, animation);
 };
 
 
+/**
+ * If camera is inside the circle return value < 1
+ * If outside > 1
+ * Else (on the circle) == 1
+ * @returns {float}
+ */
 GLVIS.NavigationHandler.prototype.getDistanceFactor = function () {
 
-
-    var coll_circle_radius = GLVIS.config.scene.circle_radius;
+    var coll_circle_radius = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
     var camera_distance_to_colls = GLVIS.config.three.camera_perspective.DISTANCE;
+    var total_distance_to_center = coll_circle_radius + camera_distance_to_colls;
 
     var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
     var current_camera_pos = camera.position.clone();
-
     var circle_center = new THREE.Vector3(0, 0, coll_circle_radius);
-
     var camera_center_vec = circle_center.clone().add(current_camera_pos);
     var current_length = camera_center_vec.length();
 
-    var total_distance_to_center = coll_circle_radius + camera_distance_to_colls;
-    var factor = total_distance_to_center / current_length;
+    var factor = current_length / total_distance_to_center;
 
     return factor;
 };
 
+/**
+ * Move the camera to the direction of the center or away from it.
+ * If factor is 1 the camera moves back to the camera-circle.
+ * < 1 is inside the circle
+ * > 1 outside the circle
+ * @param {float} factor
+ * @param {bool} animation
+ * @param {function} cb
+ */
+GLVIS.NavigationHandler.prototype.setDistanceFactor = function (factor, animation, cb) {
 
-GLVIS.NavigationHandler.prototype.setDistanceFactor = function (factor) {
-    var coll_circle_radius = GLVIS.config.scene.circle_radius;
+    if (animation) {
+        /** @type {GLVIS.Animation} anim **/
+        var anim = GLVIS.Scene.getCurrentScene().getAnimation();
+        //anim.stopCameraMovementAnimations();
 
-    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+        var anim_config = GLVIS.config.navigation.camera_move_center;
+        anim.register(
+                this.animationconfig_.move_tocircle,
+                factor,
+                null,
+                this.getDistanceFactor.bind(this),
+                this.setDistanceFactor.bind(this),
+                0,
+                anim_config.speed,
+                anim_config.pow,
+                anim_config.threshold,
+                cb,
+                true);
 
-    /** @type {THREE.Vector3} **/
-    var current_camera_pos = camera.position.clone();
+    } else {
+        var coll_circle_radius = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
+        var camera_distance_to_colls = GLVIS.config.three.camera_perspective.DISTANCE;
+        var total_distance_to_center = coll_circle_radius + camera_distance_to_colls;
 
-    var circle_center = new THREE.Vector3(0, 0, coll_circle_radius);
-    var camera_center_vec = circle_center.clone().add(current_camera_pos);
+        var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+        var current_camera_pos = camera.position.clone();
+        var circle_center = new THREE.Vector3(0, 0, coll_circle_radius);
+        var camera_center_vec = circle_center.clone().add(current_camera_pos);
+        var current_length = camera_center_vec.length();
 
-    camera_center_vec.multiplyScalar(1 - factor);
+        camera_center_vec.multiplyScalar(factor / (current_length / total_distance_to_center));
 
-    var new_camera_pos = camera_center_vec.clone().sub(circle_center);
-    camera.position.set(new_camera_pos.x, new_camera_pos.y, new_camera_pos.z);
+        var new_camera_pos = camera_center_vec.clone().sub(circle_center);
+        camera.position.set(new_camera_pos.x, new_camera_pos.y, new_camera_pos.z);
+    }
+
+
+
 };
 
 
@@ -380,8 +384,7 @@ GLVIS.NavigationHandler.prototype.animatedCollectionFocus = function (collection
 
 
         /**
-         * @TODO DIENSTAG
-         * Do h-v movenent here after hitting the circle-sphere 
+         * STATUS OPEN!
          **/
 
     });
@@ -404,10 +407,10 @@ GLVIS.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_f
     var getter = this.getZoomFactor;
     var setter = this.zoomDelta;
 
-    //GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.zoom_id);
+    //GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animationconfig_.zoom_id);
 
     GLVIS.Scene.getCurrentScene().getAnimation().register(
-            this.animation_.zoom_id,
+            this.animationconfig_.zoom_id,
             zoom_goal,
             null,
             getter,
@@ -424,14 +427,14 @@ GLVIS.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_f
  * Resetting both movement-animations
  */
 GLVIS.NavigationHandler.prototype.resetAnimationMovement = function () {
-    GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animation_.move);
+    GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animationconfig_.move);
 };
 
 /**
  * Resetting the zoom-animation
  */
 GLVIS.NavigationHandler.prototype.resetAnimationZoom = function () {
-    GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animation_.zoom_id);
+    GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animationconfig_.zoom_id);
 };
 
 /**
@@ -440,16 +443,191 @@ GLVIS.NavigationHandler.prototype.resetAnimationZoom = function () {
  * @param {function} callback_fct callback when ready
  */
 GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callback_fct) {
-    var animated_move = false;
 
-    this.setCameraToCircle(collection.getPosition().x, collection.getPosition().y, collection.getPosition().z,
-            animated_move,
-            callback_fct
+    var goal_dist_fct = GLVIS.config.collection.init_distance_fct;
+
+    var anim = GLVIS.Scene.getCurrentScene().getAnimation();
+    anim.stopCameraMovementAnimations();
+
+    var move_goal = this.getDegreeOnCameraSphere_(
+            collection.getPosition().x,
+            collection.getPosition().y,
+            collection.getPosition().z
             );
 
-    this.zoom(2);
+    var anim_config = GLVIS.config.navigation.move.animated;
+    anim.register(
+            this.animationconfig_.move,
+            move_goal,
+            null,
+            this.getCurrentHVDegree.bind(this),
+            this.moveCameraAroundCircleWObj.bind(this),
+            0,
+            anim_config.speed,
+            anim_config.pow,
+            anim_config.threshold,
+            function () {
+                callback_fct();
+            },
+            false
+            );
+
+    this.setDistanceFactor(goal_dist_fct, true, function () {
+    });
+
 };
 
+GLVIS.NavigationHandler.prototype.defocusCollection = function () {
+
+    var anim = GLVIS.Scene.getCurrentScene().getAnimation();
+    anim.stopCameraMovementAnimations();
+    this.setDistanceFactor(1, true, function () {
+    });
+};
+
+/**
+ * Moving camera to recommendation
+ * 
+ * Has its own workflow because the camera does NOT point to the center in the end
+ * 
+ * @param {GLVIS.Recommendation} rec
+ */
+GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
+
+    var abs_pos = rec.getPosition(true);
+    var abs_pos_vec = new THREE.Vector3(abs_pos.x, abs_pos.y, abs_pos.z);
+    // @TODO: Calculate accurate offset
+
+
+
+    var camera_distance = GLVIS.config.collection.recommendation.camera_distance;
+    /*
+     * The camera distance vector has the same direction as the connection between 
+     * the circle-center and the collection
+     */
+
+    var coll_pos = rec.getCollection().getPosition();
+    var coll_pos_vec = new THREE.Vector3(coll_pos.x, coll_pos.y, coll_pos.z);
+    var circle_center_vec = new THREE.Vector3(0, 0, -GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius());
+    var dir_vec = coll_pos_vec.clone().sub(circle_center_vec).normalize();
+    var final_pos = abs_pos_vec.clone().add(dir_vec.multiplyScalar(camera_distance));
+    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+    this.lockLookAt(abs_pos_vec);
+    var move_config = GLVIS.config.collection.recommendation.focus_animation.move;
+    var move_setter = this.moveCamera;
+    var move_getter_x = this.getPosX;
+    var move_setter_param_x = 0;
+    var move_getter_y = this.getPosY;
+    var move_setter_param_y = 1;
+    var move_getter_z = this.getPosZ;
+    var move_setter_param_z = 2;
+    var move_speed = move_config.speed;
+    var move_pow = move_config.pow;
+    var move_threshold = move_config.threshold;
+
+    GLVIS.Scene.getCurrentScene().getAnimation().stopCameraMovementAnimations();
+
+    //X
+    GLVIS.Scene.getCurrentScene().getAnimation().register(
+            this.animationconfig_.move_id_x,
+            final_pos.x,
+            null,
+            move_getter_x,
+            move_setter,
+            move_setter_param_x,
+            move_speed,
+            move_pow,
+            move_threshold,
+            function () {
+                this.lockLookAt(abs_pos_vec);
+            }.bind(this)
+            );
+    //Y
+    GLVIS.Scene.getCurrentScene().getAnimation().register(
+            this.animationconfig_.move_id_y,
+            final_pos.y,
+            null,
+            move_getter_y,
+            move_setter,
+            move_setter_param_y,
+            move_speed,
+            move_pow,
+            move_threshold,
+            function () {
+                this.lockLookAt(abs_pos_vec);
+            }.bind(this)
+            );
+    //Z
+    GLVIS.Scene.getCurrentScene().getAnimation().register(
+            this.animationconfig_.move_id_z,
+            final_pos.z,
+            null,
+            move_getter_z,
+            move_setter,
+            move_setter_param_z,
+            move_speed,
+            move_pow,
+            move_threshold,
+            function () {
+                this.lockLookAt(abs_pos_vec);
+            }.bind(this)
+            );
+};
+GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_objects) {
+    var is_positive = e.deltaY === 1 ? true : false;
+    console.log(is_positive);
+    for (var i = 0; i < intersected_objects.length; i++) {
+        if (intersected_objects[i].object && intersected_objects[i].object.scene_obj) {
+            var i_obj = intersected_objects[i].object.scene_obj;
+            if (i_obj instanceof GLVIS.Collection) {
+                /** @type{GLVIS.Collection} i_obj **/
+                console.log("C " + i_obj.getId());
+                if (is_positive) {
+                    if (!i_obj.getRingRepresentation())
+                        i_obj.createRingRepresentation();
+                }
+                else {
+                    /**
+                     * Find the coll with ring-rep and defocus
+                     */
+                    var cs = GLVIS.Scene.getCurrentScene().getCollections();
+                    for (var i = 0; i < cs.length; i++) {
+                        if (cs[i].getRingRepresentation()) {
+                            cs[i].deleteRingRepresentation();
+                            break;
+                        }
+                    }
+                }
+
+                break;
+            } else if (i_obj instanceof GLVIS.Recommendation) {
+                /** @type{GLVIS.Recommendation} i_obj **/
+                console.log("R " + i_obj.getId());
+
+                if (is_positive) {
+
+                    if (i_obj.getCollection().getRingRepresentation())
+                        i_obj.focusAndZoom();
+                    else
+                        i_obj.getCollection().createRingRepresentation();
+                }
+                else {
+                    if (i_obj.getCollection().getRingRepresentation()) {
+                        if (i_obj === GLVIS.Recommendation.current_selected_rec)
+                            i_obj.defocusAndZoomOut();
+                        else
+                            i_obj.getCollection().deleteRingRepresentation();
+                    }
+                    else {
+                        //If not even an ringrep exists -> do nothing with that rec
+                    }
+
+                }
+                break;
+            }
+        }
+    }
+};
 /**
  * Single getter for animation
  * @returns {float}
@@ -457,7 +635,6 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
 GLVIS.NavigationHandler.prototype.getPosX = function () {
     return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.x;
 };
-
 /**
  * Single getter for animation
  * @returns {float}
@@ -465,7 +642,6 @@ GLVIS.NavigationHandler.prototype.getPosX = function () {
 GLVIS.NavigationHandler.prototype.getPosY = function () {
     return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.y;
 };
-
 /**
  * Single getter for animation
  * @returns {float}

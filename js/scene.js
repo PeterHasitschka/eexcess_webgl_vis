@@ -6,6 +6,11 @@ var GLVIS = GLVIS || {};
 GLVIS.Scene = function (canvas) {
 
     GLVIS.Scene.current_scene = this;
+    
+    /**
+     * Switch between RING and BOW for different positioning on a virtual ring
+     */
+    this.vis_type_ = GLVIS.config.scene.possible_vis_types.BOW;
 
     /** @type {GLVIS.NavigationHandler} **/
     this.navigation_handler_ = new GLVIS.NavigationHandler(this);
@@ -24,8 +29,8 @@ GLVIS.Scene = function (canvas) {
     /** @type {GLVIS.InteractionHandler} **/
     this.interaction_handler_ = new GLVIS.InteractionHandler(this);
 
-    /** @type{GLVIS.CollectionPosLinear} **/
-    this.collection_position_handler_ = new GLVIS.CollectionPosCircular();
+    /** @type{GLVIS.CollectionPosCircular} **/
+    this.collection_position_handler_ = new GLVIS.CollectionPosCircular(this.vis_type_);
 
     /** @type{GLVIS.Animation} **/
     this.animation_ = new GLVIS.Animation();
@@ -165,6 +170,15 @@ GLVIS.Scene.prototype.getTimeDelta = function () {
     return this.time_.delta;
 };
 
+
+/**
+ * 
+ * @returns {integer} Get vis-type flag (e.g. ring or bow)
+ */
+GLVIS.Scene.prototype.getVisType = function () {
+    return this.vis_type_;
+};
+
 /**
  * 
  * @param {integer} collection_id
@@ -207,6 +221,12 @@ GLVIS.Scene.prototype.initCollectionNetwork = function () {
 
 
 GLVIS.Scene.current_scene = null;
+
+
+GLVIS.Scene.VISTYPE = {
+    RING: 0x1,
+    BOW: 0x2
+};
 
 /**
  * Get current scene

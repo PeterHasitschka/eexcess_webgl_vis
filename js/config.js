@@ -5,8 +5,14 @@ GLVIS.config = {
     scene: {
         queries_to_fetch: 21,
         skip_empty_queries: true,
-        circle_radius: 2000,
-        media_folder: "/visualizations/WebGlVisualization/media/"
+        circle_radius_ring: 2000,
+        circle_radius_bow: 8000,
+        bow_empty_spaces_factor: 2,
+        media_folder: "/visualizations/WebGlVisualization/media/",
+        possible_vis_types: {
+            BOW: 0x1,
+            RING: 0x2
+        }
     },
     debug: {
         active: true,
@@ -16,23 +22,32 @@ GLVIS.config = {
     three: {
         camera_ortho: {
             NEAR: -1000,
-            FAR: 10000,
+            FAR: 17000,
             Z_POS: 300
         },
         camera_perspective: {
-            FOV: 60,
-            NEAR: 50,
-            FAR: 10000,
+            FOV: 80,
+            NEAR: 20,
+            FAR: 20000,
             DISTANCE: 1300
         },
         canvas_color: 0xFBFFFD
     },
     interaction: {
         raycaster_precision: 0.5,
-        mousesensitivy: 25
+        /**
+         * Key is the max distancefactor
+         * @see {GLVIS.NavigationHandler.prototype.getDistanceFactor}
+         */
+
+        mousesensitivy: {
+            100: 25, //Allover view (df 1)
+            0.91: 100, //Focused collection
+            0.864: 1000   //Focused rec
+        }
     },
     collection: {
-        init_distance: 400,
+        init_distance_fct: 0.9,
         center_node: {
             transparency: {
                 inactive: 0.5
@@ -63,21 +78,20 @@ GLVIS.config = {
                     Europeana: 0x1F77B4
                 },
                 language: {
-                    
-                     cs: 0x1F77B4,
-                     unknown: 0xFF7F0E,
-                     unkown: 0xFF7F0E, //(!)
-                     en: 0x2CA02C,
-                     es: 0xD62728,
-                     da: 0x9467BD,
-                     de: 0x8C564B,
-                     et: 0xE377C2,
-                     ro: 0x7F7F7F,
-                     pl: 0xBCBD22,
-                     hu: 0x17BECF,
-                     it: 0x1F77B4,
-                     mul: 0xFF7F0E
-                     
+                    cs: 0x1F77B4,
+                    unknown: 0xFF7F0E,
+                    unkown: 0xFF7F0E, //(!)
+                    en: 0x2CA02C,
+                    es: 0xD62728,
+                    da: 0x9467BD,
+                    de: 0x8C564B,
+                    et: 0xE377C2,
+                    ro: 0x7F7F7F,
+                    pl: 0xBCBD22,
+                    hu: 0x17BECF,
+                    it: 0x1F77B4,
+                    mul: 0xFF7F0E
+
                 },
                 rings: {
                     r1: 0xe41a1c,
@@ -93,7 +107,7 @@ GLVIS.config = {
                 strength: 0.01,
                 weakness: 0.5
             },
-            camera_distance: 100,
+            camera_distance: 30,
             common_node: {
                 min_radius: 0.5,
                 active_radius: 10,
@@ -308,17 +322,23 @@ GLVIS.config = {
         },
         move: {
             animated: {
-                threshold: 1,
-                pow: 0.2,
-                speed_fct: 0.2
+                speed: 0.1,
+                pow: 0.01,
+                threshold: 0.01
             }
+        },
+        camera_move_center: {
+            speed: 0.05,
+            pow: 0.01,
+            threshold: 0.001
         },
         animation_ids: {
             zoom_id: 'nh_anim_zoom',
             move: 'nh_anim_move',
             move_id_x: 'nh_anim_move_x',
             move_id_y: 'nh_anim_move_y',
-            move_id_z: 'nh_anim_move_z'
+            move_id_z: 'nh_anim_move_z',
+            move_tocircle: 'nh_anim_move_tocircle'
         }
     },
     rec_dashboard: {

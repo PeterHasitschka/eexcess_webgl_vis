@@ -224,14 +224,15 @@ GLVIS.Recommendation.prototype.handleDetailNodeClick = function () {
             3);
 
     //Don't do focus etc. if clicked before --> Zoom out to collection
-    if (GLVIS.Recommendation.current_selected_rec && GLVIS.Recommendation.current_selected_rec === this) {
-        this.defocusAndZoomOut();
-        return;
-    }
-
+    /*
+     if (GLVIS.Recommendation.current_selected_rec && GLVIS.Recommendation.current_selected_rec === this) {
+     this.defocusAndZoomOut();
+     return;
+     }
+     */
 
     this.focusAndZoom();
-    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
+
 };
 
 /**
@@ -275,89 +276,8 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
     GLVIS.Debugger.debug("Recommendation", "Setting node type to DETAILED and zoom in afterwards", 5);
     this.setNodeType(GLVIS.Recommendation.NODETYPES.DETAILED);
 
-    var abs_pos = this.getPosition(true);
-    var abs_pos_vec = new THREE.Vector3(abs_pos.x, abs_pos.y, abs_pos.z);
-    // @TODO: Calculate accurate offset
-
-    var camera_distance = GLVIS.config.collection.recommendation.camera_distance;
-
-
-
-    /*
-     * The camera distance vector has the same direction as the connection between 
-     * the circle-center and the collection
-     */
-
-    var coll_pos = this.getCollection().getPosition();
-    var coll_pos_vec = new THREE.Vector3(coll_pos.x, coll_pos.y, coll_pos.z);
-    var circle_center_vec = new THREE.Vector3(0, 0, -GLVIS.config.scene.circle_radius);
-
-    var dir_vec = coll_pos_vec.clone().sub(circle_center_vec).normalize();
-    var final_pos = abs_pos_vec.clone().add(dir_vec.multiplyScalar(camera_distance));
-
-
     var nav_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
-    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
-    nav_handler.lockLookAt(abs_pos_vec);
-
-
-
-    var move_config = GLVIS.config.collection.recommendation.focus_animation.move;
-    var move_setter = nav_handler.moveCamera;
-    var move_getter_x = nav_handler.getPosX;
-    var move_setter_param_x = 0;
-    var move_getter_y = nav_handler.getPosY;
-    var move_setter_param_y = 1;
-    var move_getter_z = nav_handler.getPosZ;
-    var move_setter_param_z = 2;
-    var move_speed = move_config.speed;
-    var move_pow = move_config.pow;
-    var move_threshold = move_config.threshold;
-
-    //X
-    GLVIS.Scene.getCurrentScene().getAnimation().register(
-            nav_handler.animation_.move_id_x,
-            final_pos.x,
-            null,
-            move_getter_x,
-            move_setter,
-            move_setter_param_x,
-            move_speed,
-            move_pow,
-            move_threshold,
-            function () {
-            }
-    );
-
-    //Y
-    GLVIS.Scene.getCurrentScene().getAnimation().register(
-            nav_handler.animation_.move_id_y,
-            final_pos.y,
-            null,
-            move_getter_y,
-            move_setter,
-            move_setter_param_y,
-            move_speed,
-            move_pow,
-            move_threshold,
-            function () {
-            }
-    );
-
-    //Z
-    GLVIS.Scene.getCurrentScene().getAnimation().register(
-            nav_handler.animation_.move_id_z,
-            final_pos.z,
-            null,
-            move_getter_z,
-            move_setter,
-            move_setter_param_z,
-            move_speed,
-            move_pow,
-            move_threshold,
-            function () {
-            }
-    );
+    nav_handler.focusRecommendation(this);
 
 
     if (GLVIS.Recommendation.current_selected_rec) {
@@ -366,15 +286,19 @@ GLVIS.Recommendation.prototype.focusAndZoom = function () {
     }
 
     if (GLVIS.Recommendation.current_selected_rec)
-        GLVIS.Recommendation.current_selected_rec.setDetailNodeVisibility(false);
+        GLVIS.Recommendation.current_selected_rec.setDetailNodeButtonVisibility(false);
     this.vis_data_.gl_objects.center_node.setButtonsVisible(true);
 
 
     GLVIS.Recommendation.current_selected_rec = this;
+    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
 };
 
-GLVIS.Recommendation.prototype.setDetailNodeVisibility = function (visible) {
-    this.vis_data_.gl_objects.center_node.setButtonsVisible(visible);
+
+GLVIS.Recommendation.prototype.setDetailNodeButtonVisibility = function (visible) {
+
+    if (this.vis_data_.gl_objects.center_node instanceof GLVIS.RecommendationDetailNode)
+        this.vis_data_.gl_objects.center_node.setButtonsVisible(visible);
 };
 
 /**
@@ -386,59 +310,49 @@ GLVIS.Recommendation.prototype.defocusAndZoomOut = function () {
     //Replace detail node with common node
     this.vis_data_.gl_objects.center_node.setButtonsVisible(false);
 
-    GLVIS.Scene.getCurrentScene().getAnimation().finishCameraMovementAnimations();
+    GLVIS.Scene.getCurrentScene().getAnimation().stopCameraMovementAnimations();
 
     this.getCollection().selectAndFocus(function () {
     });
 
     GLVIS.Recommendation.current_selected_rec = null;
+    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
 };
 
 /**
  * Swap the node type (e.g. common node or detailed node).
  * Each other registered type of node will be deleted from the gl list and will
  * be destroyed.
- * @param {type} Instance of @see{GLVIS.Recommendation.NODETYPES}
- * @returns {undefined}
+ * @param {Object} type Instance of @see{GLVIS.Recommendation.NODETYPES}
  */
 GLVIS.Recommendation.prototype.setNodeType = function (type) {
 
-    var rec_common_node_exists = false;
+    var rec_node_type_exists = false;
 
     GLVIS.Debugger.debug("Recommendation", "Creating new node type.", 5);
 
     //Check if that kind of node already exists
-    for (var key in this.vis_data_.gl_objects) {
-        if (this.vis_data_.gl_objects.hasOwnProperty(key)) {
-            if (this.vis_data_.gl_objects[key] instanceof type) {
-                rec_common_node_exists = true;
-                GLVIS.Debugger.debug("Recommendation", "Node of type " + type + " exists... skip creating it.", 6);
-            }
-        }
+    if (this.vis_data_.center_node instanceof type) {
+        rec_node_type_exists = true;
+        GLVIS.Debugger.debug("Recommendation", "Node of type " + type + " exists... skip creating it.", 6);
     }
-
-    if (rec_common_node_exists)
+    if (rec_node_type_exists)
         return;
 
-    //Go through all other nodetypes and delete them from the gl objects
-    //to make place for the wanted type
-    for (var key in GLVIS.Recommendation.NODETYPES) {
-        var curr_node_type = GLVIS.Recommendation.NODETYPES[key];
+    this.vis_data_.gl_objects.center_node.delete();
 
-        //Delete this kind of node from the gl list     
-        for (var key in this.vis_data_.gl_objects) {
-            if (this.vis_data_.gl_objects.hasOwnProperty(key)) {
-                if (this.vis_data_.gl_objects[key] instanceof curr_node_type) {
-                    this.vis_data_.gl_objects[key].delete();
-                    this.vis_data_.gl_objects[key] = null;
-                }
-            }
-        }
-    }
     //Create new node type
     var gl_node = new type(this, this.getCollection().getMeshContainerNode());
     this.vis_data_.gl_objects.center_node = gl_node;
     this.setIsDirty(true);
+};
+
+/**
+ * Returns the Node depending on the LOD
+ * @returns {GLVIS.RecommendationCommonNode | GLVIS.RecommendationDetailNode}
+ */
+GLVIS.Recommendation.prototype.getRecNode = function () {
+    return this.vis_data_.gl_objects.center_node;
 };
 
 /**

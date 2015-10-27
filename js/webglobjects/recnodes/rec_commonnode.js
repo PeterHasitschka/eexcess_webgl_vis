@@ -52,6 +52,8 @@ GLVIS.RecommendationCommonNode.prototype.initAndRegisterGlObj = function (mesh_p
         "interaction_singleclick_exclusive": true,
         "mouseover": this.recommendation_.handleMouseover.bind(this.recommendation_)
     };
+    
+    circle.scene_obj = this.recommendation_;
 
 
     mesh_parent.add(circle);

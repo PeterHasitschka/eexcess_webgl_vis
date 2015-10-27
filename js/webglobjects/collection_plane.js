@@ -51,7 +51,9 @@ GLVIS.CollectionPlane.prototype.initAndRegisterGlObj = function (mesh_parent) {
         "interaction_id": "collection_center",
         "interaction_singleclick_per_type": true
     };
-
+    circle.scene_obj = this.collection_;
+    
+    
     if (!mesh_parent) {
         var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
         webgl_handler.getThreeScene().add(circle);
