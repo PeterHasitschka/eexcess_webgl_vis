@@ -52,6 +52,7 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
         distance_factor: 1,
         size_factor: 1,
         relevance: 1,
+        relevance_shown: false,
         is_filter_positive: true,
         gl_objects: {
             center_node: null,
@@ -525,6 +526,7 @@ GLVIS.Recommendation.prototype.setRelativePositionByRad = function (that, rad) {
 
     var node_type_secific_add_distance = this.vis_data_.gl_objects.center_node.add_distance;
 
+    //this.updateNodeDistance();
     var distance = that.vis_data_.distance_factor * init_distance + node_type_secific_add_distance;
     var pos = GLVIS.Tools.getPosFromRad(rad, distance);
     that.setRelativePosition(pos.x, pos.y, GLVIS.config.collection.recommendation.init_z);
@@ -564,15 +566,16 @@ GLVIS.Recommendation.prototype.toggleVisualizeRelevance = function (visualize) {
         var config = GLVIS.config.collection.recommendation.relevance;
 
         this.setSizeFactor(relevance * config.sizefactor + config.sizeoffset, true);
-        //this.setDistanceFactor(1 + relevance * config.distfactor, true);
     }
     else {
         var config = GLVIS.config.collection.recommendation;
         GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(config.size_animation.id_prefix + this.getId());
         GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(config.distfact_animation.id_prefix + this.getId());
         this.setSizeFactor(1, false);
-        this.setDistanceFactor(1, false);
     }
+
+    this.vis_data_.relevance_shown = visualize;
+    this.updateNodeDistance();
 };
 
 /**
@@ -746,15 +749,55 @@ GLVIS.Recommendation.prototype.setFilterPositive = function (positive) {
     var animate = this.getCollection().getStatus() === GLVIS.Collection.STATUSFLAGS.SELECTED ? true : false;
     if (positive) {
         this.setOpacity(1, animate);
-        this.setDistanceFactor(1, animate);
+        //this.setDistanceFactor(1, animate);
     }
     else {
         this.setOpacity(0.3, animate);
-        this.setDistanceFactor(0.9, animate);
+        //this.setDistanceFactor(0.9, animate);
     }
 
-    this.setIsDirty(true);
+
+
     this.vis_data_.is_filter_positive = positive;
+
+    //Include relevance in distance of nodes
+    /*
+     var relevance = this.getRelevance();
+     
+     var filter_distance_fact = positive ? 1 : GLVIS.config.collection.recommendation.filter.distance_factor;
+     var dist_fact = GLVIS.config.collection.recommendation.relevance.distfactor;
+     
+     if (this.vis_data_.relevance_shown)
+     this.setDistanceFactor((1 + relevance * dist_fact) * filter_distance_fact, true);
+     else
+     this.setDistanceFactor(1 * filter_distance_fact, true);
+     */
+
+    this.updateNodeDistance();
+    this.setIsDirty(true);
+};
+
+GLVIS.Recommendation.prototype.updateNodeDistance = function () {
+    var relevance = this.getRelevance();
+    var filter_positive = this.vis_data_.is_filter_positive;
+
+    var filter_distance_fact = filter_positive ? 1 : GLVIS.config.collection.recommendation.filter.distance_factor;
+    var dist_fact = GLVIS.config.collection.recommendation.relevance.distfactor;
+
+    var goal_fact;
+    if (this.vis_data_.relevance_shown)
+        goal_fact = (1 + relevance * dist_fact) * filter_distance_fact;
+    else
+        goal_fact = 1 * filter_distance_fact;
+
+    var animate = false;
+    if (this.getCollection().getRingRepresentation())
+        animate = true;
+
+    if (this.getDistanceFactor() !== goal_fact)
+        this.setDistanceFactor(goal_fact, animate);
+
+    //this.setIsDirty(true);
 };
 
 /**

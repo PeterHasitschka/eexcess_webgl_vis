@@ -185,6 +185,9 @@ GLVIS.config = {
                 sizefactor: 2,
                 sizeoffset: 0.5,
                 distfactor: 0.2
+            },
+            filter: {
+                distance_factor: 0.6
             }
         },
         ring: {
