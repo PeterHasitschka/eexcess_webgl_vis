@@ -44,7 +44,8 @@ GLVIS.config = {
             100: 25, //Allover view (df 1)
             0.91: 100, //Focused collection
             0.864: 1000   //Focused rec
-        }
+        },
+        key_step: 1
     },
     collection: {
         init_distance_fct: 0.9,

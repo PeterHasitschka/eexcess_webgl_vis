@@ -12,19 +12,21 @@ GLVIS.InteractionHandler = function (scene) {
     var config = GLVIS.config.interaction;
     var nh = this.scene_.getNavigationHandler();
 
+
+    var ks = config.key_step;
     this.keyinteractions_ = {
         keydown: {
             37: function () {   // LEFT
-                nh.moveCameraAroundCircle(-5, 0, true);
+                nh.moveCameraAroundCircle(-ks, 0, true);
             }.bind(this),
             39: function () {   // RIGHT
-                nh.moveCameraAroundCircle(5, 0, true);
+                nh.moveCameraAroundCircle(ks, 0, true);
             }.bind(this),
             38: function () {   // UP
-                nh.moveCameraAroundCircle(0, 5, true);
+                nh.moveCameraAroundCircle(0, ks, true);
             }.bind(this),
             40: function () {   // DOWN
-                nh.moveCameraAroundCircle(0, -5, true);
+                nh.moveCameraAroundCircle(0, -ks, true);
             }.bind(this)
         }
     };
