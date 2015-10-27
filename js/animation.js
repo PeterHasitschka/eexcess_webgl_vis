@@ -21,7 +21,7 @@ GLVIS.Animation.prototype.animate = function () {
         var curr_val = curr_anim.getter_fct(curr_anim.object);
 
         if (curr_anim.max_diff === null)
-            curr_anim.max_diff = curr_anim.goal - curr_val;
+            curr_anim.max_diff = GLVIS.Tools.MultVarOps.sub(curr_anim.goal, curr_val);
 
         var delta = this.getStepByExpSlowdown_(curr_val,
                 curr_anim.goal,
@@ -30,15 +30,15 @@ GLVIS.Animation.prototype.animate = function () {
                 curr_anim.pow,
                 curr_anim.threshold
                 );
-        
-        if (delta !== 0.0) {
+
+        if (GLVIS.Tools.MultVarOps.length(delta) !== 0.0) {
             var val_to_set = delta;
             if (curr_anim.add_to_current)
-                val_to_set = curr_val + delta;
+                val_to_set = GLVIS.Tools.MultVarOps.add(curr_val, delta);
         }
         else {
             //Set value to the final difference
-            val_to_set = curr_anim.goal - curr_val;
+            val_to_set = GLVIS.Tools.MultVarOps.sub(curr_anim.goal, curr_val);
 
             //If absolute values -> Set to goal
             if (curr_anim.add_to_current)
@@ -58,9 +58,9 @@ GLVIS.Animation.prototype.animate = function () {
         //Call setter fct
         curr_anim.setter_fct.apply(null, params_for_setting);
 
-            
+
         //Animation ready
-        if (delta === 0.0) {
+        if (GLVIS.Tools.MultVarOps.length(delta) === 0.0) {
             GLVIS.Debugger.debug("Animation", "Animation '" +
                     curr_anim.identifier + "' ready", 7);
 
@@ -68,18 +68,18 @@ GLVIS.Animation.prototype.animate = function () {
             curr_anim.callback_fct();
             return;
         }
-        
+
         curr_anim.iterations++;
     }
 };
 
 
-GLVIS.Animation.prototype.finishCameraMovementAnimations = function(){
-    
-  this.finishAnimation(GLVIS.config.navigation.animation_ids.move); 
-  this.finishAnimation(GLVIS.config.navigation.animation_ids.move_id_x); 
-  this.finishAnimation(GLVIS.config.navigation.animation_ids.move_id_y); 
-  this.finishAnimation(GLVIS.config.navigation.animation_ids.move_id_z); 
+GLVIS.Animation.prototype.finishCameraMovementAnimations = function () {
+
+    this.finishAnimation(GLVIS.config.navigation.animation_ids.move);
+    this.finishAnimation(GLVIS.config.navigation.animation_ids.move_id_x);
+    this.finishAnimation(GLVIS.config.navigation.animation_ids.move_id_y);
+    this.finishAnimation(GLVIS.config.navigation.animation_ids.move_id_z);
 };
 
 /**
@@ -110,14 +110,14 @@ GLVIS.Animation.prototype._finishAnimation = function (animation) {
     var params_for_setting = [];
     if (animation.object)
         params_for_setting.push(animation.object);
-    
+
     var val = animation.goal;
     if (!animation.add_to_current) {
         val -= animation.getter_fct(animation.object);
     }
     for (var param_count = 0; param_count < animation.setter_fct_param_num; param_count++)
         params_for_setting.push(null);
-    
+
     params_for_setting.push(val);
 
     animation.setter_fct.apply(null, params_for_setting);
@@ -225,20 +225,26 @@ GLVIS.Animation.prototype.unregister = function (identifier) {
  */
 GLVIS.Animation.prototype.getStepByExpSlowdown_ = function (curr, goal, max_diff, factor, pow, threshold) {
 
-    curr = parseFloat(curr);
-    goal = parseFloat(goal);
-    max_diff = parseFloat(max_diff);
-    var diff = goal - curr;
+    if (typeof curr !== 'object')
+        curr = parseFloat(curr);
+    if (typeof goal !== 'object')
+        goal = parseFloat(goal);
+    if (typeof max_diff !== 'object')
+        max_diff = parseFloat(max_diff);
 
-    var max_val = Math.max(curr, goal);
-    var min_val = Math.min(curr, goal);
+    var diff = GLVIS.Tools.MultVarOps.sub(goal, curr);
 
-    var abs_diff = max_val - min_val;
 
-    if (abs_diff > threshold) {
+    var max_val = GLVIS.Tools.MultVarOps.gt(curr, goal) ? curr : goal;
+    var min_val = GLVIS.Tools.MultVarOps.gt(goal, curr) ? curr : goal;
+
+    var abs_diff = GLVIS.Tools.MultVarOps.sub(max_val, min_val);
+
+
+    if (GLVIS.Tools.MultVarOps.length(abs_diff) > threshold) {
 
         //Normalize to a small value
-        var normalized_diff = diff / max_diff;
+        var normalized_diff = GLVIS.Tools.MultVarOps.length(diff) / GLVIS.Tools.MultVarOps.length(max_diff);
 
         var power = Math.pow(Math.abs(normalized_diff), pow);
         power /= 2;
@@ -247,10 +253,12 @@ GLVIS.Animation.prototype.getStepByExpSlowdown_ = function (curr, goal, max_diff
                 [max_diff, diff, normalized_diff, pow, power, factor],
                 8);
 
-        return power * diff * factor;
+        return GLVIS.Tools.MultVarOps.mult(power * factor, diff);
     }
     else {
-        return 0.0;
+        //return 0.0;
+        //Same as 0.0 but with still existing object
+        return GLVIS.Tools.MultVarOps.sub(curr, curr);
     }
 
 };
