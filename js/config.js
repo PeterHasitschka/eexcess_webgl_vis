@@ -323,7 +323,8 @@ GLVIS.config = {
             move: 'nh_anim_move',
             move_id_x: 'nh_anim_move_x',
             move_id_y: 'nh_anim_move_y',
-            move_id_z: 'nh_anim_move_z'
+            move_id_z: 'nh_anim_move_z',
+            move_tocircle: 'nh_anim_move_tocircle'
         }
     },
     rec_dashboard: {

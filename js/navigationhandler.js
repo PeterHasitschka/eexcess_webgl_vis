@@ -12,7 +12,7 @@ GLVIS.NavigationHandler = function (scene) {
     /** @type {THREE.Vector3} **/
     this.lookat_lock_ = null;
 
-    this.animation_ = GLVIS.config.navigation.animation_ids;
+    this.animationconfig_ = GLVIS.config.navigation.animation_ids;
 };
 
 /**
@@ -48,6 +48,16 @@ GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z, distanc
         this.setDistanceFactor(distance_fact, animate);
 
 };
+
+
+/**
+ * Convert the current Camera position to a relative H and V degree to the zero point
+ * @returns {object} Holding 'h' (Horizontal degree), 'v' (Vertical degree)
+ */
+GLVIS.NavigationHandler.prototype.getCurrentHVDegree = function () {
+    return GLVIS.Tools.MultVarOps.mult(-1, this.getMissingCameraDegrees(0, 0, 0));
+};
+
 
 /**
  * Difference of the current degree  (@see{GLVIS.NavigationHandler.prototype.getDegreeOnCameraSphere_})
@@ -108,6 +118,11 @@ GLVIS.NavigationHandler.prototype.getDegreeOnCameraSphere_ = function (x, y, z) 
         v *= -1;
 
     return {h: h, v: v};
+};
+
+
+GLVIS.NavigationHandler.prototype.moveCameraAroundCircleWObj = function (h_v) {
+    GLVIS.NavigationHandler.prototype.moveCameraAroundCircle(h_v.h, h_v.v, true);
 };
 
 /**
@@ -240,10 +255,10 @@ GLVIS.NavigationHandler.prototype.setDistanceFactor = function (factor, animatio
     if (animation) {
         /** @type {GLVIS.Animation} anim **/
         var anim = GLVIS.Scene.getCurrentScene().getAnimation();
-        anim.finishCameraMovementAnimations();
+        //anim.finishCameraMovementAnimations();
 
         anim.register(
-                this.animation_.move,
+                this.animationconfig_.move_tocircle,
                 factor,
                 null,
                 this.getDistanceFactor.bind(this),
@@ -391,10 +406,10 @@ GLVIS.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_f
     var getter = this.getZoomFactor;
     var setter = this.zoomDelta;
 
-    //GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animation_.zoom_id);
+    //GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animationconfig_.zoom_id);
 
     GLVIS.Scene.getCurrentScene().getAnimation().register(
-            this.animation_.zoom_id,
+            this.animationconfig_.zoom_id,
             zoom_goal,
             null,
             getter,
@@ -411,14 +426,14 @@ GLVIS.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_f
  * Resetting both movement-animations
  */
 GLVIS.NavigationHandler.prototype.resetAnimationMovement = function () {
-    GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animation_.move);
+    GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animationconfig_.move);
 };
 
 /**
  * Resetting the zoom-animation
  */
 GLVIS.NavigationHandler.prototype.resetAnimationZoom = function () {
-    GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animation_.zoom_id);
+    GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animationconfig_.zoom_id);
 };
 
 /**
@@ -430,25 +445,55 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
 
     var goal_dist_fct = GLVIS.config.collection.init_distance_fct;
 
-    //ZOOM OUT
-    if (this.getDistanceFactor() < goal_dist_fct) {
-        this.setDistanceFactor(goal_dist_fct, true, function () {
-            this.setCameraToCircle(collection.getPosition().x, collection.getPosition().y, collection.getPosition().z,
-                    null,
-                    true,
-                    callback_fct
-                    );
-        }.bind(this));
-    } else {    //ZOOM IN
-        this.setCameraToCircle(collection.getPosition().x, collection.getPosition().y, collection.getPosition().z,
-                null,
-                true,
-                callback_fct
-                );
-        this.setDistanceFactor(goal_dist_fct, true, function () {
-        });
-    }
 
+
+    var move_goal = this.getDegreeOnCameraSphere_(
+            collection.getPosition().x,
+            collection.getPosition().y,
+            collection.getPosition().z
+            );
+
+    GLVIS.Scene.getCurrentScene().getAnimation().register(
+            this.animationconfig_.move,
+            move_goal,
+            null,
+            this.getCurrentHVDegree.bind(this),
+            this.moveCameraAroundCircleWObj.bind(this),
+            0,
+            0.1,
+            0.01,
+            0.1,
+            function () {
+                callback_fct();
+            },
+            false
+            );
+
+
+    this.setDistanceFactor(goal_dist_fct, true, function(){});
+
+
+
+
+//ZOOM OUT
+    /**
+     if (this.getDistanceFactor() < goal_dist_fct) {
+     this.setDistanceFactor(goal_dist_fct, true, function () {
+     this.setCameraToCircle(collection.getPosition().x, collection.getPosition().y, collection.getPosition().z,
+     null,
+     true,
+     cb
+     );
+     }.bind(this));
+     } else {    //ZOOM IN
+     this.setCameraToCircle(collection.getPosition().x, collection.getPosition().y, collection.getPosition().z,
+     null,
+     true,
+     cb
+     );
+     
+     }
+     **/
 
 
 
@@ -503,7 +548,7 @@ GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
 
     //X
     GLVIS.Scene.getCurrentScene().getAnimation().register(
-            this.animation_.move_id_x,
+            this.animationconfig_.move_id_x,
             final_pos.x,
             null,
             move_getter_x,
@@ -518,7 +563,7 @@ GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
             );
     //Y
     GLVIS.Scene.getCurrentScene().getAnimation().register(
-            this.animation_.move_id_y,
+            this.animationconfig_.move_id_y,
             final_pos.y,
             null,
             move_getter_y,
@@ -533,7 +578,7 @@ GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
             );
     //Z
     GLVIS.Scene.getCurrentScene().getAnimation().register(
-            this.animation_.move_id_z,
+            this.animationconfig_.move_id_z,
             final_pos.z,
             null,
             move_getter_z,

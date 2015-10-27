@@ -151,31 +151,29 @@ GLVIS.Tools.MultVarOps = {
         return this.test_param;
     },
     testAnim: function () {
-
         var goal = {
-            a: 50,
-            b: 20,
-            c: 30
+            h: 10,
+            v: 0
         };
+
+        /** @var {GLVIS.NavigationHandler} nh **/
+        var nh = GLVIS.Scene.getCurrentScene().getNavigationHandler();
+
+
         GLVIS.Scene.getCurrentScene().getAnimation().register(
                 "test_anim",
                 goal,
                 null,
-                this.getTestParam.bind(this),
-                this.setTestParam.bind(this),
+                nh.getCurrentHVDegree.bind(nh),
+                nh.moveCameraAroundCircleWObj.bind(nh),
                 0,
                 0.1,
                 0.01,
                 0.1,
                 function () {
                     console.log("ready");
-                }.bind(this),
-                true
+                },
+                false
                 );
     }
-
-
-
-
-
 };
