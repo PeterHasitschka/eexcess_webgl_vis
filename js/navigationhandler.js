@@ -255,8 +255,9 @@ GLVIS.NavigationHandler.prototype.setDistanceFactor = function (factor, animatio
     if (animation) {
         /** @type {GLVIS.Animation} anim **/
         var anim = GLVIS.Scene.getCurrentScene().getAnimation();
-        //anim.finishCameraMovementAnimations();
+        //anim.stopCameraMovementAnimations();
 
+        var anim_config = GLVIS.config.navigation.camera_move_center;
         anim.register(
                 this.animationconfig_.move_tocircle,
                 factor,
@@ -264,9 +265,9 @@ GLVIS.NavigationHandler.prototype.setDistanceFactor = function (factor, animatio
                 this.getDistanceFactor.bind(this),
                 this.setDistanceFactor.bind(this),
                 0,
-                0.05,
-                0.01,
-                0.001,
+                anim_config.speed,
+                anim_config.pow,
+                anim_config.threshold,
                 cb,
                 true);
 
@@ -445,7 +446,8 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
 
     var goal_dist_fct = GLVIS.config.collection.init_distance_fct;
 
-
+    var anim = GLVIS.Scene.getCurrentScene().getAnimation();
+    anim.stopCameraMovementAnimations();
 
     var move_goal = this.getDegreeOnCameraSphere_(
             collection.getPosition().x,
@@ -453,16 +455,17 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
             collection.getPosition().z
             );
 
-    GLVIS.Scene.getCurrentScene().getAnimation().register(
+    var anim_config = GLVIS.config.navigation.move.animated;
+    anim.register(
             this.animationconfig_.move,
             move_goal,
             null,
             this.getCurrentHVDegree.bind(this),
             this.moveCameraAroundCircleWObj.bind(this),
             0,
-            0.1,
-            0.01,
-            0.1,
+            anim_config.speed,
+            anim_config.pow,
+            anim_config.threshold,
             function () {
                 callback_fct();
             },
@@ -475,6 +478,9 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
 };
 
 GLVIS.NavigationHandler.prototype.defocusCollection = function () {
+
+    var anim = GLVIS.Scene.getCurrentScene().getAnimation();
+    anim.stopCameraMovementAnimations();
     this.setDistanceFactor(1, true, function () {
     });
 };
@@ -519,7 +525,7 @@ GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
     var move_pow = move_config.pow;
     var move_threshold = move_config.threshold;
 
-    GLVIS.Scene.getCurrentScene().getAnimation().finishCameraMovementAnimations();
+    GLVIS.Scene.getCurrentScene().getAnimation().stopCameraMovementAnimations();
 
     //X
     GLVIS.Scene.getCurrentScene().getAnimation().register(
@@ -597,11 +603,25 @@ GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_ob
             } else if (i_obj instanceof GLVIS.Recommendation) {
                 /** @type{GLVIS.Recommendation} i_obj **/
                 console.log("R " + i_obj.getId());
+
                 if (is_positive) {
-                    i_obj.focusAndZoom();
+
+                    if (i_obj.getCollection().getRingRepresentation())
+                        i_obj.focusAndZoom();
+                    else
+                        i_obj.getCollection().createRingRepresentation();
                 }
                 else {
-                    i_obj.defocusAndZoomOut();
+                    if (i_obj.getCollection().getRingRepresentation()) {
+                        if (i_obj === GLVIS.Recommendation.current_selected_rec)
+                            i_obj.defocusAndZoomOut();
+                        else
+                            i_obj.getCollection().deleteRingRepresentation();
+                    }
+                    else {
+                        //If not even an ringrep exists -> do nothing with that rec
+                    }
+
                 }
                 break;
             }

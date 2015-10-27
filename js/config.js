@@ -27,7 +27,7 @@ GLVIS.config = {
         },
         camera_perspective: {
             FOV: 80,
-            NEAR: 50,
+            NEAR: 20,
             FAR: 20000,
             DISTANCE: 1300
         },
@@ -98,7 +98,7 @@ GLVIS.config = {
                 strength: 0.01,
                 weakness: 0.5
             },
-            camera_distance: 100,
+            camera_distance: 30,
             common_node: {
                 min_radius: 0.5,
                 active_radius: 10,
@@ -313,10 +313,15 @@ GLVIS.config = {
         },
         move: {
             animated: {
-                threshold: 1,
-                pow: 0.2,
-                speed_fct: 0.2
+                speed: 0.1,
+                pow: 0.01,
+                threshold: 0.01
             }
+        },
+        camera_move_center: {
+            speed: 0.05,
+            pow: 0.01,
+            threshold: 0.001
         },
         animation_ids: {
             zoom_id: 'nh_anim_zoom',

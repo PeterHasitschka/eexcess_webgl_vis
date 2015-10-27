@@ -73,14 +73,17 @@ GLVIS.Animation.prototype.animate = function () {
     }
 };
 
+/**
+ * Stop all camera-movement animations immediately
+ */
+GLVIS.Animation.prototype.stopCameraMovementAnimations = function () {
 
-GLVIS.Animation.prototype.finishCameraMovementAnimations = function () {
-
-    this.finishAnimation(GLVIS.config.navigation.animation_ids.move);
-    this.finishAnimation(GLVIS.config.navigation.animation_ids.move_id_x);
-    this.finishAnimation(GLVIS.config.navigation.animation_ids.move_id_y);
-    this.finishAnimation(GLVIS.config.navigation.animation_ids.move_id_z);
+    for (var key in GLVIS.config.navigation.animation_ids) {
+        GLVIS.Debugger.debug("Animation", "Hard-stopping animation: " + GLVIS.config.navigation.animation_ids[key], 8);
+        this.unregister(GLVIS.config.navigation.animation_ids[key]);
+    }
 };
+
 
 /**
  * Finish a specific animation by its identifier
