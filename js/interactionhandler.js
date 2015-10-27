@@ -79,14 +79,29 @@ GLVIS.InteractionHandler = function (scene) {
 
             if (!is_mouse_down_in_canvas)
                 return;
+
             var zoom_factor = 1 / nh.getZoomFactor();
             var curr_mouse_x_diff = 0 - (event.clientX - mouse_x_prev) * zoom_factor;
             var curr_mouse_y_diff = (event.clientY - mouse_y_prev) * zoom_factor;
 
             nh.resetAnimationMovement();
+
+            var sensitivity_vals = config.mousesensitivy;
+
+            var df = nh.getDistanceFactor();
+
+            var max_df = null;
+            for (var max_df_key in sensitivity_vals) {
+                if (df <= max_df_key)
+                    max_df = max_df_key;
+                else
+                    break;
+            }
+
+            var sensitivity = sensitivity_vals[max_df];
             nh.moveCameraAroundCircle(
-                    curr_mouse_x_diff / config.mousesensitivy,
-                    curr_mouse_y_diff / config.mousesensitivy,
+                    curr_mouse_x_diff / sensitivity,
+                    curr_mouse_y_diff / sensitivity,
                     true
                     );
             mouse_x_prev = event.clientX;

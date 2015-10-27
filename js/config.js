@@ -35,7 +35,16 @@ GLVIS.config = {
     },
     interaction: {
         raycaster_precision: 0.5,
-        mousesensitivy: 25
+        /**
+         * Key is the max distancefactor
+         * @see {GLVIS.NavigationHandler.prototype.getDistanceFactor}
+         */
+
+        mousesensitivy: {
+            100: 25, //Allover view (df 1)
+            0.91: 100, //Focused collection
+            0.864: 1000   //Focused rec
+        }
     },
     collection: {
         init_distance_fct: 0.9,
