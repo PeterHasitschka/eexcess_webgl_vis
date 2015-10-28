@@ -159,36 +159,6 @@ GLVIS.ToolbarHandler.prototype.buttons = {
         }
 
 
-    },
-    row2: {
-        cameracontrol: {
-            viewfromtop: {
-                fct: function (e) {
-                    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
-                    camera.position.set(0, 1500, -800);
-                    camera.lookAt(new THREE.Vector3(0, 0, -801));
-                },
-                label: "View from top",
-                visible: true
-            }
-        },
-        filter: {
-            test1: {
-                fct: function (e) {
-
-
-                    var fh = GLVIS.Scene.getCurrentScene().getFilterHandler();
-                    
-                    var filter1 = new GLVIS.Filter("provider", "de");
-                    var filter2 = new GLVIS.Filter(GLVIS.Filter.KEYS.PROVIDER, "ZBW");
-                    fh.addFilter(filter1);
-                    fh.addFilter(filter2);
-                    fh.apply();
-                },
-                label: "Test Filter",
-                visible: true
-            }
-        }
     }
 
 };
