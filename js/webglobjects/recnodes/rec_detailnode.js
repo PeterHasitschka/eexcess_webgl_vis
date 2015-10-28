@@ -165,12 +165,6 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
             },
             {
                 action: null,
-                icon: "button-icon-reference.png",
-                //title: "Reference (use)",
-                visible: false
-            },
-            {
-                action: null,
                 icon: "button-icon-info.png",
                 title: "Show info",
                 visible: false

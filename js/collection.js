@@ -648,8 +648,10 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
 
     GLVIS.Debugger.debug("Collection", "Deleting Ring Rep of Coll " + this.getId(), 5);
 
-    if (this.ring_representation_)
-        this.ring_representation_.delete();
+    if (!this.ring_representation_)
+        return;
+
+    this.ring_representation_.delete();
     this.ring_representation_ = null;
 
     this.toggleRecRelevanceVisualization(false);
