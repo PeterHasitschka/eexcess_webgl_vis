@@ -4,7 +4,7 @@ var GLVIS = GLVIS || {};
  * Create a button for rec-detail-nodes with actions, icons etc.
  * 
  * @param {GLVIS.RecommendationDetailNode} parent_node Detail node were button gets added
- * @param {object} options key-values: action, x_offset, icon, visible
+ * @param {object} options key-values: action, icon, visible
  */
 GLVIS.RecDetailNodeButton = function (parent_node, options) {
 
@@ -13,7 +13,8 @@ GLVIS.RecDetailNodeButton = function (parent_node, options) {
     this.webgl_objects_ = {
         parent: parent_node.getGroupMesh(),
         circle: null,
-        icon: null
+        icon: null,
+        label: null
     };
 
     this.parent_ = parent_node;
@@ -21,10 +22,11 @@ GLVIS.RecDetailNodeButton = function (parent_node, options) {
     this.click_action_ = options.action || null;
     this.icon_ = options.icon || null;
     this.visible_ = options.visible || false;
+    this.title_ = options.title || null;
 
     this.pos = {
-        x: options.x_offset || 0,
-        y: config.y_offset,
+        x: null,
+        y: null,
         z: config.z_offset
     };
 
@@ -39,6 +41,11 @@ GLVIS.RecDetailNodeButton = function (parent_node, options) {
  */
 GLVIS.RecDetailNodeButton.prototype.hover = function () {
     this.webgl_objects_.circle.material.color.setHex(GLVIS.config.collection.recommendation.detail_node.button.hovercolor);
+
+    if (this.webgl_objects_.label) {
+        this.webgl_objects_.label.setIsVisible(true);
+        //this.webgl_objects_.label.render();
+    }
     GLVIS.RecDetailNodeButton.current_hovered = this;
     GLVIS.RecDetailNodeButton.new_hovered = true;
     this.setIsDirty(true);
@@ -48,7 +55,16 @@ GLVIS.RecDetailNodeButton.prototype.hover = function () {
  * Called by @see{GLVIS.InteractionHandler} if button is not registered as hovered in current raycast
  */
 GLVIS.RecDetailNodeButton.prototype.unhover = function () {
+
+    if (!this.webgl_objects_.circle)
+        return;
+
     this.webgl_objects_.circle.material.color.setHex(0xFFFFFF);
+
+    if (this.webgl_objects_.label) {
+        this.webgl_objects_.label.setIsVisible(false);
+        //this.webgl_objects_.label.render();
+    }
     this.setIsDirty(true);
 };
 
@@ -107,7 +123,43 @@ GLVIS.RecDetailNodeButton.prototype.initAndRegisterGlObj = function (parent_node
             this.setIsDirty(true);
         }.bind(this));
     }
+
+    if (this.title_) {
+        var label = new GLVIS.Text(
+                this.title_,
+                {
+                    font_size: config.label.font_size,
+                    render_factor: config.label.render_factor,
+                    bg_color: config.label.bg_color
+                },
+        null,
+                null,
+                null,
+                null,
+                null,
+                parent_node
+                );
+        label.setIsVisible(false);
+        this.webgl_objects_.label = label;
+    }
 };
+
+/**
+ * Set the (relative position of the button to the rec-node's center
+ * @param {float} x
+ * @param {float} y
+ */
+GLVIS.RecDetailNodeButton.prototype.setPosition = function (x, y) {
+
+    if (x !== null)
+        this.pos.x = x;
+
+    if (y !== null && y !== undefined)
+        this.pos.y = y;
+
+    this.setIsDirty(true);
+};
+
 
 /**
  * Setting the visibility of the button
@@ -175,6 +227,15 @@ GLVIS.RecDetailNodeButton.prototype.render = function () {
             this.pos.z + 0.1
             );
 
+    /** @type {GLVIS.Text} **/
+    var label = this.webgl_objects_.label;
+    if (label) {
+        var y_offset = GLVIS.config.collection.recommendation.detail_node.button.label.y_offset;
+        //label.setIsVisible(this.visible_);
+        label.setPosition(this.pos.x, this.pos.y + y_offset, this.pos.z + 0.1);
+        label.render();
+    }
+
     this.dirty_ = false;
 };
 
@@ -184,6 +245,11 @@ GLVIS.RecDetailNodeButton.prototype.render = function () {
 GLVIS.RecDetailNodeButton.prototype.delete = function () {
     delete this.webgl_objects_.circle;
     delete this.webgl_objects_.icon;
+
+    if (this.webgl_objects_.label) {
+        this.webgl_objects_.label.delete();
+        delete this.webgl_objects_.label;
+    }
 };
 
 

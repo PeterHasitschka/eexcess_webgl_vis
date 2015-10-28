@@ -108,9 +108,9 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                             config.circle.segments
                             ),
                     circle_inner_material);
-            
+
             circle_inner.scene_obj = this.recommendation_;
-            
+
             this.webgl_objects_.group.add(circle_inner);
             this.webgl_objects_.circle_inner = circle_inner;
 
@@ -141,23 +141,77 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
         var button_options = [
             {
                 action: this.recommendation_.openLink.bind(this.recommendation_),
-                x_offset: 0,
                 icon: "button-icon-link.png",
+                title: "Open in new tab",
                 visible: false
             },
             {
                 action: null,
-                x_offset: -3,
-                icon: "button-icon-smiley.png",
+                icon: "button-icon-filter.png",
+                title: "Filter",
+                visible: false
+            },
+            {
+                action: this.recommendation_.setBookmark.bind(this.recommendation_),
+                icon: "button-icon-bookmark.png",
+                title: "Bookmark",
+                visible: false
+            },
+            {
+                action: null,
+                icon: "button-icon-reference.png",
+                title: "Reference (use)",
+                visible: false
+            },
+            {
+                action: null,
+                icon: "button-icon-reference.png",
+                //title: "Reference (use)",
+                visible: false
+            },
+            {
+                action: null,
+                icon: "button-icon-info.png",
+                title: "Show info",
                 visible: false
             }
+
         ];
 
         for (var i = 0; i < button_options.length; i++) {
             var button = new GLVIS.RecDetailNodeButton(this, button_options[i]);
             this.webgl_objects_.buttons.push(button);
         }
+
     }
+    this.calculateButtonPositions_();
+};
+
+
+/**
+ * Sets the position of the added buttons around the node
+ */
+GLVIS.RecommendationDetailNode.prototype.calculateButtonPositions_ = function () {
+
+    var config = GLVIS.config.collection.recommendation.detail_node.button;
+    var b_count = this.webgl_objects_.buttons.length;
+    var rad = config.distance_rad;
+
+    var step = Math.PI * 2 / b_count;
+
+    var curr_angle = 0;
+    for (var i = 0; i < b_count; i++) {
+
+        /** @type {GLVIS.RecDetailNodeButton} **/
+        var curr_button = this.webgl_objects_.buttons[i];
+        var x = Math.cos(curr_angle) * rad;
+        var y = Math.sin(curr_angle) * rad;
+
+        curr_button.setPosition(x, y);
+
+        curr_angle += step;
+    }
+
 };
 
 /**

@@ -133,12 +133,18 @@ GLVIS.config = {
                 },
                 add_dinstance: 50,
                 button: {
-                    y_offset: -9,
                     z_offset: 1,
                     size: 1.2,
                     icon_size: 1.0,
                     segments: 20,
-                    hovercolor: 0xFFFF55
+                    hovercolor: 0xFFFF55,
+                    distance_rad: 8.5,
+                    label: {
+                        bg_color: '#FFFF55',
+                        font_size: 1.5,
+                        render_factor: 30,
+                        y_offset: -2.1
+                    }
                 }
             },
             animation: {
