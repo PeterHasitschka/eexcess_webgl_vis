@@ -184,10 +184,16 @@ GLVIS.config = {
             relevance: {
                 sizefactor: 2,
                 sizeoffset: 0.5,
-                distfactor: 0.2
+                distfactor: 0.7
             },
             filter: {
-                distance_factor: 0.6
+                distance_factor: 0.3
+            },
+            distance: {
+                min_dist_fct: 0.65,
+                max_dist_fct: 1,
+                rel_offset: 0.3,
+                filter_offset: 0.25
             }
         },
         ring: {

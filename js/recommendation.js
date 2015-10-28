@@ -784,11 +784,20 @@ GLVIS.Recommendation.prototype.updateNodeDistance = function () {
     var filter_distance_fact = filter_positive ? 1 : GLVIS.config.collection.recommendation.filter.distance_factor;
     var dist_fact = GLVIS.config.collection.recommendation.relevance.distfactor;
 
+    var dist_config = GLVIS.config.collection.recommendation.distance;
+
     var goal_fact;
+    var min_dist = dist_config.min_dist_fct;
+    var max_dist = dist_config.max_dist_fct;
+
     if (this.vis_data_.relevance_shown)
-        goal_fact = (1 + relevance * dist_fact) * filter_distance_fact;
+        goal_fact = dist_config.rel_offset + (dist_config.filter_offset + relevance * dist_fact) * filter_distance_fact;
     else
         goal_fact = 1 * filter_distance_fact;
+
+    //Set min and max distance factor
+    goal_fact = Math.max(goal_fact, min_dist);
+    goal_fact = Math.min(goal_fact, max_dist);
 
     var animate = false;
     if (this.getCollection().getRingRepresentation())
@@ -796,8 +805,6 @@ GLVIS.Recommendation.prototype.updateNodeDistance = function () {
 
     if (this.getDistanceFactor() !== goal_fact)
         this.setDistanceFactor(goal_fact, animate);
-
-    //this.setIsDirty(true);
 };
 
 /**

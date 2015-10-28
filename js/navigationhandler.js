@@ -575,13 +575,13 @@ GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
 };
 GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_objects) {
     var is_positive = e.deltaY === 1 ? true : false;
-    console.log(is_positive);
+   
     for (var i = 0; i < intersected_objects.length; i++) {
         if (intersected_objects[i].object && intersected_objects[i].object.scene_obj) {
             var i_obj = intersected_objects[i].object.scene_obj;
             if (i_obj instanceof GLVIS.Collection) {
+                
                 /** @type{GLVIS.Collection} i_obj **/
-                console.log("C " + i_obj.getId());
                 if (is_positive) {
                     if (!i_obj.getRingRepresentation())
                         i_obj.createRingRepresentation();
@@ -601,9 +601,8 @@ GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_ob
 
                 break;
             } else if (i_obj instanceof GLVIS.Recommendation) {
+                
                 /** @type{GLVIS.Recommendation} i_obj **/
-                console.log("R " + i_obj.getId());
-
                 if (is_positive) {
 
                     if (i_obj.getCollection().getRingRepresentation())
