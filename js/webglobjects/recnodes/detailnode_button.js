@@ -56,14 +56,14 @@ GLVIS.RecDetailNodeButton.prototype.hover = function () {
  */
 GLVIS.RecDetailNodeButton.prototype.unhover = function () {
 
+
     if (!this.webgl_objects_.circle)
         return;
-
     this.webgl_objects_.circle.material.color.setHex(0xFFFFFF);
 
     if (this.webgl_objects_.label) {
         this.webgl_objects_.label.setIsVisible(false);
-        //this.webgl_objects_.label.render();
+        this.webgl_objects_.label.render();
     }
     this.setIsDirty(true);
 };
@@ -130,7 +130,8 @@ GLVIS.RecDetailNodeButton.prototype.initAndRegisterGlObj = function (parent_node
                 {
                     font_size: config.label.font_size,
                     render_factor: config.label.render_factor,
-                    bg_color: config.label.bg_color
+                    bg_color: config.label.bg_color,
+                    highlight_activated: false
                 },
         null,
                 null,

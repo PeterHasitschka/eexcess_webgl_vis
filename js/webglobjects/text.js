@@ -25,7 +25,8 @@ GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouselea
         pos_x: 0,
         pos_y: 0,
         pos_z: config.z_value,
-        render_factor: config.render_factor
+        render_factor: config.render_factor,
+        highlight_activated: true
     };
     //Overwrite init config
     for (var key in options) {
@@ -51,6 +52,7 @@ GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouselea
     this.color_ = init_data.color;
     this.bg_color_ = init_data.bg_color;
     this.opacity_ = init_data.opacity;
+    this.h_active = init_data.highlight_activated;
     this.h_color_ = init_highlight_data.color;
     this.h_bg_color_ = init_highlight_data.bg_color;
     this.h_opacity_ = init_highlight_data.opacity;
@@ -231,6 +233,8 @@ GLVIS.Text.prototype.handleMouseleave = function () {
  * Swapping normal and hightlight mesh
  */
 GLVIS.Text.prototype.highlight = function () {
+    if (!this.h_active)
+        return;
 
     this.webgl_objects_.mesh_focus.visible = true;
     this.webgl_objects_.mesh.visible = false;
@@ -239,6 +243,10 @@ GLVIS.Text.prototype.highlight = function () {
  * Swapping normal and hightlight mesh
  */
 GLVIS.Text.prototype.unHighlight = function () {
+
+    if (!this.h_active)
+        return;
+
     this.webgl_objects_.mesh.visible = true;
     this.webgl_objects_.mesh_focus.visible = false;
 };
@@ -261,6 +269,7 @@ GLVIS.Text.prototype.render = function () {
     this.webgl_objects_.mesh.position.set(pos_x, pos_y, pos_z);
     this.webgl_objects_.mesh.material.opacity = this.opacity_;
     this.webgl_objects_.mesh.visible = this.getIsVisible();
+
     this.webgl_objects_.mesh_focus.position.set(pos_x, pos_y, pos_z);
     this.webgl_objects_.mesh_focus.material.opacity = this.opacity_;
     this.setIsDirty(false);
