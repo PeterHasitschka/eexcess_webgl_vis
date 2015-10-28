@@ -18,10 +18,10 @@ GLVIS.Debugger = {
  */
 GLVIS.Debugger.debug = function (class_name, value, level) {
 
-    if (level > this.level_)
+    if (!this.active_ || level > this.level_)
         return;
-    
-    
+
+
     console.log(
             this.prefix_ + "L" + level + "::'%c" + class_name + "':%c",
             this.classname_css,

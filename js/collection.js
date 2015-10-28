@@ -585,6 +585,7 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
  */
 GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
 
+    this.selectAndFocus();
     /**
      * Remove all other ringreps
      * @param {GLVIS.Collection} coll
@@ -603,7 +604,7 @@ GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
     pos_handler.setCollToFocus(this);
     pos_handler.setIsOneFocused(true);
 
-    this.selectAndFocus();
+
     this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
 
     this.unconnectSameRecsFromOtherCollections();
