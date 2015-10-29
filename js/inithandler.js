@@ -19,13 +19,18 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
     var path = path_to_webglvisualization_folder;
 
     //Load HTML-Credentials via AJAX
-    jQuery.get(
-            path + "html/recdashboard/index.html", function (data) {
 
-                root_element.append(data);
-                this.loadFiles(root_element, path, cb);
-            }.bind(this)
-            );
+    if (false)
+        jQuery.get(
+                path + "html/recdashboard/index.html", function (data) {
+
+                    root_element.append(data);
+                    this.loadFiles(root_element, path, cb);
+                }.bind(this)
+                );
+    else {
+        this.loadFiles(root_element, path, cb);
+    }
 };
 
 
@@ -38,13 +43,13 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
      * gets created.
      */
     if (!GLVIS.InitHandler.libs_loaded) {
-        require([
+        this.load_([
             path + "../../../libs/jquery-1.10.1.min.js",
             path + "../../../libs/jquery-mousewheel/jquery.mousewheel.min.js",
             path + "lib/underscore/underscore.js",
             path + "lib/three.js/three.min.js"],
                 function () {
-                    require([
+                    this.load_([
                         path + "js/config.js",
                         path + "js/tools/debugger.js",
                         path + "js/tools/tools.js",
@@ -102,8 +107,8 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
 
                                 //Recall this function
                                 GLVIS.InitHandler.init(root_element, path, cb);
-                            });
-                }
+                            }.bind(this));
+                }.bind(this)
         );
     }
     else {
@@ -111,6 +116,11 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
     }
 };
 
+
+GLVIS.InitHandler.load_ = function (files, cb) {
+    require(files, cb);
+
+};
 
 /**
  * Create DB-Handler and Scene. 
