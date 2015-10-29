@@ -48,6 +48,7 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                                     path + "js/webglhandler.js",
                                     path + "js/interactionhandler.js",
                                     path + "js/navigationhandler.js",
+                                    path + "js/forms.js",
                                     path + "js/recdashboard/recdashboardhandler.js",
                                     path + "js/recdashboard/toolbar.js",
                                     path + "js/recdashboard/button.js",

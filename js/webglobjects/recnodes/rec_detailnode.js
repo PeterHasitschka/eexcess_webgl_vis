@@ -85,99 +85,97 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
         var result = eexcess_data.result;
         var preview_image = result.previewImage;
 
-        //DUMMY FOR EVERYONE!
-        if (!preview_image)
-            preview_image = GLVIS.config.scene.media_folder + "testtexture.jpg";
+        var image = preview_image || GLVIS.config.scene.media_folder + "eexcess_logo.jpeg";
 
-        if (preview_image) {
+        /**
+         * Create inner circle with image texture
+         */
+        var circle_inner_material =
+                new THREE.MeshBasicMaterial(
+                        {
+                            color: 0XFF0000,
+                            transparent: true,
+                            side: THREE.DoubleSide,
+                            opacity: 1
+                        });
+        var circle_inner = new THREE.Mesh(
+                new THREE.CircleGeometry(
+                        inner_static_rad,
+                        config.circle.segments
+                        ),
+                circle_inner_material);
 
-            /**
-             * Create inner circle with image texture
-             */
-            var circle_inner_material =
-                    new THREE.MeshBasicMaterial(
-                            {
-                                color: 0XFF0000,
-                                transparent: true,
-                                side: THREE.DoubleSide,
-                                opacity: 1
-                            });
-            var circle_inner = new THREE.Mesh(
-                    new THREE.CircleGeometry(
-                            inner_static_rad,
-                            config.circle.segments
-                            ),
-                    circle_inner_material);
+        circle_inner.scene_obj = this.recommendation_;
 
-            circle_inner.scene_obj = this.recommendation_;
-
-            this.webgl_objects_.group.add(circle_inner);
-            this.webgl_objects_.circle_inner = circle_inner;
+        this.webgl_objects_.group.add(circle_inner);
+        this.webgl_objects_.circle_inner = circle_inner;
 
 
-            GLVIS.Debugger.debug("RecommendationDetailNode", "Preview image exists... start loading", 5);
+        GLVIS.Debugger.debug("RecommendationDetailNode", "Preview image exists... start loading", 5);
 
-            var that = this;
-            THREE.ImageUtils.loadTexture(preview_image, {}, function (texture) {
 
-                GLVIS.Debugger.debug("RecommendationDetailNode", "Preview loaded. Creating texture", 5);
-                texture.minFilter = THREE.LinearFilter;
-                that.webgl_objects_.circle_inner.material = new THREE.MeshBasicMaterial({
-                    map: texture,
-                    side: THREE.DoubleSide,
-                    transparent: true,
-                    opacity: 1,
-                    color: 0xFFFFFF
-                });
-                texture.flipY = true;
-                texture.needsUpdate = true;
+        THREE.ImageUtils.loadTexture(image, {}, function (texture) {
 
-                that.setIsDirty(true);
-                that.recommendation_.setIsDirty(true);
+            GLVIS.Debugger.debug("RecommendationDetailNode", "Preview loaded. Creating texture", 5);
+            texture.minFilter = THREE.LinearFilter;
+            this.webgl_objects_.circle_inner.material = new THREE.MeshBasicMaterial({
+                map: texture,
+                side: THREE.DoubleSide,
+                transparent: true,
+                color: 0xFFFFFF
             });
-        }
+            texture.flipY = true;
+            texture.needsUpdate = true;
 
-        //Add buttons
-        var button_options = [
-            {
-                action: this.recommendation_.openLink.bind(this.recommendation_),
-                icon: "button-icon-link.png",
-                title: "Open in new tab",
-                visible: false
-            },
-            {
-                action: null,
-                icon: "button-icon-filter.png",
-                title: "Filter",
-                visible: false
-            },
-            {
-                action: this.recommendation_.setBookmark.bind(this.recommendation_),
-                icon: "button-icon-bookmark.png",
-                title: "Bookmark",
-                visible: false
-            },
-            {
-                action: null,
-                icon: "button-icon-reference.png",
-                title: "Reference (use)",
-                visible: false
-            },
-            {
-                action: null,
-                icon: "button-icon-info.png",
-                title: "Show info",
-                visible: false
-            }
+            this.setIsDirty(true);
+            this.recommendation_.setIsDirty(true);
 
-        ];
-
-        for (var i = 0; i < button_options.length; i++) {
-            var button = new GLVIS.RecDetailNodeButton(this, button_options[i]);
-            this.webgl_objects_.buttons.push(button);
-        }
-
+        }.bind(this));
     }
+
+    var forms = GLVIS.Scene.getCurrentScene().getForms();
+    var recdbhandler = GLVIS.Scene.getCurrentScene().getRecDashboardHandler();
+    //Add buttons
+    var button_options = [
+        {
+            action: this.recommendation_.openLink.bind(this.recommendation_),
+            icon: "button-icon-open.png",
+            title: "Open in new tab",
+            visible: false
+        },
+        {
+            action: null,
+            icon: "button-icon-filter.png",
+            title: "Filter",
+            visible: false
+        },
+        {
+            action: recdbhandler.openBookmarkForm.bind(recdbhandler, this.recommendation_),
+            icon: "button-icon-bookmark.png",
+            title: "Bookmark",
+            visible: false
+        },
+        {
+            action: null,
+            icon: "button-icon-ref.png",
+            title: "Reference (use)",
+            visible: false
+        },
+        {
+            action: null,
+            icon: "button-icon-info.png",
+            title: "Show info",
+            visible: false
+        }
+
+    ];
+
+    for (var i = 0; i < button_options.length; i++) {
+        var button = new GLVIS.RecDetailNodeButton(this, button_options[i]);
+        this.webgl_objects_.buttons.push(button);
+    }
+
+
     this.calculateButtonPositions_();
 };
 

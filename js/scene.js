@@ -6,7 +6,7 @@ var GLVIS = GLVIS || {};
 GLVIS.Scene = function (canvas) {
 
     GLVIS.Scene.current_scene = this;
-    
+
     /**
      * Switch between RING and BOW for different positioning on a virtual ring
      */
@@ -31,6 +31,9 @@ GLVIS.Scene = function (canvas) {
 
     /** @type{GLVIS.CollectionPosCircular} **/
     this.collection_position_handler_ = new GLVIS.CollectionPosCircular(this.vis_type_);
+
+    /** @type{GLVIS.Scene} **/
+    this.forms_ = new GLVIS.Forms(this);
 
     /** @type{GLVIS.Animation} **/
     this.animation_ = new GLVIS.Animation();
@@ -160,6 +163,14 @@ GLVIS.Scene.prototype.getComparer = function () {
  */
 GLVIS.Scene.prototype.getRecConnector = function () {
     return this.recconnector_;
+};
+
+/**
+ * Get the scene's form handler
+ * @returns {GLVIS.Forms}
+ */
+GLVIS.Scene.prototype.getForms = function () {
+    return this.forms_;
 };
 
 /**

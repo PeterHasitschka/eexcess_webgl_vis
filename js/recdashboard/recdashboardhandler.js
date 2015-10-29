@@ -27,3 +27,10 @@ GLVIS.RecDashboardHandler.prototype.onRecommendationClick = function (recommenda
     this.last_clicked_rec = recommendation;
     this.toolbar.getButton("rec_focusparentcol").show();
 };
+
+
+GLVIS.RecDashboardHandler.prototype.openBookmarkForm = function (rec) {
+
+    console.log("TODO!");
+};
+

@@ -855,17 +855,6 @@ GLVIS.Recommendation.prototype.openLink = function () {
 };
 
 
-GLVIS.Recommendation.prototype.setBookmark = function(){
-    alert("implement me");
-};
-
-GLVIS.Recommendation.prototype.unsetBookmark = function(){
-    alert("implement me");
-};
-
-
-
-
 /******************
  * 
  * STATIC FUNCTIONS
