@@ -18,9 +18,9 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
 
     var path = path_to_webglvisualization_folder;
 
-    //Load HTML-Credentials via AJAX
-
+    console.log(root_element);
     if (false)
+        //Load HTML-Credentials via AJAX
         jQuery.get(
                 path + "html/recdashboard/index.html", function (data) {
 
@@ -29,11 +29,35 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
                 }.bind(this)
                 );
     else {
+        this.appendHtmlStuff(root_element);
         this.loadFiles(root_element, path, cb);
     }
 };
 
 
+
+GLVIS.InitHandler.appendHtmlStuff = function (root_element) {
+
+
+    var html = '<div id="webgl_toolbar_container">' +
+            '' +
+            '        <div id="webgl_toolbar">' +
+            '' +
+            '        </div>' +
+            '' +
+            '' +
+            '        <a target="_blank" href="/visualizations/WebGlVisualization/html/standalone/index.html"> Lade Standalone Version</a>' +
+            '    </div>' +
+            '    <div id="webgl_canvas_container">' +
+            '        <p>Loading WebGL-Visualization...<br />' +
+            '            Please wait!<br/>' +
+            '            <img src="/visualizations/WebGlVisualization/media/ajax-loader.gif" alt="loading" /></p>' +
+            '    </div>';
+
+    root_element.append(html);
+
+
+};
 
 GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
 
@@ -109,7 +133,7 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
                                 GLVIS.InitHandler.init(root_element, path, cb);
                             }.bind(this));
                 }.bind(this)
-        );
+                );
     }
     else {
         GLVIS.InitHandler.initScene(this.scene, this.db_handler, cb);
