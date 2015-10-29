@@ -14,9 +14,9 @@ GLVIS.InitHandler.libs_loaded = false;
  * @param {function} cb callback
  * @returns {undefined}
  */
-GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_folder, cb) {
+GLVIS.InitHandler.init = function (root_element, cb) {
 
-    var path = path_to_webglvisualization_folder;
+    var path = "../WebGlVisualization/";
 
     console.log(root_element);
     if (false)
@@ -79,59 +79,59 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
      */
     if (!GLVIS.InitHandler.libs_loaded) {
         this.load_([
-            path + "../../../libs/jquery-1.10.1.min.js",
-            path + "../../../libs/jquery-mousewheel/jquery.mousewheel.min.js",
-            path + "lib/underscore/underscore.js",
-            path + "lib/three.js/three.min.js"],
+            "libs/jquery-1.10.2.min.js",
+            "libs/jquery.mousewheel.min.js",
+            "../WebGlVisualization/lib/underscore/underscore.js",
+            "../WebGlVisualization/lib/three.js/three.min.js"],
                 function () {
                     this.load_([
-                        path + "js/config.js",
-                        path + "js/tools/debugger.js",
-                        path + "js/tools/tools.js",
-                        path + "js/tools/animationdebug.js",
-                        path + "js/db/db_handler.js",
-                        path + "js/db/query.js",
-                        path + "js/db/rec.js",
-                        path + "js/db/query_creator.js",
-                        path + "js/animation.js",
-                        path + "js/webglhandler.js",
-                        path + "js/interactionhandler.js",
-                        path + "js/navigationhandler.js",
-                        path + "js/forms.js",
-                        path + "js/recdashboard/recdashboardhandler.js",
-                        path + "js/recdashboard/toolbar.js",
-                        path + "js/recdashboard/button.js",
-                        path + "js/compare/direct.js",
-                        path + "js/compare/highlight_recs_by_label.js",
-                        path + "js/compare/webglobjects/direct_bar.js",
-                        path + "js/webglobjects/collection_centernode.js",
-                        path + "js/webglobjects/collection_plane.js",
-                        path + "js/webglobjects/recnodes/rec_commonnode.js",
-                        path + "js/webglobjects/recnodes/rec_detailnode.js",
-                        path + "js/webglobjects/recnodes/detailnode_button.js",
-                        path + "js/webglobjects/text.js",
-                        path + "js/filter/filterhandler.js",
-                        path + "js/filter/filter.js",
-                        path + "js/collection.js",
-                        path + "js/recommendation.js",
-                        path + "js/ringrep/coll_ringsegment.js",
-                        path + "js/ringrep/ringrepresentation.js",
-                        path + "js/ringrep/tree.js",
-                        path + "js/position/recommendation/distributed.js",
-                        path + "js/position/recommendation/ringrep.js",
-                        //path + "js/position/collection/linear.js",
-                        path + "js/position/collection/circular.js",
-                        path + "js/position/collection/circletype/ring.js",
-                        path + "js/position/collection/circletype/bow.js",
-                        path + "js/webglobjects/connection/collection_rec_line.js",
-                        path + "js/webglobjects/connection/collection_collection_line.js",
-                        path + "js/webglobjects/connection/rec_rec_spline.js",
-                        path + "js/recconnector.js",
-                        path + "js/scene.js",
-                        path + "../../../common_js/storage.js",
-                        path + "../Vis-Template/js/utils.js", //Important to prevent .scrollTo-Bug
-                        path + "../Vis-Template/js/colorpicker.js", //Important to prevent .colorPicker-Bug
-                        path + "../Vis-Template/js/accordion-and-dropdown.js"   //Important to prevent .dropdown-Bug
+                        "../WebGlVisualization/js/config.js",
+                        "../WebGlVisualization/js/tools/debugger.js",
+                        "../WebGlVisualization/js/tools/tools.js",
+                        "../WebGlVisualization/js/tools/animationdebug.js",
+                        "../WebGlVisualization/js/db/db_handler.js",
+                        "../WebGlVisualization/js/db/query.js",
+                        "../WebGlVisualization/js/db/rec.js",
+                        "../WebGlVisualization/js/db/query_creator.js",
+                        "../WebGlVisualization/js/animation.js",
+                        "../WebGlVisualization/js/webglhandler.js",
+                        "../WebGlVisualization/js/interactionhandler.js",
+                        "../WebGlVisualization/js/navigationhandler.js",
+                        "../WebGlVisualization/js/forms.js",
+                        "../WebGlVisualization/js/recdashboard/recdashboardhandler.js",
+                        "../WebGlVisualization/js/recdashboard/toolbar.js",
+                        "../WebGlVisualization/js/recdashboard/button.js",
+                        "../WebGlVisualization/js/compare/direct.js",
+                        "../WebGlVisualization/js/compare/highlight_recs_by_label.js",
+                        "../WebGlVisualization/js/compare/webglobjects/direct_bar.js",
+                        "../WebGlVisualization/js/webglobjects/collection_centernode.js",
+                        "../WebGlVisualization/js/webglobjects/collection_plane.js",
+                        "../WebGlVisualization/js/webglobjects/recnodes/rec_commonnode.js",
+                        "../WebGlVisualization/js/webglobjects/recnodes/rec_detailnode.js",
+                        "../WebGlVisualization/js/webglobjects/recnodes/detailnode_button.js",
+                        "../WebGlVisualization/js/webglobjects/text.js",
+                        "../WebGlVisualization/js/filter/filterhandler.js",
+                        "../WebGlVisualization/js/filter/filter.js",
+                        "../WebGlVisualization/js/collection.js",
+                        "../WebGlVisualization/js/recommendation.js",
+                        "../WebGlVisualization/js/ringrep/coll_ringsegment.js",
+                        "../WebGlVisualization/js/ringrep/ringrepresentation.js",
+                        "../WebGlVisualization/js/ringrep/tree.js",
+                        "../WebGlVisualization/js/position/recommendation/distributed.js",
+                        "../WebGlVisualization/js/position/recommendation/ringrep.js",
+                        //"../WebGlVisualization/js/position/collection/linear.js",
+                        "../WebGlVisualization/js/position/collection/circular.js",
+                        "../WebGlVisualization/js/position/collection/circletype/ring.js",
+                        "../WebGlVisualization/js/position/collection/circletype/bow.js",
+                        "../WebGlVisualization/js/webglobjects/connection/collection_rec_line.js",
+                        "../WebGlVisualization/js/webglobjects/connection/collection_collection_line.js",
+                        "../WebGlVisualization/js/webglobjects/connection/rec_rec_spline.js",
+                        "../WebGlVisualization/js/recconnector.js",
+                        "../WebGlVisualization/js/scene.js"
+                       // "../WebGlVisualization/../../../common_js/storage.js",
+                       // "../WebGlVisualization/../Vis-Template/js/utils.js", //Important to prevent .scrollTo-Bug
+                       // "../WebGlVisualization/../Vis-Template/js/colorpicker.js", //Important to prevent .colorPicker-Bug
+                       // "../WebGlVisualization/../Vis-Template/js/accordion-and-dropdown.js"   //Important to prevent .dropdown-Bug
                     ],
                             function () {
                                 GLVIS.Debugger.debug("InitHandler",
@@ -159,7 +159,19 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
  * @param {function} cb Callback
  */
 GLVIS.InitHandler.load_ = function (files, cb) {
-    require(files, cb);
+
+    if (!Modernizr) {
+        require(files, cb);
+    } else {
+        Modernizr.load({
+            test: files,
+            load: files,
+            complete: function () {
+                cb();
+                return;
+            }
+        });
+    }
 };
 
 /**
