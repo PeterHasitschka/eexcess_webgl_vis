@@ -35,9 +35,13 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
 };
 
 
-
+/**
+ * Adding html stuff to the root element.
+ * It's not possible anymore to use a .html file via jQuery-get due to XHR Problems
+ * when using the dashboard in a standalone environment without extension or server
+ * @param {object} root_element Jquery object
+ */
 GLVIS.InitHandler.appendHtmlStuff = function (root_element) {
-
 
     var html = '<div id="webgl_toolbar_container">' +
             '' +
@@ -56,9 +60,16 @@ GLVIS.InitHandler.appendHtmlStuff = function (root_element) {
 
     root_element.append(html);
 
-
 };
 
+/**
+ * Loading all necessary JS Files for the Plugin
+ * 
+ * @param {object} root_element jQuery element
+ * @param {string} path prefix for all files 
+ * @param {function} cb Callback after loading
+ * @returns {GLVIS.InitHandler.loadFiles}
+ */
 GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
 
     /**
@@ -140,10 +151,15 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
     }
 };
 
-
+/**
+ * Wrapper for specific loading method. Require.js makes problems
+ * Plans to switch to Modernizr.
+ * 
+ * @param {array[string]} files
+ * @param {function} cb Callback
+ */
 GLVIS.InitHandler.load_ = function (files, cb) {
     require(files, cb);
-
 };
 
 /**
