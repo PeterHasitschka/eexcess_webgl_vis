@@ -29,7 +29,7 @@ GLVIS.Button.prototype.toHtml = function () {
     out += "<div class='webgl_toolbar_element' id='" + config.button_id_prefix + this.id_ + "'>";
 
     if (this.icon)
-        out += "    <img src='/visualizations/WebGlVisualization/media/toolbar/" + this.icon + "' class='webgl_toolbar_element_icon'/>";
+        out += "    <img src='../WebGlVisualization/media/toolbar/" + this.icon + "' class='webgl_toolbar_element_icon'/>";
     out += "    <span class='webgl_toolbar_element_label'>" + this.label + "</span>";
     out += "</div>";
 

@@ -113,7 +113,7 @@ GLVIS.InteractionHandler = function (scene) {
 
 
         //MOUSE-WHEEL (ZOOM)
-        jQuery(canvas).mousewheel(function (event) {
+        jQuery(canvas).on('scroll', function (event) {
             if (false) {
                 nh.resetAnimationZoom();
                 nh.zoomDelta(event.deltaY * 5);

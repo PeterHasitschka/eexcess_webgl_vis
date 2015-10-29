@@ -44,18 +44,13 @@ GLVIS.InitHandler.init = function (root_element, cb) {
 GLVIS.InitHandler.appendHtmlStuff = function (root_element) {
 
     var html = '<div id="webgl_toolbar_container">' +
-            '' +
             '        <div id="webgl_toolbar">' +
-            '' +
             '        </div>' +
-            '' +
-            '' +
-            '        <a target="_blank" href="/visualizations/WebGlVisualization/html/standalone/index.html"> Lade Standalone Version</a>' +
             '    </div>' +
             '    <div id="webgl_canvas_container">' +
             '        <p>Loading WebGL-Visualization...<br />' +
             '            Please wait!<br/>' +
-            '            <img src="/visualizations/WebGlVisualization/media/ajax-loader.gif" alt="loading" /></p>' +
+            '            <img src="../WebGlVisualization/media/ajax-loader.gif" alt="loading" /></p>' +
             '    </div>';
 
     root_element.append(html);
@@ -80,7 +75,6 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
     if (!GLVIS.InitHandler.libs_loaded) {
         this.load_([
             "libs/jquery-1.10.2.min.js",
-            "libs/jquery.mousewheel.min.js",
             "../WebGlVisualization/lib/underscore/underscore.js",
             "../WebGlVisualization/lib/three.js/three.min.js"],
                 function () {
@@ -128,10 +122,6 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
                         "../WebGlVisualization/js/webglobjects/connection/rec_rec_spline.js",
                         "../WebGlVisualization/js/recconnector.js",
                         "../WebGlVisualization/js/scene.js"
-                       // "../WebGlVisualization/../../../common_js/storage.js",
-                       // "../WebGlVisualization/../Vis-Template/js/utils.js", //Important to prevent .scrollTo-Bug
-                       // "../WebGlVisualization/../Vis-Template/js/colorpicker.js", //Important to prevent .colorPicker-Bug
-                       // "../WebGlVisualization/../Vis-Template/js/accordion-and-dropdown.js"   //Important to prevent .dropdown-Bug
                     ],
                             function () {
                                 GLVIS.Debugger.debug("InitHandler",
