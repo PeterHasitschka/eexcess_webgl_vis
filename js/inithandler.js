@@ -18,20 +18,9 @@ GLVIS.InitHandler.init = function (root_element, cb) {
 
     var path = "../WebGlVisualization/";
 
-    console.log(root_element);
-    if (false)
-        //Load HTML-Credentials via AJAX
-        jQuery.get(
-                path + "html/recdashboard/index.html", function (data) {
+    this.appendHtmlStuff(root_element);
+    this.loadFiles(root_element, path, cb);
 
-                    root_element.append(data);
-                    this.loadFiles(root_element, path, cb);
-                }.bind(this)
-                );
-    else {
-        this.appendHtmlStuff(root_element);
-        this.loadFiles(root_element, path, cb);
-    }
 };
 
 
@@ -83,7 +72,8 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
                         "../WebGlVisualization/js/tools/debugger.js",
                         "../WebGlVisualization/js/tools/tools.js",
                         "../WebGlVisualization/js/tools/animationdebug.js",
-                        "../WebGlVisualization/js/db/db_handler.js",
+                        "../WebGlVisualization/js/db/db_handler_indexed.js",
+                        "../WebGlVisualization/js/db/db_handler_local.js",
                         "../WebGlVisualization/js/db/query.js",
                         "../WebGlVisualization/js/db/rec.js",
                         "../WebGlVisualization/js/db/query_creator.js",
@@ -130,8 +120,7 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
 
                                 GLVIS.InitHandler.libs_loaded = true;
 
-                                //Recall this function
-                                GLVIS.InitHandler.init(root_element, path, cb);
+                                GLVIS.InitHandler.initScene(this.scene, this.db_handler, cb);
                             }.bind(this));
                 }.bind(this)
                 );
@@ -153,10 +142,16 @@ GLVIS.InitHandler.load_ = function (files, cb) {
     if (!Modernizr) {
         require(files, cb);
     } else {
+
+        console.log("Loading Files: ", files);
         Modernizr.load({
-            test: files,
             load: files,
-            complete: function () {
+            callback: function (d) {
+                console.log("cb", d);
+                return;
+            },
+            complete: function (d) {
+                console.log("complete", d);
                 cb();
                 return;
             }
@@ -167,34 +162,51 @@ GLVIS.InitHandler.load_ = function (files, cb) {
 /**
  * Create DB-Handler and Scene. 
  * @param {GLVIS.Scene} scene
- * @param {GLVIS.DbHandler} db_handler
+ * @param {GLVIS.DbHandlerIndexedDb} db_handler
  * @param {function} cb callback
  */
 GLVIS.InitHandler.initScene = function (scene, db_handler, cb) {
 
+
     scene = new GLVIS.Scene(jQuery(GLVIS.config.rec_dashboard.selector));
-    db_handler = new GLVIS.DbHandler();
-    var queries_to_add = null;
-    db_handler.loadQueriesAndRecs(function () {
+    db_handler = new GLVIS.DbHandlerLocalStorage();
+    ;
 
-        GLVIS.Debugger.debug("InitHandler",
-                "Query-Data loaded and processed cb",
-                3);
+    var collections = db_handler.getCollections();
+    for (var q_count = 0; q_count < collections.length; q_count++) {
+        scene.addCollection(collections[q_count]);
+    }
 
-        var queries_to_add = db_handler.fetchQueries(GLVIS.config.scene.queries_to_fetch);
+    scene.initCollectionNetwork();
+    GLVIS.Scene.getCurrentScene().getWebGlHandler().getCanvas().show();
 
-        for (var q_count = 0; q_count < queries_to_add.length; q_count++) {
-            scene.addCollection(queries_to_add[q_count]);
-        }
+    GLVIS.Scene.animate();
 
-        scene.initCollectionNetwork();
-        GLVIS.Scene.getCurrentScene().getWebGlHandler().getCanvas().show();
+    if (cb)
+        cb();
 
-        GLVIS.Scene.animate();
-
-        if (cb)
-            cb();
-    });
+    /*
+     db_handler.loadQueriesAndRecs(function () {
+     
+     GLVIS.Debugger.debug("InitHandler",
+     "Query-Data loaded and processed cb",
+     3);
+     
+     var queries_to_add = db_handler.fetchQueries(GLVIS.config.scene.queries_to_fetch);
+     
+     for (var q_count = 0; q_count < queries_to_add.length; q_count++) {
+     scene.addCollection(queries_to_add[q_count]);
+     }
+     
+     scene.initCollectionNetwork();
+     GLVIS.Scene.getCurrentScene().getWebGlHandler().getCanvas().show();
+     
+     GLVIS.Scene.animate();
+     
+     if (cb)
+     cb();
+     });
+     */
 };
 
 
@@ -207,6 +219,6 @@ GLVIS.InitHandler.cleanup = function () {
     delete GLVIS.Scene.getCurrentScene();
     GLVIS.Scene.current_scene = null;
 
-    delete GLVIS.DbHandler.getCurrentDbHandler();
-    GLVIS.DbHandler.current_db_handler_ = null;
+    delete GLVIS.DbHandlerIndexedDb.getCurrentDbHandlerIndexedDb();
+    GLVIS.DbHandlerIndexedDb.current_db_handler_ = null;
 };
