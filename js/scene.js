@@ -1,5 +1,3 @@
-
-console.log("SCENE LOADED X");
 var GLVIS = GLVIS || {};
 
 /** @constructor 
@@ -273,4 +271,3 @@ GLVIS.Scene.animate = function () {
     if (animation_debugger)
         animation_debugger.update();
 };
-console.log("SCENE LOADED Y");
