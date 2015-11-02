@@ -8,7 +8,7 @@ GLVIS.config = {
         circle_radius_ring: 2000,
         circle_radius_bow: 8000,
         bow_empty_spaces_factor: 2,
-        media_folder: "/visualizations/WebGlVisualization/media/",
+        media_folder: "../WebGlVisualization/media/",
         possible_vis_types: {
             BOW: 0x1,
             RING: 0x2
