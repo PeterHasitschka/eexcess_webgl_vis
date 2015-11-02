@@ -14,7 +14,7 @@ GLVIS.DbRecObj = function (data) {
 };
 
 /**
- * Set Data coming from @see{GLVIS.DbHandler.getStorageData_}
+ * Set Data coming from @see{GLVIS.DbHandlerIndexedDb.getStorageData_}
  * @param {type} data Obj
  */
 GLVIS.DbRecObj.prototype.setData = function (data) {
@@ -22,7 +22,7 @@ GLVIS.DbRecObj.prototype.setData = function (data) {
 };
 
 /**
- * Returning (processed) data originally from @see{GLVIS.DbHandler.getStorageData_}.
+ * Returning (processed) data originally from @see{GLVIS.DbHandlerIndexedDb.getStorageData_}.
  * @returns {object}
  */
 GLVIS.DbRecObj.prototype.getData = function () {

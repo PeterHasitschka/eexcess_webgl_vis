@@ -18,20 +18,12 @@ GLVIS.InitHandler.init = function (root_element, cb) {
 
     var path = "../WebGlVisualization/";
 
-    console.log(root_element);
-    if (false)
-        //Load HTML-Credentials via AJAX
-        jQuery.get(
-                path + "html/recdashboard/index.html", function (data) {
+    this.appendHtmlStuff(root_element);
+    this.loadFiles(root_element, path, cb);
 
-                    root_element.append(data);
-                    this.loadFiles(root_element, path, cb);
-                }.bind(this)
-                );
-    else {
-        this.appendHtmlStuff(root_element);
-        this.loadFiles(root_element, path, cb);
-    }
+    this.load_tries = 0;
+    this.max_load_tries = 3;
+
 };
 
 
@@ -60,6 +52,10 @@ GLVIS.InitHandler.appendHtmlStuff = function (root_element) {
 
 /**
  * Loading all necessary JS Files for the Plugin
+ * If an error occours in the callback after loading where the scene gets created
+ * this method will be recalled again (until a limit is reached).
+ * This is necessary due to the Modernizr callback that may come before the classes
+ * may be loaded.
  * 
  * @param {object} root_element jQuery element
  * @param {string} path prefix for all files 
@@ -68,83 +64,104 @@ GLVIS.InitHandler.appendHtmlStuff = function (root_element) {
  */
 GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
 
-    /**
-     * Run require in two steps... Otherwise it may happen
-     * randomly that three.js doesn't get loaded until the scene
-     * gets created.
-     */
     if (!GLVIS.InitHandler.libs_loaded) {
         this.load_([
             "libs/jquery-1.10.2.min.js",
             "../WebGlVisualization/lib/underscore/underscore.js",
-            "../WebGlVisualization/lib/three.js/three.min.js"],
-                function () {
-                    this.load_([
-                        "../WebGlVisualization/js/config.js",
-                        "../WebGlVisualization/js/tools/debugger.js",
-                        "../WebGlVisualization/js/tools/tools.js",
-                        "../WebGlVisualization/js/tools/animationdebug.js",
-                        "../WebGlVisualization/js/db/db_handler.js",
-                        "../WebGlVisualization/js/db/query.js",
-                        "../WebGlVisualization/js/db/rec.js",
-                        "../WebGlVisualization/js/db/query_creator.js",
-                        "../WebGlVisualization/js/animation.js",
-                        "../WebGlVisualization/js/webglhandler.js",
-                        "../WebGlVisualization/js/interactionhandler.js",
-                        "../WebGlVisualization/js/navigationhandler.js",
-                        "../WebGlVisualization/js/forms.js",
-                        "../WebGlVisualization/js/recdashboard/recdashboardhandler.js",
-                        "../WebGlVisualization/js/recdashboard/toolbar.js",
-                        "../WebGlVisualization/js/recdashboard/button.js",
-                        "../WebGlVisualization/js/compare/direct.js",
-                        "../WebGlVisualization/js/compare/highlight_recs_by_label.js",
-                        "../WebGlVisualization/js/compare/webglobjects/direct_bar.js",
-                        "../WebGlVisualization/js/webglobjects/collection_centernode.js",
-                        "../WebGlVisualization/js/webglobjects/collection_plane.js",
-                        "../WebGlVisualization/js/webglobjects/recnodes/rec_commonnode.js",
-                        "../WebGlVisualization/js/webglobjects/recnodes/rec_detailnode.js",
-                        "../WebGlVisualization/js/webglobjects/recnodes/detailnode_button.js",
-                        "../WebGlVisualization/js/webglobjects/text.js",
-                        "../WebGlVisualization/js/filter/filterhandler.js",
-                        "../WebGlVisualization/js/filter/filter.js",
-                        "../WebGlVisualization/js/collection.js",
-                        "../WebGlVisualization/js/recommendation.js",
-                        "../WebGlVisualization/js/ringrep/coll_ringsegment.js",
-                        "../WebGlVisualization/js/ringrep/ringrepresentation.js",
-                        "../WebGlVisualization/js/ringrep/tree.js",
-                        "../WebGlVisualization/js/position/recommendation/distributed.js",
-                        "../WebGlVisualization/js/position/recommendation/ringrep.js",
-                        //"../WebGlVisualization/js/position/collection/linear.js",
-                        "../WebGlVisualization/js/position/collection/circular.js",
-                        "../WebGlVisualization/js/position/collection/circletype/ring.js",
-                        "../WebGlVisualization/js/position/collection/circletype/bow.js",
-                        "../WebGlVisualization/js/webglobjects/connection/collection_rec_line.js",
-                        "../WebGlVisualization/js/webglobjects/connection/collection_collection_line.js",
-                        "../WebGlVisualization/js/webglobjects/connection/rec_rec_spline.js",
-                        "../WebGlVisualization/js/recconnector.js",
-                        "../WebGlVisualization/js/scene.js"
-                    ],
-                            function () {
-                                GLVIS.Debugger.debug("InitHandler",
-                                        "finished calling js files for webglvis-plugin",
-                                        3);
+            "../WebGlVisualization/lib/three.js/three.min.js",
+            "../WebGlVisualization/js/config.js",
+            "../WebGlVisualization/js/tools/debugger.js",
+            "../WebGlVisualization/js/tools/tools.js",
+            "../WebGlVisualization/js/tools/animationdebug.js",
+            "../WebGlVisualization/js/db/db_handler_indexed.js",
+            "../WebGlVisualization/js/db/db_handler_local.js",
+            "../WebGlVisualization/js/db/query.js",
+            "../WebGlVisualization/js/db/rec.js",
+            "../WebGlVisualization/js/db/query_creator.js",
+            "../WebGlVisualization/js/animation.js",
+            "../WebGlVisualization/js/webglhandler.js",
+            "../WebGlVisualization/js/interactionhandler.js",
+            "../WebGlVisualization/js/navigationhandler.js",
+            "../WebGlVisualization/js/forms.js",
+            "../WebGlVisualization/js/recdashboard/recdashboardhandler.js",
+            "../WebGlVisualization/js/recdashboard/toolbar.js",
+            "../WebGlVisualization/js/recdashboard/button.js",
+            "../WebGlVisualization/js/compare/direct.js",
+            "../WebGlVisualization/js/compare/highlight_recs_by_label.js",
+            "../WebGlVisualization/js/compare/webglobjects/direct_bar.js",
+            "../WebGlVisualization/js/webglobjects/collection_centernode.js",
+            "../WebGlVisualization/js/webglobjects/collection_plane.js",
+            "../WebGlVisualization/js/webglobjects/recnodes/rec_commonnode.js",
+            "../WebGlVisualization/js/webglobjects/recnodes/rec_detailnode.js",
+            "../WebGlVisualization/js/webglobjects/recnodes/detailnode_button.js",
+            "../WebGlVisualization/js/webglobjects/text.js",
+            "../WebGlVisualization/js/filter/filterhandler.js",
+            "../WebGlVisualization/js/filter/filter.js",
+            "../WebGlVisualization/js/collection.js",
+            "../WebGlVisualization/js/recommendation.js",
+            "../WebGlVisualization/js/ringrep/coll_ringsegment.js",
+            "../WebGlVisualization/js/ringrep/ringrepresentation.js",
+            "../WebGlVisualization/js/ringrep/tree.js",
+            "../WebGlVisualization/js/position/recommendation/distributed.js",
+            "../WebGlVisualization/js/position/recommendation/ringrep.js",
+            //"../WebGlVisualization/js/position/collection/linear.js",
+            "../WebGlVisualization/js/position/collection/circular.js",
+            "../WebGlVisualization/js/position/collection/circletype/ring.js",
+            "../WebGlVisualization/js/position/collection/circletype/bow.js",
+            "../WebGlVisualization/js/webglobjects/connection/collection_rec_line.js",
+            "../WebGlVisualization/js/webglobjects/connection/collection_collection_line.js",
+            "../WebGlVisualization/js/webglobjects/connection/rec_rec_spline.js",
+            "../WebGlVisualization/js/recconnector.js",
+            "../WebGlVisualization/js/scene.js"
+        ],
+                //Callback after all files where loaded
+                        function () {
+                            GLVIS.Debugger.debug("InitHandler",
+                                    "finished calling js files for webglvis-plugin",
+                                    3);
 
-                                GLVIS.InitHandler.libs_loaded = true;
+                            //Increment loading tries
+                            this.load_tries++;
 
-                                //Recall this function
-                                GLVIS.InitHandler.init(root_element, path, cb);
-                            }.bind(this));
-                }.bind(this)
-                );
-    }
+                            /**
+                             * There may be some errors due to not complete init of the loaded classes.
+                             * Give it some tries again to finish loading by recalling the loadFiles method
+                             */
+                            try {
+
+                                GLVIS.InitHandler.initScene(this.scene, this.db_handler, cb);
+                            } catch (Exception) {
+
+                                if (this.load_tries < this.max_load_tries) {
+                                    GLVIS.Debugger.debug("InitHandler",
+                                            "Error in creating scene. May be caused by not ready loaded file. Trying to load file once more!",
+                                            3);
+                                    //Recall
+                                    this.loadFiles(root_element, path, cb);
+                                    return;
+                                }
+                                /**
+                                 * Too much tries. The error in creating the scene may be caused by something else
+                                 */
+                                else {
+                                    GLVIS.Debugger.debug("InitHandler",
+                                            "Tried to create scene after loading files " + this.load_tries + " time! Stopping now!",
+                                            1);
+                                    console.error("Error creating scene!", Exception);
+                                    return;
+                                }
+                            }
+                            GLVIS.InitHandler.libs_loaded = true;
+                        }.bind(this));
+            }
     else {
         GLVIS.InitHandler.initScene(this.scene, this.db_handler, cb);
     }
 };
 
 /**
- * Wrapper for specific loading method. Require.js makes problems
- * Plans to switch to Modernizr.
+ * Wrapper for specific loading method. Require.js made problems in new dashboard
+ * So switch to Modernizr.
  * 
  * @param {array[string]} files
  * @param {function} cb Callback
@@ -155,9 +172,11 @@ GLVIS.InitHandler.load_ = function (files, cb) {
         require(files, cb);
     } else {
         Modernizr.load({
-            test: files,
             load: files,
-            complete: function () {
+            callback: function (d) {
+                return;
+            },
+            complete: function (d) {
                 cb();
                 return;
             }
@@ -168,34 +187,27 @@ GLVIS.InitHandler.load_ = function (files, cb) {
 /**
  * Create DB-Handler and Scene. 
  * @param {GLVIS.Scene} scene
- * @param {GLVIS.DbHandler} db_handler
+ * @param {GLVIS.DbHandlerIndexedDb} db_handler
  * @param {function} cb callback
  */
 GLVIS.InitHandler.initScene = function (scene, db_handler, cb) {
 
     scene = new GLVIS.Scene(jQuery(GLVIS.config.rec_dashboard.selector));
-    db_handler = new GLVIS.DbHandler();
-    var queries_to_add = null;
-    db_handler.loadQueriesAndRecs(function () {
 
-        GLVIS.Debugger.debug("InitHandler",
-                "Query-Data loaded and processed cb",
-                3);
+    db_handler = new GLVIS.DbHandlerLocalStorage();
 
-        var queries_to_add = db_handler.fetchQueries(GLVIS.config.scene.queries_to_fetch);
+    var collections = db_handler.getCollections();
+    for (var q_count = 0; q_count < collections.length; q_count++) {
+        scene.addCollection(collections[q_count]);
+    }
 
-        for (var q_count = 0; q_count < queries_to_add.length; q_count++) {
-            scene.addCollection(queries_to_add[q_count]);
-        }
+    scene.initCollectionNetwork();
+    GLVIS.Scene.getCurrentScene().getWebGlHandler().getCanvas().show();
 
-        scene.initCollectionNetwork();
-        GLVIS.Scene.getCurrentScene().getWebGlHandler().getCanvas().show();
+    GLVIS.Scene.animate();
 
-        GLVIS.Scene.animate();
-
-        if (cb)
-            cb();
-    });
+    if (cb)
+        cb();
 };
 
 
@@ -208,6 +220,6 @@ GLVIS.InitHandler.cleanup = function () {
     delete GLVIS.Scene.getCurrentScene();
     GLVIS.Scene.current_scene = null;
 
-    delete GLVIS.DbHandler.getCurrentDbHandler();
-    GLVIS.DbHandler.current_db_handler_ = null;
+    delete GLVIS.DbHandlerIndexedDb.getCurrentDbHandlerIndexedDb();
+    GLVIS.DbHandlerIndexedDb.current_db_handler_ = null;
 };

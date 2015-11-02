@@ -1,8 +1,8 @@
 var GLVIS = GLVIS || {};
 
 
-GLVIS.DbHandler = function () {
-    GLVIS.DbHandler.current_db_handler_ = this;
+GLVIS.DbHandlerIndexedDb = function () {
+    GLVIS.DbHandlerIndexedDb.current_db_handler_ = this;
 
     this.db_ = null;
     this.query_data_ = [];
@@ -19,9 +19,9 @@ GLVIS.DbHandler = function () {
  * @param {Boolean} load_duplicates If true, also duplicate-flagged queries are fetched
  * @returns {Array} Holding @see{GLVIS.Query} objects
  */
-GLVIS.DbHandler.prototype.fetchQueries = function (length, end, load_duplicates) {
+GLVIS.DbHandlerIndexedDb.prototype.fetchQueries = function (length, end, load_duplicates) {
 
-    GLVIS.Debugger.debug("DbHandler",
+    GLVIS.Debugger.debug("DbHandlerIndexedDb",
             "Fetching " + length + " queries from query_data",
             3);
     if (!end)
@@ -39,12 +39,12 @@ GLVIS.DbHandler.prototype.fetchQueries = function (length, end, load_duplicates)
  * Flagging duplicates
  * @param {type} callback_ready Function called when ready
  */
-GLVIS.DbHandler.prototype.loadQueriesAndRecs = function (callback_ready) {
+GLVIS.DbHandlerIndexedDb.prototype.loadQueriesAndRecs = function (callback_ready) {
 
     var that = this;
     this.initDb_(function () {
 
-        GLVIS.Debugger.debug("DbHandler",
+        GLVIS.Debugger.debug("DbHandlerIndexedDb",
                 "Init DB ready.",
                 3);
 
@@ -65,7 +65,7 @@ GLVIS.DbHandler.prototype.loadQueriesAndRecs = function (callback_ready) {
                 //Filter duplicate queries
                 that.flagDuplicateQueryObjects_();
 
-                GLVIS.Debugger.debug("DbHandler",
+                GLVIS.Debugger.debug("DbHandlerIndexedDb",
                         ["QUERY- AND REC-DATA", that.query_data_, that.rec_data_],
                         5);
 
@@ -79,7 +79,7 @@ GLVIS.DbHandler.prototype.loadQueriesAndRecs = function (callback_ready) {
 
 };
 
-GLVIS.DbHandler.prototype.initDb_ = function (callback_ready) {
+GLVIS.DbHandlerIndexedDb.prototype.initDb_ = function (callback_ready) {
 
     if (this.db_ !== null) {
         callback_ready();
@@ -103,9 +103,9 @@ GLVIS.DbHandler.prototype.initDb_ = function (callback_ready) {
  * If two queries have the same search string, the OLDER one gets flagged as
  * duplicate, so newer ones appear in the list, and older ones are e.g. hidden
  */
-GLVIS.DbHandler.prototype.flagDuplicateQueryObjects_ = function () {
+GLVIS.DbHandlerIndexedDb.prototype.flagDuplicateQueryObjects_ = function () {
 
-    GLVIS.Debugger.debug("DbHandler",
+    GLVIS.Debugger.debug("DbHandlerIndexedDb",
             "Starting flagging duplicate query-strings",
             5);
 
@@ -141,7 +141,7 @@ GLVIS.DbHandler.prototype.flagDuplicateQueryObjects_ = function () {
             if (curr_back_q.getQueryStr() === controll_q.getQueryStr()) {
                 controll_q.flagDuplicate();
 
-                GLVIS.Debugger.debug("DbHandler",
+                GLVIS.Debugger.debug("DbHandlerIndexedDb",
                         "Flagged a query-data as duplicate",
                         8);
 
@@ -151,7 +151,7 @@ GLVIS.DbHandler.prototype.flagDuplicateQueryObjects_ = function () {
 
     }
 
-    GLVIS.Debugger.debug("DbHandler",
+    GLVIS.Debugger.debug("DbHandlerIndexedDb",
             "Finished flagging duplicate query-strings " +
             "(Flagged " + dupl_count + "/" + this.query_data_.length + ")",
             5);
@@ -164,7 +164,7 @@ GLVIS.DbHandler.prototype.flagDuplicateQueryObjects_ = function () {
  * @param {type} success_cb
  * @returns {undefined}
  */
-GLVIS.DbHandler.prototype.getFullQueryStorageData_ = function (success_cb) {
+GLVIS.DbHandlerIndexedDb.prototype.getFullQueryStorageData_ = function (success_cb) {
 
     var config = GLVIS.config.db.query;
     var that = this;
@@ -181,7 +181,7 @@ GLVIS.DbHandler.prototype.getFullQueryStorageData_ = function (success_cb) {
  * @param {type} success_cb
  * @returns {undefined}
  */
-GLVIS.DbHandler.prototype.getFullRecStorageData_ = function (success_cb) {
+GLVIS.DbHandlerIndexedDb.prototype.getFullRecStorageData_ = function (success_cb) {
 
     var config = GLVIS.config.db.rec;
     var that = this;
@@ -197,7 +197,7 @@ GLVIS.DbHandler.prototype.getFullRecStorageData_ = function (success_cb) {
  * Fill the query-data with the data-objects of the rec-results
  * @returns {undefined}
  */
-GLVIS.DbHandler.prototype.injectRecDataIntoQueryData_ = function () {
+GLVIS.DbHandlerIndexedDb.prototype.injectRecDataIntoQueryData_ = function () {
 
     for (var q_count = 0; q_count < this.query_data_.length; q_count++) {
 
@@ -229,7 +229,7 @@ GLVIS.DbHandler.prototype.injectRecDataIntoQueryData_ = function () {
     //Delete empty but long array
     this.rec_data_ = [];
 
-    GLVIS.Debugger.debug("DbHandler",
+    GLVIS.Debugger.debug("DbHandlerIndexedDb",
             "DBHANDLER: Finished injecting recs in queries",
             3);
 };
@@ -245,9 +245,9 @@ GLVIS.DbHandler.prototype.injectRecDataIntoQueryData_ = function () {
  * @param {array} fields keys of the columns to load
  * @returns {array} holding objects of all entries of the storage with the data of the fields
  */
-GLVIS.DbHandler.prototype.getStorageData_ = function (cb_data_loaded, storage_name, fields) {
+GLVIS.DbHandlerIndexedDb.prototype.getStorageData_ = function (cb_data_loaded, storage_name, fields) {
 
-    GLVIS.Debugger.debug("DbHandler",
+    GLVIS.Debugger.debug("DbHandlerIndexedDb",
             "GETTING DATA FROM " + storage_name,
             4);
 
@@ -299,13 +299,13 @@ GLVIS.DbHandler.prototype.getStorageData_ = function (cb_data_loaded, storage_na
  ******************/
 
 
-GLVIS.DbHandler.current_db_handler_ = null;
+GLVIS.DbHandlerIndexedDb.current_db_handler_ = null;
 
 /**
  * Get current DB-Handler
- * @returns {GLVIS.DbHandler}
+ * @returns {GLVIS.DbHandlerIndexedDb}
  */
-GLVIS.DbHandler.getCurrentDbHandler = function () {
+GLVIS.DbHandlerIndexedDb.getCurrentDbHandlerIndexedDb = function () {
     if (!this.current_db_handler_)
         throw("ERROR: NO CURRENT DB-HANDLER!");
 
