@@ -46,6 +46,7 @@ GLVIS.InitHandler.appendHtmlStuff = function (root_element) {
     var html = '<div id="webgl_toolbar_container">' +
             '        <div id="webgl_toolbar">' +
             '        </div>' +
+            '        <a target="_blank" href="../WebGlVisualization/html/standalone/index.html"> Lade Standalone Version</a>' +
             '    </div>' +
             '    <div id="webgl_canvas_container">' +
             '        <p>Loading WebGL-Visualization...<br />' +
