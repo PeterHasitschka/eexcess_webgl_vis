@@ -28,8 +28,14 @@ GLVIS.Button.prototype.toHtml = function () {
 
     out += "<div class='webgl_toolbar_element' id='" + config.button_id_prefix + this.id_ + "'>";
 
+    var folder_prefix;
+    if (typeof (standalone_folder_prefix) !== "undefined")
+        folder_prefix = standalone_folder_prefix;
+    else
+        folder_prefix = "../WebGlVisualization/";
+
     if (this.icon)
-        out += "    <img src='../WebGlVisualization/media/toolbar/" + this.icon + "' class='webgl_toolbar_element_icon'/>";
+        out += "    <img src='" + folder_prefix + "media/toolbar/" + this.icon + "' class='webgl_toolbar_element_icon'/>";
     out += "    <span class='webgl_toolbar_element_label'>" + this.label + "</span>";
     out += "</div>";
 

@@ -91,6 +91,9 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
         var cors_proxy = config.cors_proxy;
         var preview_image = result.previewImage ? cors_proxy + result.previewImage : null;
 
+        if (typeof (standalone_folder_prefix) !== "undefined")
+            GLVIS.config.scene.media_folder = "../../media/";
+
         var image = preview_image || GLVIS.config.scene.media_folder + config.placeholder_img;
 
         /**
@@ -131,7 +134,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                 side: THREE.DoubleSide,
                 transparent: true,
                 color: 0xFFFFFF,
-                visible:true
+                visible: true
             });
             texture.flipY = true;
             texture.needsUpdate = true;

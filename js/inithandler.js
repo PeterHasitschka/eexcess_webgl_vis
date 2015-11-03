@@ -35,6 +35,10 @@ GLVIS.InitHandler.init = function (root_element, cb) {
  */
 GLVIS.InitHandler.appendHtmlStuff = function (root_element) {
 
+    var media_folder = "../WebGlVisualization/media/";
+    if (typeof (standalone_folder_prefix) !== "undefined")
+        media_folder = "../../media/";
+
     var html = '<div id="webgl_toolbar_container">' +
             '        <div id="webgl_toolbar">' +
             '        </div>' +
@@ -43,7 +47,7 @@ GLVIS.InitHandler.appendHtmlStuff = function (root_element) {
             '    <div id="webgl_canvas_container">' +
             '        <p>Loading WebGL-Visualization...<br />' +
             '            Please wait!<br/>' +
-            '            <img src="../WebGlVisualization/media/ajax-loader.gif" alt="loading" /></p>' +
+            '            <img src="' + media_folder + 'ajax-loader.gif" alt="loading" /></p>' +
             '    </div>';
 
     root_element.append(html);
@@ -64,55 +68,62 @@ GLVIS.InitHandler.appendHtmlStuff = function (root_element) {
  */
 GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
 
+    var folder_prefix;
+    if (typeof (standalone_folder_prefix) !== "undefined")
+        folder_prefix = standalone_folder_prefix;
+    else
+        folder_prefix = "../WebGlVisualization/";
+
+
     if (!GLVIS.InitHandler.libs_loaded) {
         this.load_([
-            "libs/jquery-1.10.2.min.js",
-            "../WebGlVisualization/lib/underscore/underscore.js",
-            "../WebGlVisualization/lib/three.js/three.min.js",
-            "../WebGlVisualization/js/config.js",
-            "../WebGlVisualization/js/tools/debugger.js",
-            "../WebGlVisualization/js/tools/tools.js",
-            "../WebGlVisualization/js/tools/animationdebug.js",
-            "../WebGlVisualization/js/db/db_handler_indexed.js",
-            "../WebGlVisualization/js/db/db_handler_local.js",
-            "../WebGlVisualization/js/db/query.js",
-            "../WebGlVisualization/js/db/rec.js",
-            "../WebGlVisualization/js/db/query_creator.js",
-            "../WebGlVisualization/js/animation.js",
-            "../WebGlVisualization/js/webglhandler.js",
-            "../WebGlVisualization/js/interactionhandler.js",
-            "../WebGlVisualization/js/navigationhandler.js",
-            "../WebGlVisualization/js/forms.js",
-            "../WebGlVisualization/js/recdashboard/recdashboardhandler.js",
-            "../WebGlVisualization/js/recdashboard/toolbar.js",
-            "../WebGlVisualization/js/recdashboard/button.js",
-            "../WebGlVisualization/js/compare/direct.js",
-            "../WebGlVisualization/js/compare/highlight_recs_by_label.js",
-            "../WebGlVisualization/js/compare/webglobjects/direct_bar.js",
-            "../WebGlVisualization/js/webglobjects/collection_centernode.js",
-            "../WebGlVisualization/js/webglobjects/collection_plane.js",
-            "../WebGlVisualization/js/webglobjects/recnodes/rec_commonnode.js",
-            "../WebGlVisualization/js/webglobjects/recnodes/rec_detailnode.js",
-            "../WebGlVisualization/js/webglobjects/recnodes/detailnode_button.js",
-            "../WebGlVisualization/js/webglobjects/text.js",
-            "../WebGlVisualization/js/filter/filterhandler.js",
-            "../WebGlVisualization/js/filter/filter.js",
-            "../WebGlVisualization/js/collection.js",
-            "../WebGlVisualization/js/recommendation.js",
-            "../WebGlVisualization/js/ringrep/coll_ringsegment.js",
-            "../WebGlVisualization/js/ringrep/ringrepresentation.js",
-            "../WebGlVisualization/js/ringrep/tree.js",
-            "../WebGlVisualization/js/position/recommendation/distributed.js",
-            "../WebGlVisualization/js/position/recommendation/ringrep.js",
-            //"../WebGlVisualization/js/position/collection/linear.js",
-            "../WebGlVisualization/js/position/collection/circular.js",
-            "../WebGlVisualization/js/position/collection/circletype/ring.js",
-            "../WebGlVisualization/js/position/collection/circletype/bow.js",
-            "../WebGlVisualization/js/webglobjects/connection/collection_rec_line.js",
-            "../WebGlVisualization/js/webglobjects/connection/collection_collection_line.js",
-            "../WebGlVisualization/js/webglobjects/connection/rec_rec_spline.js",
-            "../WebGlVisualization/js/recconnector.js",
-            "../WebGlVisualization/js/scene.js"
+            folder_prefix + "../Dashboard/libs/jquery-1.10.2.min.js",
+            folder_prefix + "lib/underscore/underscore.js",
+            folder_prefix + "lib/three.js/three.min.js",
+            folder_prefix + "js/config.js",
+            folder_prefix + "js/tools/debugger.js",
+            folder_prefix + "js/tools/tools.js",
+            folder_prefix + "js/tools/animationdebug.js",
+            folder_prefix + "js/db/db_handler_indexed.js",
+            folder_prefix + "js/db/db_handler_local.js",
+            folder_prefix + "js/db/query.js",
+            folder_prefix + "js/db/rec.js",
+            folder_prefix + "js/db/query_creator.js",
+            folder_prefix + "js/animation.js",
+            folder_prefix + "js/webglhandler.js",
+            folder_prefix + "js/interactionhandler.js",
+            folder_prefix + "js/navigationhandler.js",
+            folder_prefix + "js/forms.js",
+            folder_prefix + "js/recdashboard/recdashboardhandler.js",
+            folder_prefix + "js/recdashboard/toolbar.js",
+            folder_prefix + "js/recdashboard/button.js",
+            folder_prefix + "js/compare/direct.js",
+            folder_prefix + "js/compare/highlight_recs_by_label.js",
+            folder_prefix + "js/compare/webglobjects/direct_bar.js",
+            folder_prefix + "js/webglobjects/collection_centernode.js",
+            folder_prefix + "js/webglobjects/collection_plane.js",
+            folder_prefix + "js/webglobjects/recnodes/rec_commonnode.js",
+            folder_prefix + "js/webglobjects/recnodes/rec_detailnode.js",
+            folder_prefix + "js/webglobjects/recnodes/detailnode_button.js",
+            folder_prefix + "js/webglobjects/text.js",
+            folder_prefix + "js/filter/filterhandler.js",
+            folder_prefix + "js/filter/filter.js",
+            folder_prefix + "js/collection.js",
+            folder_prefix + "js/recommendation.js",
+            folder_prefix + "js/ringrep/coll_ringsegment.js",
+            folder_prefix + "js/ringrep/ringrepresentation.js",
+            folder_prefix + "js/ringrep/tree.js",
+            folder_prefix + "js/position/recommendation/distributed.js",
+            folder_prefix + "js/position/recommendation/ringrep.js",
+            //folder_prefix + "js/position/collection/linear.js",
+            folder_prefix + "js/position/collection/circular.js",
+            folder_prefix + "js/position/collection/circletype/ring.js",
+            folder_prefix + "js/position/collection/circletype/bow.js",
+            folder_prefix + "js/webglobjects/connection/collection_rec_line.js",
+            folder_prefix + "js/webglobjects/connection/collection_collection_line.js",
+            folder_prefix + "js/webglobjects/connection/rec_rec_spline.js",
+            folder_prefix + "js/recconnector.js",
+            folder_prefix + "js/scene.js"
         ],
                 //Callback after all files where loaded
                         function () {
