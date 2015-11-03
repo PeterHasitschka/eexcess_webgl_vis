@@ -113,32 +113,20 @@ GLVIS.InteractionHandler = function (scene) {
 
 
         //MOUSE-WHEEL (ZOOM)
-        jQuery(canvas).on('scroll', function (event) {
-            if (false) {
-                nh.resetAnimationZoom();
-                nh.zoomDelta(event.deltaY * 5);
-            } else {
-                nh.onMouseWheelMove(event, this.getIntersectedObjects_(event));
-            }
-
-
+        jQuery(canvas)[0].addEventListener("mousewheel", function (event) {
+            console.log(event);
+            nh.onMouseWheelMove(event, this.getIntersectedObjects_(event));
         }.bind(this));
+
+        /*
+         * Not working in new dashboard
+         jQuery(canvas).on('scroll', function (event) {
+         }.bind(this));
+         */
     }.bind(this));
 };
 
-/**
- * @TODO Check if needed anymore
- */
-/*
- GLVIS.InteractionHandler.prototype.deselectAllCollections = function () {
- //Deselect all collections
- for (var i = 0; i < this.scene_.getCollections().length; i++)
- {
- var curr_coll = this.scene_.getCollections()[i];
- curr_coll.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
- }
- };
- */
+
 /**
  * Calls interaction function on Three-Object if exists
  * @param {event} event 

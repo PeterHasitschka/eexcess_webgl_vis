@@ -84,9 +84,14 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
     var eexcess_data = this.recommendation_.getEexcessData();
     if (eexcess_data) {
         var result = eexcess_data.result;
-        var preview_image = result.previewImage;
 
-        var image = preview_image || GLVIS.config.scene.media_folder + "eexcess_logo.jpeg";
+        /**
+         * A CORS Proxy may be necessary to load the thumbnail images from external ressources
+         */
+        var cors_proxy = config.cors_proxy;
+        var preview_image = result.previewImage ? cors_proxy + result.previewImage : null;
+
+        var image = preview_image || GLVIS.config.scene.media_folder + config.placeholder_img;
 
         /**
          * Create inner circle with image texture
@@ -97,7 +102,8 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                             color: 0XFF0000,
                             transparent: true,
                             side: THREE.DoubleSide,
-                            opacity: 1
+                            opacity: 1,
+                            visible: false
                         });
         var circle_inner = new THREE.Mesh(
                 new THREE.CircleGeometry(
@@ -124,7 +130,8 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
                 map: texture,
                 side: THREE.DoubleSide,
                 transparent: true,
-                color: 0xFFFFFF
+                color: 0xFFFFFF,
+                visible:true
             });
             texture.flipY = true;
             texture.needsUpdate = true;

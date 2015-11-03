@@ -145,7 +145,9 @@ GLVIS.config = {
                         render_factor: 30,
                         y_offset: -2.1
                     }
-                }
+                },
+                cors_proxy: 'https://crossorigin.me/',
+                placeholder_img: "eexcess_logo.jpeg"
             },
             animation: {
                 speed: 0.1,

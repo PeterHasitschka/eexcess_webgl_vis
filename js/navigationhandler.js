@@ -574,7 +574,7 @@ GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
             );
 };
 GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_objects) {
-    var is_positive = e.deltaY === 1 ? true : false;
+    var is_positive = e.deltaY < 0 ? true : false;
    
     for (var i = 0; i < intersected_objects.length; i++) {
         if (intersected_objects[i].object && intersected_objects[i].object.scene_obj) {
