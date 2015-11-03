@@ -162,7 +162,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
             visible: false
         },
         {
-            action: null,
+            action: forms.createFormRecInfo.bind(forms, this.recommendation_),
             icon: "button-icon-info.png",
             title: "Show info",
             visible: false
