@@ -82,7 +82,8 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
             path + "../../../libs/jquery-1.10.1.min.js",
             path + "../../../libs/jquery-mousewheel/jquery.mousewheel.min.js",
             path + "lib/underscore/underscore.js",
-            path + "lib/three.js/three.min.js"],
+            path + "lib/three.js/three.min.js",
+            path + "lib/jquery/fancybox/jquery.fancybox.pack.js"],
                 function () {
                     this.load_([
                         path + "js/config.js",
