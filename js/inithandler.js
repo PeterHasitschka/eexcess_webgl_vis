@@ -80,6 +80,7 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
             folder_prefix + "../Dashboard/libs/jquery-1.10.2.min.js",
             folder_prefix + "lib/underscore/underscore.js",
             folder_prefix + "lib/three.js/three.min.js",
+            folder_prefix + "lib/jquery/fancybox/jquery.fancybox.pack.js",
             folder_prefix + "js/config.js",
             folder_prefix + "js/tools/debugger.js",
             folder_prefix + "js/tools/tools.js",

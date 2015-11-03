@@ -7,3 +7,8 @@ GLVIS.Forms = function (scene) {
 };
 
 
+GLVIS.Forms.prototype.createFormRecInfo = function(){
+    
+    
+    
+};
