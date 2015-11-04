@@ -167,3 +167,23 @@ GLVIS.FilterHandler.prototype.applyFiltersToRec_ = function (rec) {
 GLVIS.FilterHandler.prototype.getFilters = function () {
     return this.filters_;
 };
+
+
+/**
+ * Returns true if a filter with key and val is currently applied
+ * @param {string} key
+ * @param {string} value
+ * @returns {Boolean}
+ */
+GLVIS.FilterHandler.prototype.isFilterApplied = function (key, value) {
+
+    var fs = this.getFilters();
+    for (var i = 0; i < fs.length; i++) {
+        /** @var{GLVIS.Filter} **/
+        var curr_f = fs[i];
+        if (curr_f.getKey().identifier === key && curr_f.getValue() === value)
+            return true;
+    }
+
+    return false;
+};

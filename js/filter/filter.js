@@ -8,8 +8,6 @@ var GLVIS = GLVIS || {};
 GLVIS.Filter = function (key, value) {
 
     if (typeof key === 'string') {
-
-
         for (var k in GLVIS.Filter.KEYS) {
 
             if (GLVIS.Filter.KEYS[k].identifier === key) {
@@ -17,12 +15,9 @@ GLVIS.Filter = function (key, value) {
                 break;
             }
         }
-
         if (typeof key !== 'object')
             throw ("Could not find key '" + key + "'");
     }
-
-
 
     this.key_ = key;
     this.value_ = value;
@@ -50,7 +45,6 @@ GLVIS.Filter.isFilter = function (key) {
             return true;
         }
     }
-    console.log(key + " is NOT allowed as filter");
     return false;
 };
 
