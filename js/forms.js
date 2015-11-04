@@ -43,7 +43,16 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
 
     for (var key in facets) {
         var data_key_html = "<div class='webgl_rec_infobox_data_key'>" + key + "</div>";
-        var data_val_html = "<div class='webgl_rec_infobox_data_val'>" + facets[key] + "</div>";
+
+        var val = facets[key];
+        if (val.indexOf("http") === 0)
+            val = "<a c href='" + val + "' target='__blank'>Open in new Tab</a>";
+
+        var filter_button = "<a f_key='" + key + "' f_val='" + facets[key] + "' rec_id=" + rec.getId() +
+                " class='webgl_rec_infobox_data_filterbutton' " +
+                "title='Use as filter' href='#'></a>";
+
+        var data_val_html = "<div class='webgl_rec_infobox_data_val'>" + val + filter_button + "</div>";
         content_right += ("<div class='webgl_rec_infobox_data_row'>" + data_key_html + data_val_html +
                 "</div>");
     }
@@ -51,6 +60,19 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
 
     var content = content_title + content_datacontainer1 + content_datacontainer2;
     this.buildForm_(content);
+
+    jQuery('.webgl_rec_infobox_data_filterbutton[rec_id=' + rec.getId() + ']').click(function () {
+
+        var key = this.getAttribute("f_key");
+        var val = this.getAttribute("f_val");
+
+        var fh = GLVIS.Scene.getCurrentScene().getFilterHandler();
+        var filter = new GLVIS.Filter(key, val);
+        fh.addFilter(filter);
+        fh.apply();
+        console.log(rec.getId(), key, val);
+
+    });
 };
 
 /**
@@ -69,7 +91,6 @@ GLVIS.Forms.prototype.buildForm_ = function (content) {
         jQuery('body').append("<div id='webgl_form_container'></div>");
 
     jQuery('#webgl_form_container').html(html);
-    console.log(html);
     jQuery("#webgl_form_link").fancybox({
         maxWidth: 700,
         maxHeight: 400,

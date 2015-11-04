@@ -58,9 +58,11 @@ GLVIS.FilterHandler.prototype.apply = function () {
     for (var i = 0; i < collections.length; i++) {
 
         //Remove splines because of possible movement of recs
-        collections[i].unconnectSameRecsFromOtherCollections();
+        /** @type {GLVIS.Collection} */
+        var curr_col = collections[i];
+        curr_col.unconnectSameRecsFromOtherCollections();
 
-        var recs = collections[i].getRecommendations();
+        var recs = curr_col.getRecommendations();
 
         for (var j = 0; j < recs.length; j++) {
             /** @type{GLVIS.Recommendation} **/
@@ -68,8 +70,53 @@ GLVIS.FilterHandler.prototype.apply = function () {
 
             this.applyFiltersToRec_(curr_rec);
         }
+
+        this.updateRingFilterSegments(curr_col);
     }
 
+};
+
+/**
+ * Update the status of the ring segments of a possible ring-structure
+ * @param {GLVIS.Collection} collection
+ */
+GLVIS.FilterHandler.prototype.updateRingFilterSegments = function (collection) {
+
+    /** @type {GLVIS.RingRepresentation} **/
+    var ringrep = collection.getRingRepresentation();
+    if (!ringrep)
+        return;
+
+    var segs = ringrep.getRingSegments();
+
+    for (var i = 0; i < segs.length; i++) {
+
+        /** @type{GLVIS.RingSegment} **/
+        var seg = segs[i];
+        var seg_key = seg.getKey().id;
+        var seg_val = seg.getValue();
+
+        //Check against current filters! And also against removed filters!
+        var filters = this.getFilters();
+
+        var filter_match = false;
+        for (var j = 0; j < filters.length; j++) {
+            /** @type{GLVIS.Filter} **/
+            var curr_f = filters[j];
+
+            var f_key = curr_f.getKey().identifier;
+            var f_val = curr_f.getValue();
+
+            if (f_key === seg_key && f_val === seg_val) {
+                filter_match = true;
+                seg.select(true);
+                break;
+            }
+        }
+        if (!filter_match) {
+            seg.deSelect(true);
+        }
+    }
 };
 
 /**

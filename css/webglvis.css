@@ -240,3 +240,10 @@ html, body {
     background-color: rgb(245, 238, 238);
     padding: 6px;
 }
+
+.webgl_rec_infobox_data_filterbutton {
+    margin-left:8px;
+    background-image: url(../media/button-icon-filter.png);
+    background-size: 13px;
+    padding-right: 13px;
+}
