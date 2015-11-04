@@ -37,7 +37,22 @@ GLVIS.Filter.prototype.getValue = function () {
 };
 
 
+/**
+ * Returns if a filter with a specific key is allowed
+ * @param {string} key
+ * @returns {bool} true if filter possible else false
+ */
+GLVIS.Filter.isFilter = function (key) {
 
+    for (var i in GLVIS.Filter.KEYS) {
+        if (GLVIS.Filter.KEYS[i].identifier === key) {
+            console.log(key + " is allowed as filter");
+            return true;
+        }
+    }
+    console.log(key + " is NOT allowed as filter");
+    return false;
+};
 
 
 GLVIS.Filter.KEYS = {
@@ -61,5 +76,4 @@ GLVIS.Filter.KEYS = {
         identifier: "license",
         type: "eexcess"
     }
-
 };

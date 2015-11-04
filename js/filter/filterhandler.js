@@ -32,7 +32,7 @@ GLVIS.FilterHandler.prototype.addFilter = function (filter) {
 
 /**
  * Remove filter.
- * @param {identifier} filter identifier string (e.g. 'language'
+ * @param {string} identifier filter identifier string (e.g. 'language'
  */
 GLVIS.FilterHandler.prototype.removeFilter = function (identifier) {
 

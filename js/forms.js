@@ -61,17 +61,24 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
     var content = content_title + content_datacontainer1 + content_datacontainer2;
     this.buildForm_(content);
 
+
+    /**
+     * on filter-symbol click create a filter and apply it on the scene.
+     * If this facet is not allowed as filter, ignore it.
+     */
     jQuery('.webgl_rec_infobox_data_filterbutton[rec_id=' + rec.getId() + ']').click(function () {
 
         var key = this.getAttribute("f_key");
         var val = this.getAttribute("f_val");
 
         var fh = GLVIS.Scene.getCurrentScene().getFilterHandler();
+        console.log("Check if filter allowed");
+        if (!GLVIS.Filter.isFilter(key))
+            return;
+
         var filter = new GLVIS.Filter(key, val);
         fh.addFilter(filter);
         fh.apply();
-        console.log(rec.getId(), key, val);
-
     });
 };
 
