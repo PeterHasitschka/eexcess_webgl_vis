@@ -243,7 +243,13 @@ html, body {
 
 .webgl_rec_infobox_data_filterbutton {
     margin-left:8px;
-    background-image: url(../media/button-icon-filter.png);
     background-size: 13px;
     padding-right: 13px;
+}
+.webgl_rec_infobox_data_filterapply {
+    background-image: url(../media/button-icon-filter.png);
+}
+
+.webgl_rec_infobox_data_filterremove {
+    background-image: url(../media/button-icon-filter_remove.png);
 }
