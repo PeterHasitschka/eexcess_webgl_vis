@@ -219,11 +219,14 @@ GLVIS.RingSegment.prototype.handleClick = function () {
         this.deSelect();
     else
         this.select();
- 
+
 };
 
-
-GLVIS.RingSegment.prototype.select = function () {
+/**
+ * Visually select a ringsegment and apply a corresponding filter if flag is set
+ * @param {bool} skip_filter_applying if true the segment only gets visually selected. No filter will be applied
+ */
+GLVIS.RingSegment.prototype.select = function (skip_filter_applying) {
     if (this.is_selected_ === true)
         return;
 
@@ -241,10 +244,10 @@ GLVIS.RingSegment.prototype.select = function () {
         var curr_ringseg = other_ringsegs[i];
         if (this.getLevel() !== curr_ringseg.getLevel() || curr_ringseg.getValue() === this.getValue())
             continue;
-        curr_ringseg.deSelect();
+        curr_ringseg.deSelect(skip_filter_applying);
     }
 
-    if (this.data_.key.type === "facet") {
+    if (this.data_.key.type === "facet" && !skip_filter_applying) {
         var filter = new GLVIS.Filter(this.data_.key.id, this.data_.val);
         GLVIS.Scene.getCurrentScene().getFilterHandler().addFilter(filter);
         GLVIS.Scene.getCurrentScene().getFilterHandler().apply();
@@ -257,8 +260,11 @@ GLVIS.RingSegment.prototype.select = function () {
     this.setIsDirty(true);
 };
 
-
-GLVIS.RingSegment.prototype.deSelect = function () {
+/**
+ * Visually deselect a ringsegment and remove a corresponding filter if flag is set
+ * @param {bool} skip_filter_applying if true the segment only gets visually deselected. No filter will be removed
+ */
+GLVIS.RingSegment.prototype.deSelect = function (skip_filter_applying) {
 
     if (this.is_selected_ === false)
         return;
@@ -268,7 +274,7 @@ GLVIS.RingSegment.prototype.deSelect = function () {
             6);
 
 
-    if (this.data_.key.type === "facet") {
+    if (this.data_.key.type === "facet" && !skip_filter_applying) {
 
         GLVIS.Scene.getCurrentScene().getFilterHandler().removeFilter(this.data_.key.id);
         GLVIS.Scene.getCurrentScene().getFilterHandler().apply();
@@ -278,6 +284,9 @@ GLVIS.RingSegment.prototype.deSelect = function () {
     this.setIsDirty(true);
 };
 
+GLVIS.RingSegment.prototype.getIsSelected = function () {
+    return this.is_selected_;
+};
 
 GLVIS.RingSegment.prototype.setIsDirty = function (dirty) {
 
@@ -302,6 +311,13 @@ GLVIS.RingSegment.prototype.getLevel = function () {
 
 GLVIS.RingSegment.prototype.getValue = function () {
     return this.data_.val;
+};
+
+/**
+ * return object holding key-name and type (e.g. facet)
+ */
+GLVIS.RingSegment.prototype.getKey = function () {
+    return this.data_.key;
 };
 
 /**
