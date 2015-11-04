@@ -59,9 +59,6 @@ GLVIS.DbHandlerLocalStorage.prototype.getCollections = function () {
             
             collection.addRecommendation(rec);
         }
-
-
-        console.log(collection);
         collections.push(collection);
     }
 

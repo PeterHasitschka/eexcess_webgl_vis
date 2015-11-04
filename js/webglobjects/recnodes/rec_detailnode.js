@@ -123,7 +123,6 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
 
         GLVIS.Debugger.debug("RecommendationDetailNode", "Preview image exists... start loading", 5);
 
-        console.log("ping");
         THREE.ImageUtils.crossOrigin = '';
         THREE.ImageUtils.loadTexture(image, {}, function (texture) {
 
@@ -141,9 +140,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
 
             this.setIsDirty(true);
             this.recommendation_.setIsDirty(true);
-            console.log("pong");
         }.bind(this));
-        console.log("bumm");
     }
 
     var forms = GLVIS.Scene.getCurrentScene().getForms();

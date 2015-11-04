@@ -114,7 +114,6 @@ GLVIS.InteractionHandler = function (scene) {
 
         //MOUSE-WHEEL (ZOOM)
         jQuery(canvas)[0].addEventListener("mousewheel", function (event) {
-            console.log(event);
             nh.onMouseWheelMove(event, this.getIntersectedObjects_(event));
         }.bind(this));
 
