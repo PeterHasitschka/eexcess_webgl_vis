@@ -18,7 +18,6 @@ GLVIS.InitHandler.init = function (root_element, path_to_webglvisualization_fold
 
     var path = path_to_webglvisualization_folder;
 
-    console.log(root_element);
     if (false)
         //Load HTML-Credentials via AJAX
         jQuery.get(
