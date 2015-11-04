@@ -53,6 +53,10 @@ GLVIS.DbHandlerLocalStorage.prototype.getCollections = function () {
             };
 
             var rec = new GLVIS.Recommendation(res_eexcess_data, collection);
+            
+            //Add relevance. The first has the highest
+            rec.setRelevance(1 - (j / curr_item.result.length));
+            
             collection.addRecommendation(rec);
         }
 
