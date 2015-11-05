@@ -242,11 +242,22 @@ html, body {
     margin-left:8px;
     background-size: 13px;
     padding-right: 13px;
+    background-image: url(../media/button-icon-filter.png);
 }
 .webgl_rec_infobox_data_filterapply {
-    background-image: url(../media/button-icon-filter.png);
+    opacity: 0.3;
 }
 
 .webgl_rec_infobox_data_filterremove {
-    background-image: url(../media/button-icon-filter_remove.png);
+}
+
+#webgl_rec_infobox_filteroptions {
+    float:left;
+    width:100%;
+    margin-top:20px
+}
+
+#webgl_rec_infobox_filteroptions span {
+    float:right;
+    margin: 0 5px;
 }
