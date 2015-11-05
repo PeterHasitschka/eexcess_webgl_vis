@@ -31,6 +31,24 @@ GLVIS.RecDashboardHandler.prototype.onRecommendationClick = function (recommenda
 
 GLVIS.RecDashboardHandler.prototype.openBookmarkForm = function (rec) {
 
-    console.log("TODO!");
+    var events = GLVIS.Scene.getCurrentScene().getInteractionHandler().getEvents();
+    events.md.stopPropagation();
+    events.mc.stopPropagation();
+
+
+    var d = rec.getEexcessData().result;
+    var i = null;
+    visTemplate.getBookmarkObj().buildSaveBookmarkDialog(
+            d,
+            function (thisValue) {
+                thisValue.internal.setCurrentItem(d, i);
+            },
+            function (bookmarkDetails) {
+                bookmarkDetails.append('p').text(d.title);
+            },
+            function () {
+                alert("SAVE BUTTON");
+            },
+            this);
 };
 

@@ -141,6 +141,14 @@ GLVIS.Scene.prototype.getRecDashboardHandler = function () {
 };
 
 /**
+ * Getter for the Interaction-Handler
+ * @returns {GLVIS.InteractionHandler}
+ */
+GLVIS.Scene.prototype.getInteractionHandler = function () {
+    return this.interaction_handler_;
+};
+
+/**
  * Returning the scene's position handler for the collections
  * @returns {GLVIS.CollectionPosLinear}
  */

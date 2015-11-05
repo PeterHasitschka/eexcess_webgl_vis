@@ -31,7 +31,10 @@ GLVIS.InteractionHandler = function (scene) {
         }
     };
 
-
+    this.events_ = {
+        mc: null,
+        md: null
+    };
 
     this.raycaster_ = new THREE.Raycaster();
     this.raycaster_.precision = config.raycaster_precision;
@@ -52,6 +55,7 @@ GLVIS.InteractionHandler = function (scene) {
 
         //MOUSE-CLICK ON SCENE  
         jQuery(canvas).click(function (event) {
+            this.events_.mc = event;
             this.handleInteraction_(event, "mouseclick");
         }.bind(this));
 
@@ -61,10 +65,11 @@ GLVIS.InteractionHandler = function (scene) {
         var mouse_x_prev = null;
         var mouse_y_prev = null;
         jQuery(canvas).mousedown(function (event) {
+            this.events_.md = event;
             is_mouse_down_in_canvas = true;
             mouse_x_prev = event.clientX;
             mouse_y_prev = event.clientY;
-        });
+        }.bind(this));
 
         jQuery(window).mouseup(function (event) {
             is_mouse_down_in_canvas = false;
@@ -276,5 +281,9 @@ GLVIS.InteractionHandler.prototype.getIntersectedObjects_ = function (event) {
     return intersects;
 };
 
-
-    
+/**
+ * For external usage (e.g. stop event propagation in creating bookmark form)
+ */
+GLVIS.InteractionHandler.prototype.getEvents = function () {
+    return this.events_;
+};
