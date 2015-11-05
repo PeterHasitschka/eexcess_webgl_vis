@@ -31,6 +31,11 @@ GLVIS.RecDashboardHandler.prototype.onRecommendationClick = function (recommenda
 
 GLVIS.RecDashboardHandler.prototype.openBookmarkForm = function (rec) {
 
+    if (!visTemplate) {
+        console.error("Could not find 'visTemplate' object for communicating with the bookmark dialog!");
+        return false;
+    }
+
     var events = GLVIS.Scene.getCurrentScene().getInteractionHandler().getEvents();
     events.md.stopPropagation();
     events.mc.stopPropagation();
@@ -46,9 +51,7 @@ GLVIS.RecDashboardHandler.prototype.openBookmarkForm = function (rec) {
             function (bookmarkDetails) {
                 bookmarkDetails.append('p').text(d.title);
             },
-            function () {
-                alert("SAVE BUTTON");
-            },
+            visTemplate.getEventHandlerObj().bookmarkSaveButtonClicked,
             this);
 };
 

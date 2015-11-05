@@ -143,6 +143,11 @@ html, body {
 
 
 #animationdebugcontainer {
+    
+    
+    display:none;
+    
+    
     position: absolute;
     right: 10px;
     top: 10px;
