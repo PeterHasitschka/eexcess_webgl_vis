@@ -144,12 +144,6 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
             visible: false
         },
         {
-            action: null,
-            icon: "button-icon-filter.png",
-            title: "Filter",
-            visible: false
-        },
-        {
             action: recdbhandler.openBookmarkForm.bind(recdbhandler, this.recommendation_),
             icon: "button-icon-bookmark.png",
             title: "Bookmark",
@@ -164,7 +158,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
         {
             action: forms.createFormRecInfo.bind(forms, this.recommendation_),
             icon: "button-icon-info.png",
-            title: "Show info",
+            title: "Info & Filter",
             visible: false
         }
 
