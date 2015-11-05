@@ -26,7 +26,7 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
         "Image": e_data.result.previewImage ? ("<img src='" + e_data.result.previewImage + "' title='" + title + "' alt='" + title + "'/>") : null
     };
 
-    var content_left = "";
+    var content_left = "<h4>Infos</h4>";
     for (var key in data) {
 
         if (data[key] === null)
@@ -40,7 +40,7 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
     var content_datacontainer1 = "<div style='float:left; width:49%' class='webgl_rec_infobox_datacontainer'>" + content_left + "</div>";
 
 
-    var content_right = "";
+    var content_right = "<h4>Facets / Filters</h4>";
 
     var facets = e_data.result.facets;
 
@@ -67,6 +67,11 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
         content_right += ("<div class='webgl_rec_infobox_data_row'>" + data_key_html + data_val_html +
                 "</div>");
     }
+    content_right += "\<div id='webgl_rec_infobox_filteroptions'>" +
+            "   <span id='webgl_rec_infobox_filter_none'><a href='#'>None</a></span>" +
+            "   <span id='webgl_rec_infobox_filter_all'><a href='#'>All</a></span>" +
+            "</div>";
+
     var content_datacontainer2 = "<div style='float:right; width:49%' class='webgl_rec_infobox_datacontainer'>" + content_right + "</div>";
 
     var content = content_title + content_datacontainer1 + content_datacontainer2;
@@ -75,6 +80,15 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
 
     this.buildForm_(content);
 
+
+    jQuery('#webgl_rec_infobox_filter_all > a').click(function () {
+        var filter_box = jQuery(this).parent().parent().parent();
+        filter_box.find('.webgl_rec_infobox_data_filterapply').click();
+    });
+    jQuery('#webgl_rec_infobox_filter_none > a').click(function () {
+        var filter_box = jQuery(this).parent().parent().parent();
+        filter_box.find('.webgl_rec_infobox_data_filterremove').click();
+    });
 
 
     /**
