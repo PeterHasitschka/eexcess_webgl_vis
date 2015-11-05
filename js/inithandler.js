@@ -128,47 +128,58 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
         ],
                 //Callback after all files where loaded
                         function () {
-                            GLVIS.Debugger.debug("InitHandler",
-                                    "finished calling js files for webglvis-plugin",
-                                    3);
-
-                            //Increment loading tries
-                            this.load_tries++;
-
-                            /**
-                             * There may be some errors due to not complete init of the loaded classes.
-                             * Give it some tries again to finish loading by recalling the loadFiles method
-                             */
-                            try {
-
-                                GLVIS.InitHandler.initScene(this.scene, this.db_handler, cb);
-                            } catch (Exception) {
-
-                                if (this.load_tries < this.max_load_tries) {
-                                    GLVIS.Debugger.debug("InitHandler",
-                                            "Error in creating scene. May be caused by not ready loaded file. Trying to load file once more!",
-                                            3);
-                                    //Recall
-                                    this.loadFiles(root_element, path, cb);
-                                    return;
-                                }
-                                /**
-                                 * Too much tries. The error in creating the scene may be caused by something else
-                                 */
-                                else {
-                                    GLVIS.Debugger.debug("InitHandler",
-                                            "Tried to create scene after loading files " + this.load_tries + " time! Stopping now!",
-                                            1);
-                                    console.error("Error creating scene!", Exception);
-                                    return;
-                                }
-                            }
-                            GLVIS.InitHandler.libs_loaded = true;
+                            this.afterFilesLoaded_(root_element, path, cb);
                         }.bind(this));
             }
     else {
         GLVIS.InitHandler.initScene(this.scene, this.db_handler, cb);
     }
+};
+
+/**
+ * Called after all files where loaded
+ * @param {type} root_element
+ * @param {type} path
+ * @param {type} cb
+ * @returns {undefined}
+ */
+GLVIS.InitHandler.afterFilesLoaded_ = function (root_element, path, cb) {
+    GLVIS.Debugger.debug("InitHandler",
+            "finished calling js files for webglvis-plugin",
+            3);
+
+    //Increment loading tries
+    this.load_tries++;
+
+    /**
+     * There may be some errors due to not complete init of the loaded classes.
+     * Give it some tries again to finish loading by recalling the loadFiles method
+     */
+    try {
+
+        GLVIS.InitHandler.initScene(this.scene, this.db_handler, cb);
+    } catch (Exception) {
+
+        if (this.load_tries < this.max_load_tries) {
+            GLVIS.Debugger.debug("InitHandler",
+                    "Error in creating scene. May be caused by not ready loaded file. Trying to load file once more!",
+                    3);
+            //Recall
+            this.loadFiles(root_element, path, cb);
+            return;
+        }
+        /**
+         * Too much tries. The error in creating the scene may be caused by something else
+         */
+        else {
+            GLVIS.Debugger.debug("InitHandler",
+                    "Tried to create scene after loading files " + this.load_tries + " time! Stopping now!",
+                    1);
+            console.error("Error creating scene!", Exception);
+            return;
+        }
+    }
+    GLVIS.InitHandler.libs_loaded = true;
 };
 
 /**
@@ -224,7 +235,7 @@ GLVIS.InitHandler.initScene = function (scene, db_handler, cb) {
 
 
 GLVIS.InitHandler.cleanup = function () {
-     
+
     GLVIS.Debugger.debug("InitHandler",
             "Cleaning up!",
             3);
