@@ -264,3 +264,10 @@ html, body {
     float:right;
     margin: 0 5px;
 }
+
+#eexcess_main_panel.webglvis #eexcess_vis_panel{
+    width: calc(100% - 200px);
+}
+#eexcess_main_panel.webglvis #eexcess_content{
+    display:none;
+}

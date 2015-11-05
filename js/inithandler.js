@@ -77,7 +77,7 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
 
     if (!GLVIS.InitHandler.libs_loaded) {
         this.load_([
-            folder_prefix + "../Dashboard/libs/jquery-1.10.2.min.js",
+            // folder_prefix + "../Dashboard/libs/jquery-1.10.2.min.js",
             folder_prefix + "lib/underscore/underscore.js",
             folder_prefix + "lib/three.js/three.min.js",
             folder_prefix + "lib/jquery/fancybox/jquery.fancybox.pack.js",
@@ -224,14 +224,11 @@ GLVIS.InitHandler.initScene = function (scene, db_handler, cb) {
 
 
 GLVIS.InitHandler.cleanup = function () {
-
+     
     GLVIS.Debugger.debug("InitHandler",
             "Cleaning up!",
             3);
 
     delete GLVIS.Scene.getCurrentScene();
     GLVIS.Scene.current_scene = null;
-
-    delete GLVIS.DbHandlerIndexedDb.getCurrentDbHandlerIndexedDb();
-    GLVIS.DbHandlerIndexedDb.current_db_handler_ = null;
 };
