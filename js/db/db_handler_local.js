@@ -20,6 +20,7 @@ GLVIS.DbHandlerLocalStorage.prototype.getCollections = function () {
     var queries_used = [];
     var collections = [];
 
+    var last_coll = null;
     for (var i = 0; i < db_results.length; i++) {
 
         var curr_item = db_results[i];
@@ -32,7 +33,7 @@ GLVIS.DbHandlerLocalStorage.prototype.getCollections = function () {
         var kws = curr_item.profile.contextKeywords;
 
         var query_str = [];
-        for (var j = 0; j < kws.length; kws++) {
+        for (var j = 0; j < kws.length; j++) {
             query_str.push(kws[j].text);
         }
         query_str = query_str.join(" ");
@@ -51,6 +52,8 @@ GLVIS.DbHandlerLocalStorage.prototype.getCollections = function () {
         };
 
         var collection = new GLVIS.Collection(eexcess_data);
+        if (last_coll)
+            collection.setParentId(last_coll.getId());
 
         for (var j = 0; j < curr_item.result.length; j++) {
 
@@ -68,23 +71,30 @@ GLVIS.DbHandlerLocalStorage.prototype.getCollections = function () {
             collection.addRecommendation(rec);
         }
         collections.push(collection);
+
+        last_coll = collection;
     }
     return collections;
 };
 
-
-GLVIS.DbHandlerLocalStorage.prototype.enrichQuery = function (query_string) {
-
-    var query_words = query_string.split(" ");
-
-    var out_array = [];
-    for (var i = 0; i < query_words.length; i++) {
-        out_array.push({
-            weight: 1,
-            text: query_words[i]
-        });
-    }
-
-
-    return out_array;
-};
+/**
+ * 
+ * Not necessary anymore. Data structure the same as before
+ * 
+ GLVIS.DbHandlerLocalStorage.prototype.enrichQuery = function (query_string) {
+ 
+ var query_words = query_string.split(" ");
+ 
+ var out_array = [];
+ for (var i = 0; i < query_words.length; i++) {
+ out_array.push({
+ weight: 1,
+ text: query_words[i]
+ });
+ }
+ 
+ 
+ return out_array;
+ };
+ 
+ */
