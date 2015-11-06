@@ -92,6 +92,9 @@ html, body {
     text-align: left;
 }
 
+#webgl_toolbar_container {
+    display:none;
+}
 
 #webgl_toolbar {
     width: 100%;
@@ -143,11 +146,11 @@ html, body {
 
 
 #animationdebugcontainer {
-    
-    
+
+
     display:none;
-    
-    
+
+
     position: absolute;
     right: 10px;
     top: 10px;
