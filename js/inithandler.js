@@ -21,8 +21,8 @@ GLVIS.InitHandler.init = function (root_element, cb) {
     this.appendHtmlStuff(root_element);
     this.loadFiles(root_element, path, cb);
 
-    this.load_tries = 0;
-    this.max_load_tries = 3;
+    //this.load_tries = 0;
+    //this.max_load_tries = 3;
 
 };
 
@@ -149,7 +149,7 @@ GLVIS.InitHandler.afterFilesLoaded_ = function (root_element, path, cb) {
             3);
 
     //Increment loading tries
-    this.load_tries++;
+    //this.load_tries++;
 
     /**
      * There may be some errors due to not complete init of the loaded classes.
@@ -160,24 +160,31 @@ GLVIS.InitHandler.afterFilesLoaded_ = function (root_element, path, cb) {
         GLVIS.InitHandler.initScene(this.scene, this.db_handler, cb);
     } catch (Exception) {
 
-        if (this.load_tries < this.max_load_tries) {
-            GLVIS.Debugger.debug("InitHandler",
-                    "Error in creating scene. May be caused by not ready loaded file. Trying to load file once more!",
-                    3);
-            //Recall
-            this.loadFiles(root_element, path, cb);
-            return;
-        }
+        console.error("Error creating scene!", Exception);
+        return;
+
+        /*
+         if (this.load_tries < this.max_load_tries) {
+         GLVIS.Debugger.debug("InitHandler",
+         "Error in creating scene. May be caused by not ready loaded file. Trying to load file once more!",
+         3);
+         //Recall
+         this.loadFiles(root_element, path, cb);
+         return;
+         
+         }
+         */
         /**
          * Too much tries. The error in creating the scene may be caused by something else
+         
+         else {
+         GLVIS.Debugger.debug("InitHandler",
+         "Tried to create scene after loading files " + this.load_tries + " time! Stopping now!",
+         1);
+         console.error("Error creating scene!", Exception);
+         return;
+         }
          */
-        else {
-            GLVIS.Debugger.debug("InitHandler",
-                    "Tried to create scene after loading files " + this.load_tries + " time! Stopping now!",
-                    1);
-            console.error("Error creating scene!", Exception);
-            return;
-        }
     }
     GLVIS.InitHandler.libs_loaded = true;
 };
@@ -201,7 +208,13 @@ GLVIS.InitHandler.load_ = function (files, cb) {
                 return;
             },
             complete: function (d) {
-                cb();
+                var millisecs = 200;
+                GLVIS.Debugger.debug("InitHandler", "Waiting for " + millisecs + "ms to complete class initializations...",3);
+                setTimeout(function () {
+                    GLVIS.Debugger.debug("InitHandler", "Finished waiting",3);
+                    cb();
+                }, millisecs);
+
                 return;
             }
         });
