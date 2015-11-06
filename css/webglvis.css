@@ -279,3 +279,11 @@ html, body {
 #eexcess_main_panel.webglvis #eexcess_content{
     display:none;
 }
+
+
+#eexcess_webglgraph_bookmarks {
+    width: 16px;
+    font-size: 0.9em;
+    padding-left: 2px;
+    margin-left: 4px;
+}  
