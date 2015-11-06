@@ -196,6 +196,7 @@ GLVIS.InitHandler.load_ = function (files, cb) {
     } else {
         Modernizr.load({
             load: files,
+            test: files,
             callback: function (d) {
                 return;
             },

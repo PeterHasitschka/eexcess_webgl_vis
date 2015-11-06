@@ -17,32 +17,40 @@ GLVIS.DbHandlerLocalStorage = function () {
 GLVIS.DbHandlerLocalStorage.prototype.getCollections = function () {
 
     var db_results = this.db_.getAllQueriesOrdered();
-
-
     var queries_used = [];
-
     var collections = [];
+
     for (var i = 0; i < db_results.length; i++) {
 
         var curr_item = db_results[i];
-        var query = curr_item.query;
+
+        if (typeof (curr_item.profile) === 'undefined') {
+
+            console.warn("Could not interprate saved results! Skipping!", curr_item);
+            continue;
+        }
+        var kws = curr_item.profile.contextKeywords;
+
+        var query_str = [];
+        for (var j = 0; j < kws.length; kws++) {
+            query_str.push(kws[j].text);
+        }
+        query_str = query_str.join(" ");
 
         //Prevent duplicate collections if flag is set.
-        if (!this.get_duplicates_ && queries_used.indexOf(query) >= 0)
+        if (!this.get_duplicates_ && queries_used.indexOf(query_str) >= 0)
             continue;
-        queries_used.push(query);
+        queries_used.push(query_str);
 
         var res_id = curr_item.id;
 
-
         var eexcess_data = {
-            query: this.enrichQuery(query),
+            query: kws,
             id: res_id,
             timestamp: 000000
         };
 
         var collection = new GLVIS.Collection(eexcess_data);
-
 
         for (var j = 0; j < curr_item.result.length; j++) {
 
@@ -53,21 +61,15 @@ GLVIS.DbHandlerLocalStorage.prototype.getCollections = function () {
             };
 
             var rec = new GLVIS.Recommendation(res_eexcess_data, collection);
-            
+
             //Add relevance. The first has the highest
             rec.setRelevance(1 - (j / curr_item.result.length));
-            
+
             collection.addRecommendation(rec);
         }
         collections.push(collection);
     }
-
-
-
-
-
     return collections;
-
 };
 
 
