@@ -28,7 +28,11 @@ GLVIS.RecDashboardHandler.prototype.onRecommendationClick = function (recommenda
     this.toolbar.getButton("rec_focusparentcol").show();
 };
 
-
+/**
+ * Open the vis-dashboard's bookmark dialog for saving a recommendation in a bookmark
+ * @param {GLVIS.Recommendation} rec
+ * @returns {Boolean}
+ */
 GLVIS.RecDashboardHandler.prototype.openBookmarkForm = function (rec) {
 
     if (!visTemplate) {
@@ -40,18 +44,42 @@ GLVIS.RecDashboardHandler.prototype.openBookmarkForm = function (rec) {
     events.md.stopPropagation();
     events.mc.stopPropagation();
 
+    var list_index = this.determineListIndex(rec);
+
+    console.log("list_index: " + list_index);
 
     var d = rec.getEexcessData().result;
-    var i = null;
     visTemplate.getBookmarkObj().buildSaveBookmarkDialog(
             d,
             function (thisValue) {
-                thisValue.internal.setCurrentItem(d, i);
+                thisValue.internal.setCurrentItem(d, list_index);
             },
             function (bookmarkDetails) {
                 bookmarkDetails.append('p').text(d.title);
             },
             visTemplate.getEventHandlerObj().bookmarkSaveButtonClicked,
             this);
+    return true;
 };
 
+/**
+ * Determine the index of the current rec in the vis' result list.
+ * If not in list it's getting set to null.
+ * @param {GLVIS.Recommendation} rec
+ * @returns {null|Integer}
+ */
+GLVIS.RecDashboardHandler.prototype.determineListIndex = function (rec) {
+    if (!visTemplate) {
+        console.error("Could not find 'visTemplate' object for communicating with the Result-List!");
+        return false;
+    }
+
+    var dashboard_data = visTemplate.getData();
+    var e_data = rec.getEexcessData().result;
+    //get current index
+    for (var i = 0; i < dashboard_data.length; i++) {
+        if (dashboard_data[i].id === e_data.id)
+            return dashboard_data[i].index;
+    }
+    return null;
+};
