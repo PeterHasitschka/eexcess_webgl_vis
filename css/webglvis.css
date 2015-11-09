@@ -287,3 +287,19 @@ html, body {
     padding-left: 2px;
     margin-left: 4px;
 }  
+
+#webgl_bookmark_popup {
+
+}
+
+.webgl_bookmark_popup_list_element {
+    font-size:14px;
+}
+
+.webgl_bookmark_popup_list_element input {
+    vertical-align: middle;
+}
+
+.webgl_bookmark_popup_subtitle {
+    font-size:13px;
+}

@@ -2,6 +2,11 @@
 var GLVIS = GLVIS || {};
 
 GLVIS.InitHandler = function () {
+    this.bookmarks_to_vis = null;
+};
+
+GLVIS.InitHandler.setBookmarks = function (bms) {
+    this.bookmarks_to_vis = bms;
 };
 
 GLVIS.InitHandler.libs_loaded = false;
@@ -12,17 +17,20 @@ GLVIS.InitHandler.libs_loaded = false;
  * @param {type} root_element
  * @param {type} path_to_webglvisualization_folder
  * @param {function} cb callback
+ * @param {object | null} bookmarks If not empty, those bookmarks are getting shown
  * @returns {undefined}
  */
-GLVIS.InitHandler.init = function (root_element, cb) {
+GLVIS.InitHandler.init = function (root_element, cb, bookmarks) {
+
+    if (bookmarks)
+        this.bookmarks_to_vis = bookmarks;
+    else
+        this.bookmarks_to_vis = null;
 
     var path = "../WebGlVisualization/";
 
     this.appendHtmlStuff(root_element);
     this.loadFiles(root_element, path, cb);
-
-    //this.load_tries = 0;
-    //this.max_load_tries = 3;
 
 };
 
@@ -77,7 +85,6 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
 
     if (!GLVIS.InitHandler.libs_loaded) {
         this.load_([
-            // folder_prefix + "../Dashboard/libs/jquery-1.10.2.min.js",
             folder_prefix + "lib/underscore/underscore.js",
             folder_prefix + "lib/three.js/three.min.js",
             folder_prefix + "lib/jquery/fancybox/jquery.fancybox.pack.js",
@@ -90,6 +97,7 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
             folder_prefix + "js/db/query.js",
             folder_prefix + "js/db/rec.js",
             folder_prefix + "js/db/query_creator.js",
+            folder_prefix + "js/db/bookmark_handler.js",
             folder_prefix + "js/animation.js",
             folder_prefix + "js/webglhandler.js",
             folder_prefix + "js/interactionhandler.js",
@@ -116,7 +124,6 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
             folder_prefix + "js/ringrep/tree.js",
             folder_prefix + "js/position/recommendation/distributed.js",
             folder_prefix + "js/position/recommendation/ringrep.js",
-            //folder_prefix + "js/position/collection/linear.js",
             folder_prefix + "js/position/collection/circular.js",
             folder_prefix + "js/position/collection/circletype/ring.js",
             folder_prefix + "js/position/collection/circletype/bow.js",
@@ -148,9 +155,6 @@ GLVIS.InitHandler.afterFilesLoaded_ = function (root_element, path, cb) {
             "finished calling js files for webglvis-plugin",
             3);
 
-    //Increment loading tries
-    //this.load_tries++;
-
     /**
      * There may be some errors due to not complete init of the loaded classes.
      * Give it some tries again to finish loading by recalling the loadFiles method
@@ -162,29 +166,6 @@ GLVIS.InitHandler.afterFilesLoaded_ = function (root_element, path, cb) {
 
         console.error("Error creating scene!", Exception);
         return;
-
-        /*
-         if (this.load_tries < this.max_load_tries) {
-         GLVIS.Debugger.debug("InitHandler",
-         "Error in creating scene. May be caused by not ready loaded file. Trying to load file once more!",
-         3);
-         //Recall
-         this.loadFiles(root_element, path, cb);
-         return;
-         
-         }
-         */
-        /**
-         * Too much tries. The error in creating the scene may be caused by something else
-         
-         else {
-         GLVIS.Debugger.debug("InitHandler",
-         "Tried to create scene after loading files " + this.load_tries + " time! Stopping now!",
-         1);
-         console.error("Error creating scene!", Exception);
-         return;
-         }
-         */
     }
     GLVIS.InitHandler.libs_loaded = true;
 };
@@ -209,9 +190,9 @@ GLVIS.InitHandler.load_ = function (files, cb) {
             },
             complete: function (d) {
                 var millisecs = 200;
-                GLVIS.Debugger.debug("InitHandler", "Waiting for " + millisecs + "ms to complete class initializations...",3);
+                GLVIS.Debugger.debug("InitHandler", "Waiting for " + millisecs + "ms to complete class initializations...", 3);
                 setTimeout(function () {
-                    GLVIS.Debugger.debug("InitHandler", "Finished waiting",3);
+                    GLVIS.Debugger.debug("InitHandler", "Finished waiting", 3);
                     cb();
                 }, millisecs);
 
@@ -231,9 +212,16 @@ GLVIS.InitHandler.initScene = function (scene, db_handler, cb) {
 
     scene = new GLVIS.Scene(jQuery(GLVIS.config.rec_dashboard.selector));
 
-    db_handler = new GLVIS.DbHandlerLocalStorage();
+    var collections = null;
+    if (!this.bookmarks_to_vis) {
+        db_handler = new GLVIS.DbHandlerLocalStorage();
+        collections = db_handler.getCollections();
+    }
+    else {
+        var bm_handler = new GLVIS.BookmarkHandler(this.bookmarks_to_vis);
+        collections = bm_handler.getCollections();
+    }
 
-    var collections = db_handler.getCollections();
     for (var q_count = 0; q_count < collections.length; q_count++) {
         scene.addCollection(collections[q_count]);
     }
