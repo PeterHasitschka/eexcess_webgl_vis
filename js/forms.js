@@ -18,65 +18,147 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
      * Build HTML Stuff here
      */
     var title = e_data.result.title;
-    var content_title = "<h2>Result-Details</h2><h3>" + title + "</h3>";
+    var content_title = jQuery('<h2/>', {
+        text: 'Result-Details'
+    }).append(jQuery('<h3/>', {
+        text: title
+    }));
+
+    var open_link = jQuery('<a/>', {
+        target: '__blank',
+        href: e_data.result.uri,
+        text: 'Open in new Tab'
+    });
+
+    var img_html = e_data.result.previewImage ? jQuery('<img>', {
+        src: e_data.result.previewImage,
+        title: title,
+        alt: title
+    }).prop("outerHTML") : null;
 
     var data = {
         "ID": rec.getId(),
-        "Link": "<a target='__blank' href='" + e_data.result.uri + "'>Open in new Tab</a>",
-        "Image": e_data.result.previewImage ? ("<img src='" + e_data.result.previewImage + "' title='" + title + "' alt='" + title + "'/>") : null
+        "Link": open_link.prop("outerHTML"),
+        "Image": img_html
     };
 
-    var content_left = "<h4>Infos</h4>";
+    var content_datacontainer1 = jQuery('<div/>', {
+        style: 'float:left; width:49%',
+        class: 'webgl_rec_infobox_datacontainer'
+    }).append(
+            jQuery('<h4/>', {
+                text: 'Infos'
+            }));
+
     for (var key in data) {
 
         if (data[key] === null)
             continue;
 
-        var data_key_html = "<div class='webgl_rec_infobox_data_key'>" + key + "</div>";
-        var data_val_html = "<div class='webgl_rec_infobox_data_val'>" + data[key] + "</div>";
-        content_left += ("<div class='webgl_rec_infobox_data_row'>" + data_key_html + data_val_html +
-                "</div>");
+        content_datacontainer1.append(
+                jQuery('<div/>', {class: 'webgl_rec_infobox_data_row'})
+                .append(jQuery('<div/>', {
+                    class: 'webgl_rec_infobox_data_key',
+                    text: key
+                }))
+                .append(jQuery('<div/>', {
+                    class: 'webgl_rec_infobox_data_val',
+                    html: data[key]
+                }))
+                );
     }
-    var content_datacontainer1 = "<div style='float:left; width:49%' class='webgl_rec_infobox_datacontainer'>" + content_left + "</div>";
 
 
-    var content_right = "<h4>Facets / Filters</h4>";
+    var content_datacontainer2 = jQuery('<div/>', {
+        style: 'float:right; width:49%',
+        class: 'webgl_rec_infobox_datacontainer'
+    }).append(
+            jQuery('<h4/>', {
+                text: 'Facets / Filters'
+            }));
+
 
     var facets = e_data.result.facets;
 
     for (var key in facets) {
-        var data_key_html = "<div class='webgl_rec_infobox_data_key'>" + key + "</div>";
 
         var val = facets[key];
         if (val.indexOf("http") === 0)
-            val = "<a c href='" + val + "' target='__blank'>Open in new Tab</a>";
+            val = jQuery('<a/>', {
+                href: val,
+                target: '__blank',
+                text: 'Open in new Tab'
+            }).prop("outerHTML");
 
         var filter_applied = GLVIS.Scene.getCurrentScene().getFilterHandler().isFilterApplied(key, facets[key]);
 
 
-        var filter_button_a = "<a f_key='" + key + "' f_val='" + facets[key] + "' rec_id=" + rec.getId() +
-                " class='webgl_rec_infobox_data_filterbutton webgl_rec_infobox_data_filterapply' " +
-                " style='display:" + (filter_applied ? "none" : "inline") + "'" +
-                "title='Use as filter' href='#'></a>";
-        var filter_button_r = "<a f_key='" + key + "' f_val='" + facets[key] + "' rec_id=" + rec.getId() +
-                " class='webgl_rec_infobox_data_filterbutton webgl_rec_infobox_data_filterremove' " +
-                " style='display:" + (!filter_applied ? "none" : "inline") + "'" +
-                "title='Remove filter' href='#'></a>";
-
-        var data_val_html = "<div class='webgl_rec_infobox_data_val'>" + val + filter_button_a + filter_button_r + "</div>";
-        content_right += ("<div class='webgl_rec_infobox_data_row'>" + data_key_html + data_val_html +
-                "</div>");
+        content_datacontainer2.append(
+                jQuery('<div/>', {class: 'webgl_rec_infobox_data_row'})
+                .append(jQuery('<div/>',
+                        {
+                            class: 'webgl_rec_infobox_data_key',
+                            text: key
+                        }
+                ))
+                .append(jQuery('<div/>', {
+                    class: 'webgl_rec_infobox_data_val'
+                })
+                        .html(val)
+                        .append(jQuery('<a/>', {
+                            f_key: key,
+                            f_val: facets[key],
+                            rec_id: rec.getId(),
+                            class: 'webgl_rec_infobox_data_filterbutton webgl_rec_infobox_data_filterapply',
+                            style: 'display:' + (filter_applied ? "none" : "inline"),
+                            title: 'Use as filter',
+                            href: '#'
+                        }))
+                        .append(jQuery('<a/>', {
+                            f_key: key,
+                            f_val: facets[key],
+                            rec_id: rec.getId(),
+                            class: 'webgl_rec_infobox_data_filterbutton webgl_rec_infobox_data_filterremove',
+                            style: 'display:' + (!filter_applied ? "none" : "inline"),
+                            title: 'Remove filter',
+                            href: '#'
+                        })))
+                );
     }
-    content_right += "\<div id='webgl_rec_infobox_filteroptions'>" +
-            "   <span id='webgl_rec_infobox_filter_none'><a href='#'>None</a></span>" +
-            "   <span id='webgl_rec_infobox_filter_all'><a href='#'>All</a></span>" +
-            "</div>";
+    content_datacontainer2.append(
+            (jQuery('<div/>', {
+                id: 'webgl_rec_infobox_filteroptions'
+            })
+                    .append(
+                            jQuery('<span/>', {
+                                id: 'webgl_rec_infobox_filter_none'
+                            })
+                            .append(
+                                    jQuery('<a/>', {
+                                        href: "#",
+                                        text: 'None'
+                                    })
+                                    )
+                            )
+                    .append(
+                            jQuery('<span/>', {
+                                id: 'webgl_rec_infobox_filter_all'
+                            })
+                            .append(
+                                    jQuery('<a/>', {
+                                        href: "#",
+                                        text: 'All'
+                                    })
+                                    )
+                            )
+                    )
+            );
 
-    var content_datacontainer2 = "<div style='float:right; width:49%' class='webgl_rec_infobox_datacontainer'>" + content_right + "</div>";
-
-    var content = content_title + content_datacontainer1 + content_datacontainer2;
 
 
+    var content = content_title.prop("outerHTML")
+            + content_datacontainer1.prop("outerHTML")
+            + content_datacontainer2.prop("outerHTML");
 
     this.buildForm_(content);
 
@@ -142,15 +224,24 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
  * @returns {undefined}
  */
 GLVIS.Forms.prototype.buildForm_ = function (content) {
-    var html = '<a id="webgl_form_link" href="#webgl_form_data" style="display:none"></a>' +
-            '<div style="display:none">' +
-            '   <div id="webgl_form_data">' + content + '</div>' +
-            '</div>';
+
+    var hidden_link = jQuery('<a/>', {
+        id: 'webgl_form_link',
+        href: '#webgl_form_data',
+        style: 'display:none'
+    });
+    var content_wrapper = jQuery('<div/>', {
+        style: 'display:none'
+    }).append(jQuery('<div/>', {
+        id: 'webgl_form_data'
+    }).append(content));
 
     if (!jQuery('#webgl_form_container').length)
-        jQuery('body').append("<div id='webgl_form_container'></div>");
+        jQuery('body').append(jQuery('<div/>', {id: 'webgl_form_container'}));
 
-    jQuery('#webgl_form_container').html(html);
+    jQuery('#webgl_form_container')
+            .append(hidden_link)
+            .append(content_wrapper);
     jQuery("#webgl_form_link").fancybox({
         maxWidth: 700,
         maxHeight: 400,
