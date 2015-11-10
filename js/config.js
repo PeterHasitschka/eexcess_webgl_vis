@@ -53,7 +53,7 @@ GLVIS.config = {
             transparency: {
                 inactive: 0.5
             },
-            sphere: {
+            circle: {
                 radius: 10.0,
                 segments: 15,
                 z_value: 0, //-20,
