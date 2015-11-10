@@ -169,3 +169,80 @@ GLVIS.CollectionPosCircular.prototype.getCollToFocus = function () {
 GLVIS.CollectionPosCircular.prototype.getCollCircleRadius = function () {
     return this.circle_type_poshelper_.getCollCircleRadius();
 };
+
+
+/**
+ * On creating a ring-segment this method is used to move the collection out of
+ * the collection-circle to be near the camera. This helps to avoid problems with
+ * the perspective. (Either the collections aren't visible or the fish-eye effect is too hard)
+ * @param {GLVIS.Collection} collection
+ * @param {function} callback_fct
+ */
+GLVIS.CollectionPosCircular.prototype.moveCollectionFromCenter = function (collection, callback_fct) {
+
+    var config = GLVIS.config.collection.focus;
+
+    var circle_rad = this.getCollCircleRadius();
+    var center_point = new THREE.Vector3(0, 0, -circle_rad);
+
+    var coll_pos = collection.getPosition();
+
+    collection.setInitPos({x: coll_pos.x, y: coll_pos.y, z: coll_pos.z});
+    var coll_pos_vec = new THREE.Vector3(coll_pos.x, coll_pos.y, coll_pos.z);
+
+    var distance_vec = coll_pos_vec.clone();
+    distance_vec.sub(center_point);
+
+    var orig_length = distance_vec.length();
+    var goal_length = orig_length + config.move_out_dist;
+
+    distance_vec.multiplyScalar((goal_length / orig_length));
+
+    var new_pos = center_point.clone();
+    new_pos.add(distance_vec);
+    var new_pos_obj = {x: new_pos.x, y: new_pos.y, z: new_pos.z};
+
+    var anim = GLVIS.Scene.getCurrentScene().getAnimation();
+    anim.register(
+            config.animation.id,
+            new_pos_obj,
+            null,
+            collection.getPosition.bind(collection),
+            collection.setPositionObj.bind(collection),
+            0,
+            config.animation.speed,
+            config.animation.pow,
+            config.animation.threshold,
+            function () {
+                callback_fct();
+            },
+            true
+            );
+};
+
+/**
+ * On removing a ring-segment this method is used to move the collection back to
+ * the collection-circle.
+ * @param {GLVIS.Collection} collection
+ */
+GLVIS.CollectionPosCircular.prototype.moveCollectionToCenter = function (collection) {
+
+    var orig_pos = collection.getInitPos();
+    var config = GLVIS.config.collection.focus;
+
+    var anim = GLVIS.Scene.getCurrentScene().getAnimation();
+    anim.register(
+            config.animation.id,
+            orig_pos,
+            null,
+            collection.getPosition.bind(collection),
+            collection.setPositionObj.bind(collection),
+            0,
+            config.animation.speed,
+            config.animation.pow,
+            config.animation.threshold,
+            function () {
+            },
+            true
+            );
+};

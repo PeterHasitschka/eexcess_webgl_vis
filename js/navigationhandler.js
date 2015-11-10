@@ -438,7 +438,7 @@ GLVIS.NavigationHandler.prototype.resetAnimationZoom = function () {
 };
 
 /**
- * 
+ * Move the camera in front of the collection
  * @param {GLVIS.Collection} collection
  * @param {function} callback_fct callback when ready
  */
@@ -471,23 +471,19 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
             },
             false
             );
-
-    this.setDistanceFactor(goal_dist_fct, true, function () {
-    });
-
 };
 
+/**
+ * Do nothing instead of stopping the camera movement.
+ */
 GLVIS.NavigationHandler.prototype.defocusCollection = function () {
 
     var anim = GLVIS.Scene.getCurrentScene().getAnimation();
     anim.stopCameraMovementAnimations();
-    this.setDistanceFactor(1, true, function () {
-    });
 };
 
 /**
  * Moving camera to recommendation
- * 
  * Has its own workflow because the camera does NOT point to the center in the end
  * 
  * @param {GLVIS.Recommendation} rec
@@ -497,8 +493,6 @@ GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
     var abs_pos = rec.getPosition(true);
     var abs_pos_vec = new THREE.Vector3(abs_pos.x, abs_pos.y, abs_pos.z);
     // @TODO: Calculate accurate offset
-
-
 
     var camera_distance = GLVIS.config.collection.recommendation.camera_distance;
     /*

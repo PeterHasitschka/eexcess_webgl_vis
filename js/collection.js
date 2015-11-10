@@ -43,6 +43,7 @@ GLVIS.Collection = function (eexcess_data) {
             y: 0,
             z: GLVIS.config.collection.center_node.circle.z_value
         },
+        init_pos: null,
         rotation_degree: 0.0,
         init_rotation_degree: null,
         gl_objects: {
@@ -425,7 +426,7 @@ GLVIS.Collection.prototype.lookAtCollection = function (goal_coll, animate) {
     var degree = rad * (180 / Math.PI) - 180;
     //console.log(my_pos, goal_pos, dir_vec, degree);
 
-    this.setRotation(degree, animate);
+    this.setRotation(0 - degree, animate);
 };
 
 /**
@@ -497,6 +498,14 @@ GLVIS.Collection.prototype.setPosition = function (x, y, z) {
 
     this.setIsDirty(true);
     this.setMyGlObjectsDirty_();
+};
+
+/**
+ * used for animation
+ * @param {object} pos containing x,y,z
+ */
+GLVIS.Collection.prototype.setPositionObj = function(pos) {
+    this.setPosition(pos.x, pos.y, pos.z);
 };
 
 /**
@@ -642,6 +651,9 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
 GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
 
     this.selectAndFocus();
+
+    GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().moveCollectionFromCenter(this, function () {});
+
     this.resetLookAt(true);
     /**
      * Remove all other ringreps
@@ -732,7 +744,7 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function (deselect) {
     }
     this.getRecPosHandler().calculatePositions();
 
-
+    GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().moveCollectionToCenter(this);
     this.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
     if (deselect) {
         this.deselect();
@@ -874,7 +886,21 @@ GLVIS.Collection.prototype.getRotation = function () {
     return this.vis_data_.rotation_degree;
 };
 
+/**
+ * Set the initial position for restoring later
+ * @param {object} pos containing x,y,z 
+ */
+GLVIS.Collection.prototype.setInitPos = function (pos) {
+    this.vis_data_.init_pos = pos;
+};
 
+/**
+ * Get the stored intial position
+ * @returns {object} containing x,y,z
+ */
+GLVIS.Collection.prototype.getInitPos = function () {
+    return this.vis_data_.init_pos;
+};
 
 /******************
  * 
