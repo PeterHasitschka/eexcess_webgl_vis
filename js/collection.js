@@ -466,7 +466,6 @@ GLVIS.Collection.prototype.setPosition = function (x, y, z) {
  */
 GLVIS.Collection.prototype.rebuildLabelPositions = function () {
 
-
     GLVIS.Debugger.debug("Collection", "Rebuilding Text positions", 7);
 
     if (!this.labels_.length)
@@ -477,31 +476,47 @@ GLVIS.Collection.prototype.rebuildLabelPositions = function () {
 
     var vert_offset = config.vertical_offset;
 
-
     var title_label = this.labels_[0];
-    title_label.setPosition(0, vert_offset, 0);
+    title_label.setPosition(config.title_pos_x, config.title_pos_y, 0);
 
-    var c_x_start = 0 - (((config.columns - 1) / 2) * config.column_distance);
+    var c_x = config.kws_pos_x;
+
+    for (var i = 1; i < this.labels_.length; i++) {
+
+        var c_y = config.kws_pos_start_y - vert_dist * (i - 1);
+
+        var curr_label = this.labels_[i];
+        curr_label.setPosition(c_x, c_y, 0);
+    }
+
+
+
+    /**
+     * Old style with labels and title on top in columns
+     */
 
     // -1 due to seperate treating of title label
-    var elements_per_col = Math.round((this.labels_.length) / config.columns);
-    for (var c_count = 0; c_count < config.columns; c_count++) {
-
-        var c_x = c_x_start + c_count * config.column_distance;
-
-        for (var r_count = 0; r_count < elements_per_col; r_count++) {
-
-            var c_y = (r_count + 1) * vert_dist + vert_offset;
-
-            var label_index = c_count * elements_per_col + r_count + 1;
-            if (label_index >= this.labels_.length)
-                break;
-
-            /** @type {GLVIS.Text} **/
-            var curr_label = this.labels_[label_index];
-            curr_label.setPosition(c_x, c_y, 0);
-        }
-    }
+    /*
+     var c_x_start = 0 - (((config.columns - 1) / 2) * config.column_distance);
+     var elements_per_col = Math.round((this.labels_.length) / config.columns);
+     for (var c_count = 0; c_count < config.columns; c_count++) {
+     
+     var c_x = c_x_start + c_count * config.column_distance;
+     
+     for (var r_count = 0; r_count < elements_per_col; r_count++) {
+     
+     var c_y = (r_count + 1) * vert_dist + vert_offset;
+     
+     var label_index = c_count * elements_per_col + r_count + 1;
+     if (label_index >= this.labels_.length)
+     break;
+     
+     /** @type {GLVIS.Text} /
+     var curr_label = this.labels_[label_index];
+     curr_label.setPosition(c_x, c_y, 0);
+     }
+     }
+     */
 };
 
 /**
