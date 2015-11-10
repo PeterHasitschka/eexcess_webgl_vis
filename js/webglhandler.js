@@ -90,13 +90,14 @@ GLVIS.WebGlHandler.prototype.createRenderer = function () {
     var scene_width = this.canvas_.width();
     var scene_height = this.canvas_.height();
 
-    var renderer = new THREE.WebGLRenderer({antialias: true});
+    var renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
     renderer.setSize(scene_width, scene_height);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setClearColor(background_color);
     this.canvas_.html(renderer.domElement);
     this.canvas_.hide();
     this.three_.renderer = renderer;
+    renderer.setClearColor(0xffffff, 0);
 };
 
 /**

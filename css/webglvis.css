@@ -11,6 +11,10 @@ html, body {
     height:100%;
 }
 
+#webgl_canvas_container canvas {
+    background:black;
+}
+
 #webgl_canvas_container p {
     text-align: center;
     margin-top: 64px;

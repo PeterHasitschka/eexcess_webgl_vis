@@ -231,7 +231,7 @@ GLVIS.Collection.prototype.initLabels = function () {
 
             var text_element = new GLVIS.Text(
                     text,
-                    {font_size: fontsize, opacity: opacity},
+                    {font_size: fontsize, opacity: opacity, color: config.label_color},
             {color: config.highlight_color},
             mouse_over_fct,
                     mouse_leave_fct,

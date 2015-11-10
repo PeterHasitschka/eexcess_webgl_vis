@@ -62,8 +62,8 @@ GLVIS.config = {
             }
         },
         plane: {
-            color: 0x4488FF,
-            opacity: 0.3,
+            color: 0xFFFFFF,
+            opacity: 0.5,
             z_value: 0.1,
             segments: 50,
             radius: 150
@@ -102,6 +102,7 @@ GLVIS.config = {
                     r5: 0xff7f00
                 }
             },
+            init_color: 0xAAAAAA,
             highlight_color: 0xFF00FF,
             init_z: 0.5, //-19,
             opacity_depth: {
@@ -239,7 +240,7 @@ GLVIS.config = {
                 opacity: 0.5,
                 label: {
                     font_size: 8,
-                    color: "#000033",
+                    color: "#FFFFFF",
                     z_value: 0.5
                 }
             },
@@ -266,10 +267,11 @@ GLVIS.config = {
             title_pos_y: 240,
             kws_pos_x: 320,
             kws_pos_start_y: 240,
-            title_color: "#CC0000",
-            highlight_color: "#0000FF",
+            title_color: "#FF2222",
+            label_color: "#FFFFFF",
+            highlight_color: "#FFAAAA",
             distance: 25,
-            init_opacity: 0.7,
+            init_opacity: 0.9,
             max_opacity: 0.9,
             min_opacity: 0.5,
             init_font_size: 20,
