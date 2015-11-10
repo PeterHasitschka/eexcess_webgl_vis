@@ -225,7 +225,7 @@ GLVIS.RecDetailNodeButton.prototype.render = function () {
     i.position.set(
             this.pos.x,
             this.pos.y,
-            this.pos.z + 0.1
+            this.pos.z + 0.001
             );
 
     /** @type {GLVIS.Text} **/
@@ -233,7 +233,7 @@ GLVIS.RecDetailNodeButton.prototype.render = function () {
     if (label) {
         var y_offset = GLVIS.config.collection.recommendation.detail_node.button.label.y_offset;
         //label.setIsVisible(this.visible_);
-        label.setPosition(this.pos.x, this.pos.y + y_offset, this.pos.z + 0.1);
+        label.setPosition(this.pos.x, this.pos.y + y_offset, this.pos.z + 0.001);
         label.render();
     }
 

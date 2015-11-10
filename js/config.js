@@ -42,8 +42,8 @@ GLVIS.config = {
 
         mousesensitivy: {
             100: 25, //Allover view (df 1)
-            0.91: 100, //Focused collection
-            0.864: 1000   //Focused rec
+            0.9997: 100, //Focused collection
+            0.98875: 1000   //Focused rec
         },
         key_step: 1
     },
@@ -134,7 +134,7 @@ GLVIS.config = {
                 },
                 add_dinstance: 50,
                 button: {
-                    z_offset: 1,
+                    z_offset: 0.01,
                     size: 1.2,
                     icon_size: 1.0,
                     segments: 20,
@@ -327,7 +327,7 @@ GLVIS.config = {
     },
     text: {
         z_value: 1,
-        render_factor: 3,
+        render_factor: 1,
         font: "Arial",
         font_size: 20,
         color: "#000000",

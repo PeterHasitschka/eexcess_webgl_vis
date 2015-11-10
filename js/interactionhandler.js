@@ -105,7 +105,7 @@ GLVIS.InteractionHandler = function (scene) {
                     break;
             }
 
-            var sensitivity = sensitivity_vals[max_df];
+            var sensitivity = sensitivity_vals[max_df];   
             nh.moveCameraAroundCircle(
                     curr_mouse_x_diff / sensitivity,
                     curr_mouse_y_diff / sensitivity,
