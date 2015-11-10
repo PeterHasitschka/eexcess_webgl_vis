@@ -156,7 +156,7 @@ GLVIS.Recommendation.prototype.setColorData = function (colordata) {
 GLVIS.Recommendation.prototype.setBaseColor = function () {
 
 
-    var color = 0;
+    var color = GLVIS.config.collection.recommendation.init_color;
 
 
     var config = GLVIS.config.collection.recommendation.colors;

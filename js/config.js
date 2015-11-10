@@ -53,7 +53,7 @@ GLVIS.config = {
             transparency: {
                 inactive: 0.5
             },
-            sphere: {
+            circle: {
                 radius: 10.0,
                 segments: 15,
                 z_value: 0, //-20,
@@ -102,6 +102,7 @@ GLVIS.config = {
                     r5: 0xff7f00
                 }
             },
+            init_color: 0x555555,
             highlight_color: 0xFF00FF,
             init_z: 0.5, //-19,
             opacity_depth: {

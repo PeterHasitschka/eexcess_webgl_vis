@@ -41,7 +41,7 @@ GLVIS.Collection = function (eexcess_data) {
         position: {
             x: 0,
             y: 0,
-            z: GLVIS.config.collection.center_node.sphere.z_value
+            z: GLVIS.config.collection.center_node.circle.z_value
         },
         rotation_degree: 0.0,
         gl_objects: {
@@ -266,7 +266,7 @@ GLVIS.Collection.prototype.render = function () {
     }
 
     var pos = this.getPosition();
-    var z_pos = GLVIS.config.collection.center_node.sphere.z_value;
+    var z_pos = GLVIS.config.collection.center_node.circle.z_value;
     this.vis_data_.mesh_container.position.set(
             pos.x,
             pos.y,
