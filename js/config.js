@@ -26,10 +26,10 @@ GLVIS.config = {
             Z_POS: 300
         },
         camera_perspective: {
-            FOV: 80,
+            FOV: 110,
             NEAR: 20,
             FAR: 20000,
-            DISTANCE: 1300
+            DISTANCE: 400
         },
         canvas_color: 0xFBFFFD
     },
@@ -48,7 +48,7 @@ GLVIS.config = {
         key_step: 1
     },
     collection: {
-        init_distance_fct: 0.9,
+        init_distance_fct: 0.977,
         center_node: {
             transparency: {
                 inactive: 0.5
@@ -346,9 +346,9 @@ GLVIS.config = {
             }
         },
         camera_move_center: {
-            speed: 0.05,
-            pow: 0.01,
-            threshold: 0.001
+            speed: 0.1,
+            pow: 0.001,
+            threshold: 0.0001
         },
         animation_ids: {
             zoom_id: 'nh_anim_zoom',
