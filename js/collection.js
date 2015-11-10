@@ -400,6 +400,7 @@ GLVIS.Collection.prototype.selectAndFocus = function (cb) {
 
 /**
  * Just moving the camera back a little bit
+ * Be sure to call this only if no other collection gets selected at the same time! (Conflicts!)
  */
 GLVIS.Collection.prototype.deselect = function () {
     GLVIS.Scene.getCurrentScene().getNavigationHandler().defocusCollection();
@@ -593,7 +594,7 @@ GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
     _.each(GLVIS.Scene.getCurrentScene().getCollections(), function (coll) {
         if (coll.getId() === this.getId())
             return;
-        coll.deleteRingRepresentation();
+        coll.deleteRingRepresentation(false);
     }.bind(this));
 
     /**
@@ -644,8 +645,9 @@ GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
  * Deleting the ring representation and all its segments etc.
  * Finally the Distributed Position Handler replaces the Ring Position Handler
  * for re-distributing the recommendation nodes around the collection
+ * @param {bool} deselect Set to false if another collection gets focused! (Conflict!)
  */
-GLVIS.Collection.prototype.deleteRingRepresentation = function () {
+GLVIS.Collection.prototype.deleteRingRepresentation = function (deselect) {
 
     GLVIS.Debugger.debug("Collection", "Deleting Ring Rep of Coll " + this.getId(), 5);
 
@@ -675,7 +677,8 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function () {
 
 
     this.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
-    this.deselect();
+    if (deselect)
+        this.deselect();
 };
 
 /**

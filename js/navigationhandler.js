@@ -575,12 +575,12 @@ GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
 };
 GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_objects) {
     var is_positive = e.deltaY < 0 ? true : false;
-   
+
     for (var i = 0; i < intersected_objects.length; i++) {
         if (intersected_objects[i].object && intersected_objects[i].object.scene_obj) {
             var i_obj = intersected_objects[i].object.scene_obj;
             if (i_obj instanceof GLVIS.Collection) {
-                
+
                 /** @type{GLVIS.Collection} i_obj **/
                 if (is_positive) {
                     if (!i_obj.getRingRepresentation())
@@ -593,7 +593,7 @@ GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_ob
                     var cs = GLVIS.Scene.getCurrentScene().getCollections();
                     for (var i = 0; i < cs.length; i++) {
                         if (cs[i].getRingRepresentation()) {
-                            cs[i].deleteRingRepresentation();
+                            cs[i].deleteRingRepresentation(true);
                             break;
                         }
                     }
@@ -601,7 +601,7 @@ GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_ob
 
                 break;
             } else if (i_obj instanceof GLVIS.Recommendation) {
-                
+
                 /** @type{GLVIS.Recommendation} i_obj **/
                 if (is_positive) {
 
@@ -615,7 +615,7 @@ GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_ob
                         if (i_obj === GLVIS.Recommendation.current_selected_rec)
                             i_obj.defocusAndZoomOut();
                         else
-                            i_obj.getCollection().deleteRingRepresentation();
+                            i_obj.getCollection().deleteRingRepresentation(true);
                     }
                     else {
                         //If not even an ringrep exists -> do nothing with that rec
