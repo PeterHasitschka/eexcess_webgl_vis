@@ -248,7 +248,7 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
 
     if (this.webgl_objects_.circle_inner) {
         this.webgl_objects_.circle_inner.position.setZ(
-                pos.z + config.z_diff_inner_circle
+                config.z_diff_inner_circle
                 );
 
         this.webgl_objects_.circle_inner.material.opacity = this.recommendation_.getOpacity(true);
