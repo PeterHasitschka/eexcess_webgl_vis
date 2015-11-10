@@ -44,6 +44,7 @@ GLVIS.Collection = function (eexcess_data) {
             z: GLVIS.config.collection.center_node.circle.z_value
         },
         rotation_degree: 0.0,
+        init_rotation_degree: null,
         gl_objects: {
             center_node: null,
             parent_connection: null,
@@ -398,6 +399,45 @@ GLVIS.Collection.prototype.selectAndFocus = function (cb) {
     GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onCollectionClick(this);
 };
 
+
+/**
+ * Rotate the collection that it faces directly another collection
+ * @param {GLVIS.Collection} coll
+ * @param {bool} animate
+ */
+GLVIS.Collection.prototype.lookAtCollection = function (goal_coll, animate) {
+
+    var my_pos = this.getPosition();
+    var my_vec = new THREE.Vector3(my_pos.x, my_pos.y, my_pos.z);
+
+    var goal_pos = goal_coll.getPosition();
+
+    //goal_pos = {x: 0, y: 0, z: 5};
+
+    var goal_vec = new THREE.Vector3(goal_pos.x, goal_pos.y, goal_pos.z);
+
+    var dir_vec = goal_vec.clone();
+    dir_vec.sub(my_vec);
+
+    //dir_vec.normalize();
+
+    var rad = Math.atan2(dir_vec.x, dir_vec.z);
+    var degree = rad * (180 / Math.PI) - 180;
+    //console.log(my_pos, goal_pos, dir_vec, degree);
+
+    this.setRotation(degree, animate);
+};
+
+/**
+ * Reset the collection's rotation to the initial value
+ * @param {bool} animate
+ */
+GLVIS.Collection.prototype.resetLookAt = function (animate) {
+    if (this.vis_data_.init_rotation_degree === null)
+        throw ("Could not reset Rotation. No init value set!");
+    this.setRotation(this.vis_data_.init_rotation_degree, animate);
+};
+
 /**
  * Just moving the camera back a little bit
  * Be sure to call this only if no other collection gets selected at the same time! (Conflicts!)
@@ -602,6 +642,7 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
 GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
 
     this.selectAndFocus();
+    this.resetLookAt(true);
     /**
      * Remove all other ringreps
      * @param {GLVIS.Collection} coll
@@ -610,6 +651,7 @@ GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
         if (coll.getId() === this.getId())
             return;
         coll.deleteRingRepresentation(false);
+        coll.lookAtCollection(this, true);
     }.bind(this));
 
     /**
@@ -692,8 +734,13 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function (deselect) {
 
 
     this.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
-    if (deselect)
+    if (deselect) {
         this.deselect();
+        for (var i = 0; i < GLVIS.Scene.getCurrentScene().getCollections().length; i++) {
+            GLVIS.Scene.getCurrentScene().getCollections()[i].resetLookAt(true);
+        }
+    }
+
 };
 
 /**
@@ -765,6 +812,15 @@ GLVIS.Collection.prototype.getHighlightRecsByLabel = function () {
  * @param {boolean} animate Animate Rotation
  */
 GLVIS.Collection.prototype.setRotation = function (degree, animate) {
+
+    while (degree < 0)
+        degree += 360;
+
+    degree = degree % 360;
+
+
+    if (this.vis_data_.init_rotation_degree === null)
+        this.vis_data_.init_rotation_degree = degree;
 
     if (degree === this.vis_data_.rotation_degree)
         return;
