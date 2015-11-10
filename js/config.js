@@ -26,10 +26,10 @@ GLVIS.config = {
             Z_POS: 300
         },
         camera_perspective: {
-            FOV: 150,
+            FOV: 120,
             NEAR: 2,
             FAR: 20000,
-            DISTANCE: 100
+            DISTANCE: 300
         },
         canvas_color: 0xFBFFFD
     },
@@ -60,6 +60,15 @@ GLVIS.config = {
                 color: 0x1d904e,
                 select_color: 0xFF0000
             }
+        },
+        focus : {
+          move_out_dist: 150,
+          animation : {
+              id: "move_coll_pos",
+              speed : 0.2,
+              pow : 0.01,
+              threshold: 1
+          }
         },
         plane: {
             color: 0xFFFFFF,
