@@ -423,10 +423,11 @@ GLVIS.Collection.prototype.lookAtCollection = function (goal_coll, animate) {
     //dir_vec.normalize();
 
     var rad = Math.atan2(dir_vec.x, dir_vec.z);
-    var degree = rad * (180 / Math.PI) - 180;
-    //console.log(my_pos, goal_pos, dir_vec, degree);
+    var degree = 0 - (rad * (180 / Math.PI) - 180);
 
-    this.setRotation(0 - degree, animate);
+    //GLVIS.Debugger.debug("Collection", " (" + this.getId() + ") Lookat: [" + Math.round(this.getRotation()) + "] -> [" + Math.round(degree) + "]", 3);
+
+    this.setRotation(degree, animate);
 };
 
 /**
@@ -504,7 +505,7 @@ GLVIS.Collection.prototype.setPosition = function (x, y, z) {
  * used for animation
  * @param {object} pos containing x,y,z
  */
-GLVIS.Collection.prototype.setPositionObj = function(pos) {
+GLVIS.Collection.prototype.setPositionObj = function (pos) {
     this.setPosition(pos.x, pos.y, pos.z);
 };
 
@@ -652,7 +653,8 @@ GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
 
     this.selectAndFocus();
 
-    GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().moveCollectionFromCenter(this, function () {});
+    GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().moveCollectionFromCenter(this, function () {
+    });
 
     this.resetLookAt(true);
     /**
@@ -825,11 +827,14 @@ GLVIS.Collection.prototype.getHighlightRecsByLabel = function () {
  */
 GLVIS.Collection.prototype.setRotation = function (degree, animate) {
 
-    while (degree < 0)
-        degree += 360;
 
-    degree = degree % 360;
-
+    //Normalize degree
+    /*
+     * REMOVED: Disturbs short-way algorithm (see below)
+     while (degree < 0)
+     degree += 360;
+     degree = degree % 360;
+     */
 
     if (this.vis_data_.init_rotation_degree === null)
         this.vis_data_.init_rotation_degree = degree;
@@ -839,6 +844,27 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
 
     var rotate_config = GLVIS.config.collection.rotation;
     if (animate) {
+
+
+
+        var degree_input = degree;
+        //Check for shortest way
+
+        var curr_degr = this.getRotation();
+        var way_normal_l = Math.abs(curr_degr - degree);
+        var way_forward_l = Math.abs(curr_degr - (degree + 360));
+        var way_backward_l = Math.abs((curr_degr + 360) - degree);
+
+        var min_way = Math.min(way_normal_l, way_forward_l, way_backward_l);
+
+        //Prevent to return back if over 360-gap is shorter
+        if (min_way === way_forward_l) {
+            degree += 360;
+        }
+        //Prevent going around the circle if going back over 0 would be shorter
+        else if (min_way === way_backward_l) {
+            this.setRotation(curr_degr + 360, false);
+        }
 
         this.vis_data_.is_currently_animated = true;
         GLVIS.Scene.getCurrentScene().getAnimation().register(
@@ -854,6 +880,11 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
                 function () {
                     GLVIS.Debugger.debug("Collection", "Finished rotation", 5);
                     this.vis_data_.is_currently_animated = false;
+
+                    //If way_forward manipulation -> Reset degree
+                    if (degree !== degree_input)
+                        this.setRotation(degree_input, false);
+
                 }.bind(this),
                 true
                 );
