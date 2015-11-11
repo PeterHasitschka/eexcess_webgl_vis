@@ -490,6 +490,11 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
  */
 GLVIS.NavigationHandler.prototype.defocusCollection = function () {
 
+    var colls = GLVIS.Scene.getCurrentScene().getCollections();
+    for (var i = 0; i < colls.length; i++) {
+        colls[i].unconnectSameRecsFromOtherCollections();
+    }
+
     var anim = GLVIS.Scene.getCurrentScene().getAnimation();
     anim.stopCameraMovementAnimations();
 };
