@@ -257,6 +257,9 @@ GLVIS.NavigationHandler.prototype.setDistanceFactor = function (factor, animatio
         var anim = GLVIS.Scene.getCurrentScene().getAnimation();
         //anim.stopCameraMovementAnimations();
 
+        if (!cb)
+            cb = null;
+
         var anim_config = GLVIS.config.navigation.camera_move_center;
         anim.register(
                 this.animationconfig_.move_tocircle,
@@ -339,6 +342,8 @@ GLVIS.NavigationHandler.prototype.unlockLookAt = function () {
  * @param {float} zoom_factor
  */
 GLVIS.NavigationHandler.prototype.zoom = function (zoom_factor) {
+    console.error("ZOOM NOT ALLOWED!");
+    return;
 
 
     if (zoom_factor < 0)
@@ -362,6 +367,9 @@ GLVIS.NavigationHandler.prototype.getZoomFactor = function () {
  * @param {float} delta_zoom_factor
  */
 GLVIS.NavigationHandler.prototype.zoomDelta = function (delta_zoom_factor) {
+    console.error("ZOOM NOT ALLOWED!");
+    return;
+
 
     var zoom = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().zoom + (delta_zoom_factor / 100);
 
@@ -449,6 +457,10 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
     var anim = GLVIS.Scene.getCurrentScene().getAnimation();
     anim.stopCameraMovementAnimations();
 
+
+    GLVIS.Scene.getCurrentScene().getNavigationHandler().setDistanceFactor(1, true);
+
+
     var move_goal = this.getDegreeOnCameraSphere_(
             collection.getPosition().x,
             collection.getPosition().y,
@@ -477,6 +489,11 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
  * Do nothing instead of stopping the camera movement.
  */
 GLVIS.NavigationHandler.prototype.defocusCollection = function () {
+
+    var colls = GLVIS.Scene.getCurrentScene().getCollections();
+    for (var i = 0; i < colls.length; i++) {
+        colls[i].unconnectSameRecsFromOtherCollections();
+    }
 
     var anim = GLVIS.Scene.getCurrentScene().getAnimation();
     anim.stopCameraMovementAnimations();

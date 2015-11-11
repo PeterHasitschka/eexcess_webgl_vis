@@ -311,9 +311,10 @@ GLVIS.Recommendation.prototype.defocusAndZoomOut = function () {
     //Replace detail node with common node
     this.vis_data_.gl_objects.center_node.setButtonsVisible(false);
 
-    GLVIS.Scene.getCurrentScene().getAnimation().stopCameraMovementAnimations();
-
+    var scene = GLVIS.Scene.getCurrentScene();
+    scene.getAnimation().stopCameraMovementAnimations();
     this.getCollection().selectAndFocus(function () {
+
     });
 
     GLVIS.Recommendation.current_selected_rec = null;
@@ -817,16 +818,19 @@ GLVIS.Recommendation.prototype.getFilterPositive = function () {
 };
 
 
-GLVIS.Recommendation.prototype.getOpacity = function (include_distance) {
+GLVIS.Recommendation.prototype.getOpacity = function (/* include_distance */) {
 
     var depth_opacity_fact = 1;
-
-    var depth_strength = GLVIS.config.collection.recommendation.opacity_depth.strength;
-    var depth_weaken = GLVIS.config.collection.recommendation.opacity_depth.weakness;
-    if (include_distance) {
-        depth_opacity_fact = Math.min(1, (1 - this.getPosition().z * depth_strength)) * depth_weaken + (1 - depth_weaken);
-    }
-    return this.vis_data_.opacity * depth_opacity_fact;
+    /*
+     var depth_strength = GLVIS.config.collection.recommendation.opacity_depth.strength;
+     var depth_weaken = GLVIS.config.collection.recommendation.opacity_depth.weakness;
+     if (include_distance) {
+     depth_opacity_fact = Math.min(1, (1 - this.getPosition().z * depth_strength)) * depth_weaken + (1 - depth_weaken);
+     }
+     
+     console.log("OPACITY: ", this.getPosition().z);
+     */
+    return this.vis_data_.opacity;
 };
 
 

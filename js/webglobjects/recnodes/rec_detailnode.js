@@ -251,7 +251,7 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
                 config.z_diff_inner_circle
                 );
 
-        this.webgl_objects_.circle_inner.material.opacity = this.recommendation_.getOpacity(true);
+        this.webgl_objects_.circle_inner.material.opacity = this.recommendation_.getOpacity();
     }
 
     for (var i = 0; i < this.webgl_objects_.buttons.length; i++) {

@@ -180,6 +180,8 @@ GLVIS.CollectionPosCircular.prototype.getCollCircleRadius = function () {
  */
 GLVIS.CollectionPosCircular.prototype.moveCollectionFromCenter = function (collection, callback_fct) {
 
+    GLVIS.Debugger.debug("CollectionPosCircular", "Moving coll " + collection.getId() + " away from center", 6);
+
     var config = GLVIS.config.collection.focus;
 
     var circle_rad = this.getCollCircleRadius();
@@ -204,7 +206,7 @@ GLVIS.CollectionPosCircular.prototype.moveCollectionFromCenter = function (colle
 
     var anim = GLVIS.Scene.getCurrentScene().getAnimation();
     anim.register(
-            config.animation.id,
+            config.animation.id + collection.getId(),
             new_pos_obj,
             null,
             collection.getPosition.bind(collection),
@@ -227,12 +229,13 @@ GLVIS.CollectionPosCircular.prototype.moveCollectionFromCenter = function (colle
  */
 GLVIS.CollectionPosCircular.prototype.moveCollectionToCenter = function (collection) {
 
+    GLVIS.Debugger.debug("CollectionPosCircular", "Moving coll " + collection.getId() + " back to the center", 6);
     var orig_pos = collection.getInitPos();
     var config = GLVIS.config.collection.focus;
 
     var anim = GLVIS.Scene.getCurrentScene().getAnimation();
     anim.register(
-            config.animation.id,
+            config.animation.id + collection.getId(),
             orig_pos,
             null,
             collection.getPosition.bind(collection),

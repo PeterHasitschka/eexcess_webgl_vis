@@ -64,7 +64,7 @@ GLVIS.config = {
         focus : {
           move_out_dist: 150,
           animation : {
-              id: "move_coll_pos",
+              id: "move_coll_pos_",
               speed : 0.2,
               pow : 0.01,
               threshold: 1
@@ -114,11 +114,13 @@ GLVIS.config = {
             init_color: 0xAAAAAA,
             highlight_color: 0xFF00FF,
             init_z: 0.5, //-19,
+            /*
             opacity_depth: {
                 strength: 0.01,
                 weakness: 0.5
             },
-            camera_distance: 5,
+            */
+            camera_distance: 10,
             common_node: {
                 min_radius: 0.5,
                 active_radius: 10,
@@ -330,7 +332,7 @@ GLVIS.config = {
             color_diff: 0x00AA00,
             rec_color: 0xFF0000,
             num_vertices: 300,
-            tube_radius: 2,
+            tube_radius: 5,
             radius_segs: 8
         }
     },
