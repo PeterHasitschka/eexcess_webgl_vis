@@ -128,6 +128,11 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
 
             GLVIS.Debugger.debug("RecommendationDetailNode", "Preview loaded. Creating texture", 5);
             texture.minFilter = THREE.LinearFilter;
+            
+            //Could happen due to asynchronous call
+            if(!this.webgl_objects_.circle_inner)
+                return;
+            
             this.webgl_objects_.circle_inner.material = new THREE.MeshBasicMaterial({
                 map: texture,
                 side: THREE.DoubleSide,
