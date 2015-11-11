@@ -181,6 +181,10 @@ GLVIS.Animation.prototype.register = function (identifier, goal, object, getter_
         setter_fct_param_num = 1;
     }
 
+    if (!callback_fct)
+        callback_fct = function () {
+        };
+
     var anim_obj = {
         identifier: identifier,
         goal: goal,

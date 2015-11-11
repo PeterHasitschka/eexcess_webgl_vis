@@ -311,9 +311,10 @@ GLVIS.Recommendation.prototype.defocusAndZoomOut = function () {
     //Replace detail node with common node
     this.vis_data_.gl_objects.center_node.setButtonsVisible(false);
 
-    GLVIS.Scene.getCurrentScene().getAnimation().stopCameraMovementAnimations();
-
+    var scene = GLVIS.Scene.getCurrentScene();
+    scene.getAnimation().stopCameraMovementAnimations();
     this.getCollection().selectAndFocus(function () {
+
     });
 
     GLVIS.Recommendation.current_selected_rec = null;

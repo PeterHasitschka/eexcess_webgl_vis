@@ -118,7 +118,7 @@ GLVIS.config = {
                 strength: 0.01,
                 weakness: 0.5
             },
-            camera_distance: 5,
+            camera_distance: 10,
             common_node: {
                 min_radius: 0.5,
                 active_radius: 10,
