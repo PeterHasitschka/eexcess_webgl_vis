@@ -15,6 +15,9 @@ GLVIS = GLVIS || {};
  */
 GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouseleave_fct, mouse_fct_data, collection, parent_container) {
 
+    if (text.length === 0)
+        throw ("EMPTY TEXT NOT ALLOWED!");
+
     var config = GLVIS.config.text;
     var init_data = {
         color: config.color,

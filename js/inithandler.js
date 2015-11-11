@@ -155,18 +155,8 @@ GLVIS.InitHandler.afterFilesLoaded_ = function (root_element, path, cb) {
             "finished calling js files for webglvis-plugin",
             3);
 
-    /**
-     * There may be some errors due to not complete init of the loaded classes.
-     * Give it some tries again to finish loading by recalling the loadFiles method
-     */
-    try {
+    GLVIS.InitHandler.initScene(this.scene, this.db_handler, cb);
 
-        GLVIS.InitHandler.initScene(this.scene, this.db_handler, cb);
-    } catch (Exception) {
-
-        console.error("Error creating scene!", Exception);
-        return;
-    }
     GLVIS.InitHandler.libs_loaded = true;
 };
 

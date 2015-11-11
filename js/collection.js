@@ -180,6 +180,9 @@ GLVIS.Collection.prototype.initLabels = function () {
 
         _.each(this.eexcess_data_.query, function (curr_q_data) {
             var text = curr_q_data.text;
+            if (!text.length)
+                return;
+
             var weight = curr_q_data.weight;
 
             var fontsize = init_font_size * Math.pow(weight, 0.5);
