@@ -331,8 +331,9 @@ GLVIS.config = {
             color_diff: 0x00AA00,
             rec_color: 0xFF0000,
             num_vertices: 300,
-            tube_radius: 5,
-            radius_segs: 8
+            tube_radius: 7,
+            radius_segs: 8,
+            node_to_center_dist: 5
         }
     },
     text: {

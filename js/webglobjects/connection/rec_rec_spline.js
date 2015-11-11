@@ -45,6 +45,7 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
 
     this.orderRecs();
 
+    var dist_from_node = config.node_to_center_dist;
     var last_rec = null;
     _.each(this.recs, function (rec) {
 
@@ -58,12 +59,16 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
                 /*
                  * Calculating the line between the current rec and the last rec
                  */
-                var last_x = last_rec.getPosition(true).x;
-                var last_y = last_rec.getPosition(true).y;
-                var last_z = last_rec.getPosition(true).z;
-                var curr_x = rec.getPosition(true).x;
-                var curr_y = rec.getPosition(true).y;
-                var curr_z = rec.getPosition(true).z;
+
+                var lr_pos = last_rec.getPosition(true);
+                var last_x = lr_pos.x;
+                var last_y = lr_pos.y;
+                var last_z = lr_pos.z;
+
+                var currr_pos = rec.getPosition(true);
+                var curr_x = currr_pos.x;
+                var curr_y = currr_pos.y;
+                var curr_z = currr_pos.z;
                 var gradient = (curr_y - last_y) / (curr_x - last_x);
 
 
@@ -82,6 +87,7 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
             }
         }
         var pos = rec.getPosition(true);
+        pos = this.posDirInnerCenter(pos, dist_from_node);
         vecs.push(new THREE.Vector3(pos.x, pos.y, pos.z));
 
         rec.setColor(config.rec_color);
@@ -121,6 +127,30 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
     this.webgl_objects.spline = tube;
     GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(tube);
 };
+
+
+/**
+ * Moving a position a little bit to the center of the collection-circle
+ * @param {object} orig_pos containg x,y,z
+ * @param {float} dist_to_move Distance to move the position
+ * @returns {object} contaning x,y,z
+ */
+GLVIS.ConnectionRecRecSpline.prototype.posDirInnerCenter = function (orig_pos, dist_to_move) {
+
+    var center = new THREE.Vector3(0, 0, -GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius());
+    var pos_vec = new THREE.Vector3(orig_pos.x, orig_pos.y, orig_pos.z);
+
+    var new_pos = pos_vec.clone();
+    new_pos.sub(center);
+    var l = new_pos.length();
+    var l_new = l - dist_to_move;
+
+    new_pos.multiplyScalar((l_new / l)).add(center);
+    var new_pos_obj = {x: new_pos.x, y: new_pos.y, z: new_pos.z};
+
+    return new_pos_obj;
+};
+
 
 /**
  * Adds a recommendation to the connection-list
