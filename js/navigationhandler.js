@@ -494,9 +494,9 @@ GLVIS.NavigationHandler.prototype.defocusCollection = function () {
     for (var i = 0; i < colls.length; i++) {
         colls[i].unconnectSameRecsFromOtherCollections();
     }
-
     var anim = GLVIS.Scene.getCurrentScene().getAnimation();
     anim.stopCameraMovementAnimations();
+    this.setDistanceFactor(1, true);
 };
 
 /**
