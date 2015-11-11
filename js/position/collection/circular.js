@@ -189,7 +189,14 @@ GLVIS.CollectionPosCircular.prototype.moveCollectionFromCenter = function (colle
 
     var coll_pos = collection.getPosition();
 
-    collection.setInitPos({x: coll_pos.x, y: coll_pos.y, z: coll_pos.z});
+
+    if (!collection.getInitPos())
+        collection.setInitPos({x: coll_pos.x, y: coll_pos.y, z: coll_pos.z});
+
+    //Get the init pos to prevent problems during aborted animation where pos is somewhere...
+    var coll_pos = collection.getInitPos();
+
+
     var coll_pos_vec = new THREE.Vector3(coll_pos.x, coll_pos.y, coll_pos.z);
 
     var distance_vec = coll_pos_vec.clone();
