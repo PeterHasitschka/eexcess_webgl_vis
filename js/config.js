@@ -114,10 +114,12 @@ GLVIS.config = {
             init_color: 0x555555,
             highlight_color: 0xFF00FF,
             init_z: 0.5, //-19,
+            /*
             opacity_depth: {
                 strength: 0.01,
                 weakness: 0.5
             },
+            */
             camera_distance: 10,
             common_node: {
                 min_radius: 0.5,
@@ -329,7 +331,7 @@ GLVIS.config = {
             color_diff: 0x00AA00,
             rec_color: 0xFF0000,
             num_vertices: 300,
-            tube_radius: 2,
+            tube_radius: 5,
             radius_segs: 8
         }
     },
