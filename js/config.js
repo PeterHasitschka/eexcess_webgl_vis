@@ -64,7 +64,7 @@ GLVIS.config = {
         focus : {
           move_out_dist: 150,
           animation : {
-              id: "move_coll_pos",
+              id: "move_coll_pos_",
               speed : 0.2,
               pow : 0.01,
               threshold: 1
