@@ -83,3 +83,11 @@ GLVIS.RecDashboardHandler.prototype.determineListIndex = function (rec) {
     }
     return null;
 };
+
+
+GLVIS.RecDashboardHandler.prototype.applyFilters = function(filters) {
+  
+    console.log(filters);
+    console.info("TODO: Apply filters to rec-dashboard sidebar!!!");
+      //FilterHandler.setCurrentFilterCategories('category', dataToHighlight, colorChannel, [facetValue]);
+};

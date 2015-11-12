@@ -74,16 +74,16 @@ GLVIS.FilterHandler.prototype.apply = function () {
         this.updateRingFilterSegments(curr_col);
     }
 
-    var prepared_filter_data = this.prepareRecResForDashboard(filter_rec_res);
+    this.sendFilterRecResForDashboard(filter_rec_res);
 };
 
 /**
  * Take an array with elements that each represents the filters positively applied to a rec.
- * Combine them by filter-name to send them to the
+ * Combine them by filter-name to send them to the Dashboard via recdashboard-handler
  * @param {object} data containing rec and positive filters
  * @returns {undefined}
  */
-GLVIS.FilterHandler.prototype.prepareRecResForDashboard = function (data) {
+GLVIS.FilterHandler.prototype.sendFilterRecResForDashboard = function (data) {
 
     var filters = {};
 
@@ -97,14 +97,13 @@ GLVIS.FilterHandler.prototype.prepareRecResForDashboard = function (data) {
 
             if (filters[recs_filters[j].id] === undefined)
                 filters[recs_filters[j].id] = {val: recs_filters[j].val, res: []};
-            filters[recs_filters[j].id].res.push(rec.getEexcessData());
+            filters[recs_filters[j].id].res.push(rec.getEexcessData().result);
         }
 
 
     }
+    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().applyFilters(filters);
 
-    console.log(filters);
-    //FilterHandler.setCurrentFilterCategories('category', dataToHighlight, colorChannel, [facetValue]);
 
 
 };
