@@ -54,7 +54,7 @@ GLVIS.FilterHandler.prototype.apply = function () {
 
 
     var collections = GLVIS.Scene.getCurrentScene().getCollections();
-
+    var filter_rec_res = [];
     for (var i = 0; i < collections.length; i++) {
 
         //Remove splines because of possible movement of recs
@@ -64,16 +64,48 @@ GLVIS.FilterHandler.prototype.apply = function () {
 
         var recs = curr_col.getRecommendations();
 
+
         for (var j = 0; j < recs.length; j++) {
             /** @type{GLVIS.Recommendation} **/
             var curr_rec = recs[j];
 
-            var filter_res = this.applyFiltersToRec_(curr_rec);
-            console.log(curr_rec.getId(), filter_res);
+            filter_rec_res.push({rec: curr_rec, positive_filters: this.applyFiltersToRec_(curr_rec)});
         }
-
         this.updateRingFilterSegments(curr_col);
     }
+
+    var prepared_filter_data = this.prepareRecResForDashboard(filter_rec_res);
+};
+
+/**
+ * Take an array with elements that each represents the filters positively applied to a rec.
+ * Combine them by filter-name to send them to the
+ * @param {object} data containing rec and positive filters
+ * @returns {undefined}
+ */
+GLVIS.FilterHandler.prototype.prepareRecResForDashboard = function (data) {
+
+    var filters = {};
+
+    for (var i = 0; i < data.length; i++) {
+
+        var rec = data[i].rec;
+        var recs_filters = data[i].positive_filters;
+
+
+        for (var j = 0; j < recs_filters.length; j++) {
+
+            if (filters[recs_filters[j].id] === undefined)
+                filters[recs_filters[j].id] = {val: recs_filters[j].val, res: []};
+            filters[recs_filters[j].id].res.push(rec.getEexcessData());
+        }
+
+
+    }
+
+    console.log(filters);
+    //FilterHandler.setCurrentFilterCategories('category', dataToHighlight, colorChannel, [facetValue]);
+
 
 };
 
@@ -128,6 +160,7 @@ GLVIS.FilterHandler.prototype.applyFiltersToRec_ = function (rec) {
 
     var filter_positive = [];
 
+    var at_least_one_negative = false;
     for (var i = 0; i < this.filters_.length; i++) {
 
         /** @type {GLVIS.Filter} **/
@@ -142,11 +175,11 @@ GLVIS.FilterHandler.prototype.applyFiltersToRec_ = function (rec) {
                 if (data_element === undefined) {
                     throw ("EEXCESS Result-Data '" + curr_filter.getKey().identifier + "' not found!");
                 }
-                if (data_element.indexOf(curr_filter.getValue()) < 0) {
-
-                    rec.setFilterPositive(false);
-                    filter_positive.push(curr_filter.getKey().identifier);
+                if (data_element !== curr_filter.getValue()) {
+                    at_least_one_negative = true;
                 }
+                else
+                    filter_positive.push({id: curr_filter.getKey().identifier, val: data_element});
 
                 break;
 
@@ -154,8 +187,14 @@ GLVIS.FilterHandler.prototype.applyFiltersToRec_ = function (rec) {
         }
     }
 
-    if (!filter_positive.length)
+
+    if (!at_least_one_negative) {
         rec.setFilterPositive(true);
+    }
+    else {
+        rec.setFilterPositive(false);
+    }
+
     return filter_positive;
 };
 

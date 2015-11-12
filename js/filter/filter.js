@@ -20,7 +20,7 @@ GLVIS.Filter = function (key, value) {
     }
 
     this.key_ = key;
-    this.value_ = value;
+    this.value_ = String(value);
 };
 
 
@@ -41,7 +41,6 @@ GLVIS.Filter.isFilter = function (key) {
 
     for (var i in GLVIS.Filter.KEYS) {
         if (GLVIS.Filter.KEYS[i].identifier === key) {
-            console.log(key + " is allowed as filter");
             return true;
         }
     }

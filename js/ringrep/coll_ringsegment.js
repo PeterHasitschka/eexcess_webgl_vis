@@ -244,7 +244,7 @@ GLVIS.RingSegment.prototype.select = function (skip_filter_applying) {
         var curr_ringseg = other_ringsegs[i];
         if (this.getLevel() !== curr_ringseg.getLevel() || curr_ringseg.getValue() === this.getValue())
             continue;
-        curr_ringseg.deSelect(skip_filter_applying);
+        curr_ringseg.deSelect(true);
     }
 
     if (this.data_.key.type === "facet" && !skip_filter_applying) {

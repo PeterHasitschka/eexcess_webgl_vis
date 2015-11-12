@@ -82,7 +82,7 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
 
     for (var key in facets) {
 
-        var val = facets[key];
+        var val = String(facets[key]);
         if (val.indexOf("http") === 0)
             val = jQuery('<a/>', {
                 href: val,
