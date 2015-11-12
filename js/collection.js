@@ -416,19 +416,13 @@ GLVIS.Collection.prototype.lookAtCollection = function (goal_coll, animate) {
 
     var goal_pos = goal_coll.getPosition();
 
-    //goal_pos = {x: 0, y: 0, z: 5};
-
     var goal_vec = new THREE.Vector3(goal_pos.x, goal_pos.y, goal_pos.z);
 
     var dir_vec = goal_vec.clone();
     dir_vec.sub(my_vec);
 
-    //dir_vec.normalize();
-
     var rad = Math.atan2(dir_vec.x, dir_vec.z);
-    var degree = 0 - (rad * (180 / Math.PI) - 180);
-
-    //GLVIS.Debugger.debug("Collection", " (" + this.getId() + ") Lookat: [" + Math.round(this.getRotation()) + "] -> [" + Math.round(degree) + "]", 3);
+    var degree = (rad * (180 / Math.PI));
 
     this.setRotation(degree, animate);
 };
