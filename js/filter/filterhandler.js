@@ -68,7 +68,8 @@ GLVIS.FilterHandler.prototype.apply = function () {
             /** @type{GLVIS.Recommendation} **/
             var curr_rec = recs[j];
 
-            this.applyFiltersToRec_(curr_rec);
+            var filter_res = this.applyFiltersToRec_(curr_rec);
+            console.log(curr_rec.getId(), filter_res);
         }
 
         this.updateRingFilterSegments(curr_col);
@@ -125,9 +126,7 @@ GLVIS.FilterHandler.prototype.updateRingFilterSegments = function (collection) {
  */
 GLVIS.FilterHandler.prototype.applyFiltersToRec_ = function (rec) {
 
-    //Switch between eexcess stuff and other HERE
-
-    //------------>
+    var filter_positive = [];
 
     for (var i = 0; i < this.filters_.length; i++) {
 
@@ -139,15 +138,14 @@ GLVIS.FilterHandler.prototype.applyFiltersToRec_ = function (rec) {
 
             case "eexcess" :
                 var e_data = rec.getEexcessData();
-                var data_element = e_data.result.facets[curr_filter.getKey().identifier];
+                var data_element = (String)(e_data.result.facets[curr_filter.getKey().identifier]);
                 if (data_element === undefined) {
                     throw ("EEXCESS Result-Data '" + curr_filter.getKey().identifier + "' not found!");
                 }
-
                 if (data_element.indexOf(curr_filter.getValue()) < 0) {
 
                     rec.setFilterPositive(false);
-                    return false;
+                    filter_positive.push(curr_filter.getKey().identifier);
                 }
 
                 break;
@@ -156,8 +154,9 @@ GLVIS.FilterHandler.prototype.applyFiltersToRec_ = function (rec) {
         }
     }
 
-    rec.setFilterPositive(true);
-
+    if (!filter_positive.length)
+        rec.setFilterPositive(true);
+    return filter_positive;
 };
 
 /**
