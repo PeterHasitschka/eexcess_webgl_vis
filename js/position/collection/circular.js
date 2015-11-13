@@ -148,7 +148,7 @@ GLVIS.CollectionPosCircular.prototype.getPosAndRot = function (index, numindizie
 
     var radius = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
 
-    var max_angle_degr = 40;
+    var max_angle_degr = 30;
     var max_angle_rad = max_angle_degr / 180 * Math.PI;
 
     var rad_start = max_angle_rad / 2 + Math.PI / 2;
