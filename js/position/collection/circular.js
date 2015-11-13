@@ -87,11 +87,11 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
     var sphereMaterial =
             new THREE.MeshBasicMaterial(
                     {
-                        color: 0x00FF00,
+                        color: 0xFF00FF,
                         transparent: false,
                         side: THREE.DoubleSide
                     });
-    var mesh = new THREE.SphereGeometry(30, 20, 20);
+    var mesh = new THREE.SphereGeometry(100, 20, 20);
     var sphere = new THREE.Mesh(
             mesh,
             sphereMaterial);
@@ -103,6 +103,17 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
      */
 
 
+    var r_radius = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
+    var r_segments = 365;
+    var r_material = new THREE.LineBasicMaterial({color: 0xAAAAAA});
+    var r_geometry = new THREE.CircleGeometry(r_radius, r_segments);
+    r_geometry.vertices.shift();
+    var ring = new THREE.Line(r_geometry, r_material);
+    ring.rotateX(Math.PI / 2);
+    ring.position.set(0, 0, -coll_ring_radius);
+
+    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(ring);
+
 
 
     for (var coll_count = 0; coll_count < parent_mapping.length; coll_count++) {
@@ -111,7 +122,7 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
         /** @type{GLVIS.Collection} **/
         var current_collection = collections[collection_key];
 
-        var index = coll_count + 1;
+        var index = coll_count;
 
         var pos = this.getPosAndRot(index, collections.length);
         current_collection.setPosition(pos.x, null, pos.z);
@@ -127,16 +138,25 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
  */
 GLVIS.CollectionPosCircular.prototype.getPosAndRot = function (index, numindizies) {
 
-    var empty_spaces = this.circle_type_poshelper_.getAddEmptySpaces(numindizies);
-    index += empty_spaces;
-    numindizies += empty_spaces;
+    //var empty_spaces = this.circle_type_poshelper_.getAddEmptySpaces(numindizies);
+    //index += empty_spaces;
+    //numindizies += empty_spaces;
 
     var rad_step = (Math.PI * 2) / (numindizies);
 
-    var curr_rad = 0 - (index * rad_step) + Math.PI / 2;
+    var curr_rad = 0 - (index * rad_step); //+ Math.PI / 2;
 
     var radius = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
+
+    var max_angle_degr = 40;
+    var max_angle_rad = max_angle_degr / 180 * Math.PI;
+
+    var rad_start = max_angle_rad / 2 + Math.PI / 2;
+    var curr_rad = rad_start - ((max_angle_rad / numindizies) * index);
+
     var pos = GLVIS.Tools.getPosFromRad(curr_rad, radius);
+
+    console.log(curr_rad, pos);
 
     var degree = (curr_rad - Math.PI / 2) * 180 / Math.PI * -1;
     return {x: pos.x, z: pos.y - radius, degree: degree};
