@@ -97,6 +97,14 @@ GLVIS.FilterHandler.prototype.sendFilterRecResForDashboard = function (data) {
 
             if (filters[recs_filters[j].id] === undefined)
                 filters[recs_filters[j].id] = {val: recs_filters[j].val, res: []};
+
+            //FilterVisTimeCategoryPoints needs a date object ... 
+            var year_str = rec.getEexcessData().result.facets.year;
+            if (year_str === undefined)
+                year_str = "0";
+            var year_d = new Date(year_str, 0, 0, 0, 0, 0, 0);
+            rec.getEexcessData().result.year = year_d;
+            
             filters[recs_filters[j].id].res.push(rec.getEexcessData().result);
         }
 

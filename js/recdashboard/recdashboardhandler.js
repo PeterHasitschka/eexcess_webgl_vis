@@ -88,11 +88,24 @@ GLVIS.RecDashboardHandler.prototype.determineListIndex = function (rec) {
 GLVIS.RecDashboardHandler.prototype.applyFilters = function (filters) {
 
     console.log(filters);
-    console.info("TODO: Apply filters to rec-dashboard sidebar!!!");
+    console.warn("TODO: Apply filters to rec-dashboard sidebar!!!");
+    return;
+
+    /**
+     * Due to problems with the FilterHandler.setCurrentFilter ... Methods
+     * we deactivated the filter-setting currently...
+     * P.H. 13.11.15
+     */
 
     for (var key in filters) {
-        FilterHandler.setCurrentFilterCategories('category', filters[key].res, key, [filters[key].val]);
-    }
 
-    //FilterHandler.setCurrentFilterCategories('category', dataToHighlight, colorChannel, [facetValue]);
+        switch (key) {
+
+            case 'year' :
+                FilterHandler.setCurrentFilterRange('time', filters[key].res, [filters[key].val], [filters[key].val], '');
+                break;
+            default:
+                FilterHandler.setCurrentFilterCategories('category', filters[key].res, key, [filters[key].val]);
+        }
+    }
 };
