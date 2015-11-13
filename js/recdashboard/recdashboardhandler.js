@@ -85,9 +85,14 @@ GLVIS.RecDashboardHandler.prototype.determineListIndex = function (rec) {
 };
 
 
-GLVIS.RecDashboardHandler.prototype.applyFilters = function(filters) {
-  
+GLVIS.RecDashboardHandler.prototype.applyFilters = function (filters) {
+
     console.log(filters);
     console.info("TODO: Apply filters to rec-dashboard sidebar!!!");
-      //FilterHandler.setCurrentFilterCategories('category', dataToHighlight, colorChannel, [facetValue]);
+
+    for (var key in filters) {
+        FilterHandler.setCurrentFilterCategories('category', filters[key].res, key, [filters[key].val]);
+    }
+
+    //FilterHandler.setCurrentFilterCategories('category', dataToHighlight, colorChannel, [facetValue]);
 };
