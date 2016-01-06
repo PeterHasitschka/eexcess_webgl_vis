@@ -386,6 +386,7 @@ GLVIS.config = {
         }
     },
     db: {
+        max_recs_to_load : 40, // Set 'null' for unlimited
         query: {
             storage_name: "queries_full",
             fields_to_load: ["id", "timestamp", "query"]

@@ -55,7 +55,17 @@ GLVIS.DbHandlerLocalStorage.prototype.getCollections = function () {
         if (last_coll)
             collection.setParentId(last_coll.getId());
 
-        for (var j = 0; j < curr_item.result.length; j++) {
+        var max_length = GLVIS.config.db.max_recs_to_load;
+        
+        var result_length = curr_item.result.length;
+        
+        if (max_length !== null && result_length > max_length) {
+            GLVIS.Debugger.debug("DbHandlerLocalStorage", "WARNING! Limiting result count (" + 
+                    result_length + ") to " + max_length, 3);
+            result_length = max_length;
+        }
+        
+        for (var j = 0; j < result_length; j++) {
 
             var curr_res_data = curr_item.result[j];
 
