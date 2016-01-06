@@ -29,8 +29,8 @@ GLVIS.WebGlHandler = function (canvas) {
 
     this.three_.scene.add(this.three_.camera);
 
-    var axes = new THREE.AxisHelper(300);
-    this.three_.scene.add(axes);
+    //var axes = new THREE.AxisHelper(300);
+    //this.three_.scene.add(axes);
 
     this.createRenderer();
 };
