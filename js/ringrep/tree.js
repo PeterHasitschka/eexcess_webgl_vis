@@ -112,6 +112,15 @@ GLVIS.RingTree.prototype.getValue = function (rec, structure) {
 
             var id = structure.id;
             var val = eexcess_data.result.facets[id];
+            
+            
+            /*
+             * Hack to prevent having 'IMAGE' and 'image' as separate values
+             * inside the 'type' ring...
+             * 28.01.16
+             */
+            if (id === "type")
+                val = val.toLowerCase();
 
             return val;
 
