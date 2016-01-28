@@ -338,7 +338,7 @@ GLVIS.config = {
     },
     text: {
         z_value: 1,
-        render_factor: 1,
+        render_factor: 2,
         font: "Arial",
         font_size: 20,
         color: "#000000",
