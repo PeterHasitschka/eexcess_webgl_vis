@@ -393,6 +393,8 @@ GLVIS.Collection.prototype.unconnectSameRecsFromOtherCollections = function () {
 GLVIS.Collection.prototype.selectAndFocus = function (cb) {
     //this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
 
+    GLVIS.Collection.curr_focus_coll = this;
+
     GLVIS.Scene.getCurrentScene().getNavigationHandler().focusCollection(this, function () {
         GLVIS.Debugger.debug("Collection",
                 "FOCUSGRAPH: Callback finish!",
@@ -443,6 +445,7 @@ GLVIS.Collection.prototype.resetLookAt = function (animate) {
  */
 GLVIS.Collection.prototype.deselect = function () {
     GLVIS.Scene.getCurrentScene().getNavigationHandler().defocusCollection();
+    GLVIS.Collection.curr_focus_coll = null;
 };
 
 /**
@@ -950,3 +953,6 @@ GLVIS.Collection.STATUSFLAGS = {
     HIDDEN: 0x001,
     SELECTED: 0x002
 };
+
+// Current focused coll
+GLVIS.Collection.curr_focus_coll = null;

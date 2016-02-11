@@ -89,16 +89,25 @@ GLVIS.RecDashboardHandler.prototype.applyFilters = function (filters) {
 
     console.log(filters);
     console.warn("TODO: Apply filters to rec-dashboard sidebar!!!");
-    return;
-
+   
     /**
      * Due to problems with the FilterHandler.setCurrentFilter ... Methods
      * we deactivated the filter-setting currently...
      * P.H. 13.11.15
      */
-
+    
+    var curr_col = GLVIS.Collection.curr_focus_coll;
+    var filterAllData = [];
+    
+    for (var i=0; i< curr_col.getRecommendations().length; i++) {
+        var curr_rec = curr_col.getRecommendations()[i];
+        filterAllData.push(curr_rec.getEexcessData().result);
+    }
+    
+    FilterHandler.setOverwriteCollectionData(filterAllData);
     for (var key in filters) {
-
+        
+        
         switch (key) {
 
             case 'year' :
@@ -108,4 +117,6 @@ GLVIS.RecDashboardHandler.prototype.applyFilters = function (filters) {
                 FilterHandler.setCurrentFilterCategories('category', filters[key].res, key, [filters[key].val]);
         }
     }
+    
+    FilterHandler.resetOverwriteCollectionData();
 };

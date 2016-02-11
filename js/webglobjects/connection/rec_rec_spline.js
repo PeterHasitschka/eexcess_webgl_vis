@@ -182,7 +182,7 @@ GLVIS.ConnectionRecRecSpline.prototype.delete = function () {
     var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
     three_scene.remove(this.webgl_objects.spline);
     delete this.webgl_objects.spline;
-
+    
     _.each(this.recs, function (rec) {
         rec.unregisterRecSpline(this);
         rec.setBaseColor();
