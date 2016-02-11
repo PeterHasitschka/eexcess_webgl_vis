@@ -166,4 +166,30 @@ GLVIS.RingRepresentation.prototype.getRingSegments = function () {
 };
 
 
+/**
+ * Returning objects containing the value and color of ringsegments of a specific ring
+ * Used inside @see{FilterVisCategoryHex} and other Filter-Plugins
+ * @param {String} facet_name
+ * @returns {Array}
+ */
+GLVIS.RingRepresentation.prototype.getColorsOfRing = function (facet_name) {
+
+    var ringsecs = this.getRingSegments();
+    var colors = [];
+    for (var i = 0; i < ringsecs.length; i++) {
+        /** @type{GLVIS.RingSegment} **/
+        var curringsec = ringsecs[i];
+
+        if (curringsec.getKey().id !== facet_name)
+            continue;
+
+        colors.push({
+            name: curringsec.getValue(),
+            color: "#" + curringsec.getDefaultColor().toString(16)
+        });
+    }
+
+    return colors;
+};
+
 GLVIS.RingRepresentation.activeRepresentations = [];

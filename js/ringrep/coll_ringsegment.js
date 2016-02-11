@@ -348,6 +348,11 @@ GLVIS.RingSegment.prototype.getRadLength = function () {
     return length_rad;
 };
 
+
+GLVIS.RingSegment.prototype.getDefaultColor = function () {
+    return this.default_color_;
+};
+
 /**
  * Delete all webgl-objects
  */
