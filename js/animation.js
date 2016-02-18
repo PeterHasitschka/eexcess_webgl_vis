@@ -1,4 +1,4 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
 /**
@@ -6,14 +6,14 @@ var GLVIS = GLVIS || {};
  * Calculates at any animation step a relative movement of values that may be
  * registered.
  */
-GLVIS.Animation = function () {
+IQHN.Animation = function () {
     this.animations_ = [];
 };
 
 /**
  * Perform all registered animations
  */
-GLVIS.Animation.prototype.animate = function () {
+IQHN.Animation.prototype.animate = function () {
 
     for (var a_count = 0; a_count < this.animations_.length; a_count++) {
 
@@ -21,7 +21,7 @@ GLVIS.Animation.prototype.animate = function () {
         var curr_val = curr_anim.getter_fct(curr_anim.object);
 
         if (curr_anim.max_diff === null)
-            curr_anim.max_diff = GLVIS.Tools.MultVarOps.sub(curr_anim.goal, curr_val);
+            curr_anim.max_diff = IQHN.Tools.MultVarOps.sub(curr_anim.goal, curr_val);
 
         var delta = this.getStepByExpSlowdown_(curr_val,
                 curr_anim.goal,
@@ -31,14 +31,14 @@ GLVIS.Animation.prototype.animate = function () {
                 curr_anim.threshold
                 );
 
-        if (GLVIS.Tools.MultVarOps.length(delta) !== 0.0) {
+        if (IQHN.Tools.MultVarOps.length(delta) !== 0.0) {
             var val_to_set = delta;
             if (curr_anim.add_to_current)
-                val_to_set = GLVIS.Tools.MultVarOps.add(curr_val, delta);
+                val_to_set = IQHN.Tools.MultVarOps.add(curr_val, delta);
         }
         else {
             //Set value to the final difference
-            val_to_set = GLVIS.Tools.MultVarOps.sub(curr_anim.goal, curr_val);
+            val_to_set = IQHN.Tools.MultVarOps.sub(curr_anim.goal, curr_val);
 
             //If absolute values -> Set to goal
             if (curr_anim.add_to_current)
@@ -60,8 +60,8 @@ GLVIS.Animation.prototype.animate = function () {
 
 
         //Animation ready
-        if (GLVIS.Tools.MultVarOps.length(delta) === 0.0) {
-            GLVIS.Debugger.debug("Animation", "Animation '" +
+        if (IQHN.Tools.MultVarOps.length(delta) === 0.0) {
+            IQHN.Debugger.debug("Animation", "Animation '" +
                     curr_anim.identifier + "' ready", 7);
 
             this.unregister(curr_anim.identifier);
@@ -76,11 +76,11 @@ GLVIS.Animation.prototype.animate = function () {
 /**
  * Stop all camera-movement animations immediately
  */
-GLVIS.Animation.prototype.stopCameraMovementAnimations = function () {
+IQHN.Animation.prototype.stopCameraMovementAnimations = function () {
 
-    for (var key in GLVIS.config.navigation.animation_ids) {
-        GLVIS.Debugger.debug("Animation", "Hard-stopping animation: " + GLVIS.config.navigation.animation_ids[key], 8);
-        this.unregister(GLVIS.config.navigation.animation_ids[key]);
+    for (var key in IQHN.config.navigation.animation_ids) {
+        IQHN.Debugger.debug("Animation", "Hard-stopping animation: " + IQHN.config.navigation.animation_ids[key], 8);
+        this.unregister(IQHN.config.navigation.animation_ids[key]);
     }
 };
 
@@ -89,9 +89,9 @@ GLVIS.Animation.prototype.stopCameraMovementAnimations = function () {
  * Finish a specific animation by its identifier
  * @param {string} identifier 
  */
-GLVIS.Animation.prototype.finishAnimation = function (identifier) {
+IQHN.Animation.prototype.finishAnimation = function (identifier) {
 
-    GLVIS.Debugger.debug("Animation", "Canceling animation '" + identifier + "'", 5);
+    IQHN.Debugger.debug("Animation", "Canceling animation '" + identifier + "'", 5);
 
     var canceled = false;
     _.each(this.animations_, function (curr_anim) {
@@ -109,7 +109,7 @@ GLVIS.Animation.prototype.finishAnimation = function (identifier) {
  * Finish a specific animation by object
  * @param {object} animation
  */
-GLVIS.Animation.prototype._finishAnimation = function (animation) {
+IQHN.Animation.prototype._finishAnimation = function (animation) {
     var params_for_setting = [];
     if (animation.object)
         params_for_setting.push(animation.object);
@@ -132,9 +132,9 @@ GLVIS.Animation.prototype._finishAnimation = function (animation) {
 /**
  * Stop all animations by setting the goal and unregistering them
  */
-GLVIS.Animation.prototype.finishAllAnimations = function () {
+IQHN.Animation.prototype.finishAllAnimations = function () {
 
-    GLVIS.Debugger.debug("Animation", "Canceling all animations", 6);
+    IQHN.Debugger.debug("Animation", "Canceling all animations", 6);
 
     /*
      * @TODO: Find out why sometimes the animations are undefined and return later.
@@ -145,11 +145,11 @@ GLVIS.Animation.prototype.finishAllAnimations = function () {
 
             if (!curr_anim)
                 return;
-            GLVIS.Debugger.debug("Animation", ["Canceling animation", curr_anim], 7);
+            IQHN.Debugger.debug("Animation", ["Canceling animation", curr_anim], 7);
             this._finishAnimation(curr_anim);
         }.bind(this));
 
-    GLVIS.Debugger.debug("Animation", "Finished Canceling all animations", 6);
+    IQHN.Debugger.debug("Animation", "Finished Canceling all animations", 6);
 };
 
 /**
@@ -168,7 +168,7 @@ GLVIS.Animation.prototype.finishAllAnimations = function () {
  * @param {type} callback_fct Function to call after finishing animation
  * @param {boolean} add_to_current If true, not the delta but the value added to current will be set
  */
-GLVIS.Animation.prototype.register = function (identifier, goal, object, getter_fct, setter_fct,
+IQHN.Animation.prototype.register = function (identifier, goal, object, getter_fct, setter_fct,
         setter_fct_param_num, factor, pow, threshold, callback_fct, add_to_current) {
 
     //Check if already exists. If is so, remove old from list
@@ -202,7 +202,7 @@ GLVIS.Animation.prototype.register = function (identifier, goal, object, getter_
     };
 
     this.animations_.push(anim_obj);
-    GLVIS.Debugger.debug("Animation", "Registered animation '" + identifier + "'", 7);
+    IQHN.Debugger.debug("Animation", "Registered animation '" + identifier + "'", 7);
 };
 
 /**
@@ -210,7 +210,7 @@ GLVIS.Animation.prototype.register = function (identifier, goal, object, getter_
  * @param {string} identifier
  * @returns {undefined}
  */
-GLVIS.Animation.prototype.unregister = function (identifier) {
+IQHN.Animation.prototype.unregister = function (identifier) {
     for (var i = 0; i < this.animations_.length; i++) {
         if (this.animations_[i].identifier === identifier) {
             this.animations_.splice(i, 1);
@@ -230,7 +230,7 @@ GLVIS.Animation.prototype.unregister = function (identifier) {
  * @param {float} threshold Value > 0 to stop animation
  * @returns {float} DELTA for animation
  */
-GLVIS.Animation.prototype.getStepByExpSlowdown_ = function (curr, goal, max_diff, factor, pow, threshold) {
+IQHN.Animation.prototype.getStepByExpSlowdown_ = function (curr, goal, max_diff, factor, pow, threshold) {
 
     if (typeof curr !== 'object')
         curr = parseFloat(curr);
@@ -239,33 +239,33 @@ GLVIS.Animation.prototype.getStepByExpSlowdown_ = function (curr, goal, max_diff
     if (typeof max_diff !== 'object')
         max_diff = parseFloat(max_diff);
 
-    var diff = GLVIS.Tools.MultVarOps.sub(goal, curr);
+    var diff = IQHN.Tools.MultVarOps.sub(goal, curr);
 
 
-    var max_val = GLVIS.Tools.MultVarOps.gt(curr, goal) ? curr : goal;
-    var min_val = GLVIS.Tools.MultVarOps.gt(goal, curr) ? curr : goal;
+    var max_val = IQHN.Tools.MultVarOps.gt(curr, goal) ? curr : goal;
+    var min_val = IQHN.Tools.MultVarOps.gt(goal, curr) ? curr : goal;
 
-    var abs_diff = GLVIS.Tools.MultVarOps.sub(max_val, min_val);
+    var abs_diff = IQHN.Tools.MultVarOps.sub(max_val, min_val);
 
 
-    if (GLVIS.Tools.MultVarOps.length(abs_diff) > threshold) {
+    if (IQHN.Tools.MultVarOps.length(abs_diff) > threshold) {
 
         //Normalize to a small value
-        var normalized_diff = GLVIS.Tools.MultVarOps.length(diff) / GLVIS.Tools.MultVarOps.length(max_diff);
+        var normalized_diff = IQHN.Tools.MultVarOps.length(diff) / IQHN.Tools.MultVarOps.length(max_diff);
 
         var power = Math.pow(Math.abs(normalized_diff), pow);
         power /= 2;
 
-        GLVIS.Debugger.debug("Animation",
+        IQHN.Debugger.debug("Animation",
                 [max_diff, diff, normalized_diff, pow, power, factor],
                 8);
 
-        return GLVIS.Tools.MultVarOps.mult(power * factor, diff);
+        return IQHN.Tools.MultVarOps.mult(power * factor, diff);
     }
     else {
         //return 0.0;
         //Same as 0.0 but with still existing object
-        return GLVIS.Tools.MultVarOps.sub(curr, curr);
+        return IQHN.Tools.MultVarOps.sub(curr, curr);
     }
 
 };

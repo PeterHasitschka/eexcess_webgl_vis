@@ -1,6 +1,6 @@
 
 
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 /**
  * 
@@ -9,15 +9,15 @@ var GLVIS = GLVIS || {};
  * 
  * @param {type} eexcess_data @TODO Define data structure
  */
-GLVIS.Collection = function (eexcess_data) {
+IQHN.Collection = function (eexcess_data) {
 
     /**
      * Internal increment id
      */
-    this.id_ = GLVIS.Collection.getNewId();
+    this.id_ = IQHN.Collection.getNewId();
 
     /**
-     * @type {GLVIS.Collection.id_}
+     * @type {IQHN.Collection.id_}
      */
     this.parent_id_ = null;
 
@@ -35,13 +35,13 @@ GLVIS.Collection = function (eexcess_data) {
      * Everything related to visualization
      */
     this.vis_data_ = {
-        status: GLVIS.Collection.STATUSFLAGS.NORMAL,
+        status: IQHN.Collection.STATUSFLAGS.NORMAL,
         //Position is stuff that belongs to the collection and not in the node.
         //Because several visual repr. should be able to use it
         position: {
             x: 0,
             y: 0,
-            z: GLVIS.config.collection.center_node.circle.z_value
+            z: IQHN.config.collection.center_node.circle.z_value
         },
         init_pos: null,
         rotation_degree: 0.0,
@@ -69,31 +69,31 @@ GLVIS.Collection = function (eexcess_data) {
      */
     this.recommendations_ = [];
 
-    /** @type{Array} holding @see{GLVIS.Text} Objects **/
+    /** @type{Array} holding @see{IQHN.Text} Objects **/
     this.labels_ = [];
 
     /**
      * Created freshly when needed
-     * @type {GLVIS.RingRepresentation}
+     * @type {IQHN.RingRepresentation}
      */
     this.ring_representation_ = null;
 
     /**
      * Created when needed
-     * @type {GLVIS.HighlightRecsByLabel}
+     * @type {IQHN.HighlightRecsByLabel}
      */
     this.highlight_recs_by_label_ = null;
 
     /**
      * Handles the positions of the recommendations
-     * @type{GLVIS.RecommendationPosDistributed} 
+     * @type{IQHN.RecommendationPosDistributed} 
      */
-    this.recommendation_position_handler_ = new GLVIS.RecommendationPosDistributed(this);
+    this.recommendation_position_handler_ = new IQHN.RecommendationPosDistributed(this);
 
     this.initGlNode();
     this.initLabels();
 
-    GLVIS.Debugger.debug("Collection",
+    IQHN.Debugger.debug("Collection",
             "Collection with id " + this.id_ + " created!",
             5);
 };
@@ -102,9 +102,9 @@ GLVIS.Collection = function (eexcess_data) {
 
 /**
  * 
- * @param {GLVIS.Recommendation} recommendation Recommendation object to add
+ * @param {IQHN.Recommendation} recommendation Recommendation object to add
  */
-GLVIS.Collection.prototype.addRecommendation = function (recommendation) {
+IQHN.Collection.prototype.addRecommendation = function (recommendation) {
     recommendation.setCollection(this);
     this.recommendations_.push(recommendation);
 
@@ -113,17 +113,17 @@ GLVIS.Collection.prototype.addRecommendation = function (recommendation) {
 
 /**
  * 
- * @param {GLVIS.RecommendationPosDistributed | GLVIS.RecommendationPosRingRepresentation} pos_handler Some type of position handler
+ * @param {IQHN.RecommendationPosDistributed | IQHN.RecommendationPosRingRepresentation} pos_handler Some type of position handler
  */
-GLVIS.Collection.prototype.setRecPosHandler = function (pos_handler) {
+IQHN.Collection.prototype.setRecPosHandler = function (pos_handler) {
     this.recommendation_position_handler_ = pos_handler;
 };
 
 /**
  * Returns Recommendation position handler
- * @returns {GLVIS.RecommendationPosDistributed | GLVIS.RecommendationPosRingRepresentation}
+ * @returns {IQHN.RecommendationPosDistributed | IQHN.RecommendationPosRingRepresentation}
  */
-GLVIS.Collection.prototype.getRecPosHandler = function () {
+IQHN.Collection.prototype.getRecPosHandler = function () {
     return this.recommendation_position_handler_;
 };
 
@@ -131,19 +131,19 @@ GLVIS.Collection.prototype.getRecPosHandler = function () {
  * Creating a node in the center of the collection
  * @returns {undefined}
  */
-GLVIS.Collection.prototype.initGlNode = function () {
+IQHN.Collection.prototype.initGlNode = function () {
 
     //Create mesh-container and add it to the scene
     var container = new THREE.Object3D();
     this.vis_data_.mesh_container = container;
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(container);
+    IQHN.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(container);
 
     //Create center node
-    var gl_node = new GLVIS.CollectionCenterNode(this, container);
+    var gl_node = new IQHN.CollectionCenterNode(this, container);
     this.vis_data_.gl_objects.center_node = gl_node;
 
     //Create plane
-    var plane = new GLVIS.CollectionPlane(this, container);
+    var plane = new IQHN.CollectionPlane(this, container);
     this.vis_data_.gl_objects.plane = plane;
 
 };
@@ -152,21 +152,21 @@ GLVIS.Collection.prototype.initGlNode = function () {
  * Returns the mesh-container holding all webgl-objects
  * @returns {THREE.Object3D}
  */
-GLVIS.Collection.prototype.getMeshContainerNode = function () {
+IQHN.Collection.prototype.getMeshContainerNode = function () {
     return this.vis_data_.mesh_container;
 };
 
 /**
  * Initializing the collection's label
  */
-GLVIS.Collection.prototype.initLabels = function () {
+IQHN.Collection.prototype.initLabels = function () {
 
-    var config = GLVIS.config.collection.labels;
+    var config = IQHN.config.collection.labels;
     var init_font_size = config.init_font_size;
 
     var text = "Collection #" + this.getId();
 
-    var text_element = new GLVIS.Text(text, {
+    var text_element = new IQHN.Text(text, {
         font_size: init_font_size,
         color: config.title_color,
         opacity: config.init_opacity
@@ -202,7 +202,7 @@ GLVIS.Collection.prototype.initLabels = function () {
              */
             var mouse_over_fct = function (text, data) {
 
-                /** @type{GLVIS.Collection} **/
+                /** @type{IQHN.Collection} **/
                 var collection = data.collection;
                 var highlighter = collection.getHighlightRecsByLabel();
 
@@ -222,7 +222,7 @@ GLVIS.Collection.prototype.initLabels = function () {
              * @param {type} data see mouse_data
              */
             var mouse_leave_fct = function (text, data) {
-                /** @type{GLVIS.Collection} **/
+                /** @type{IQHN.Collection} **/
                 var collection = data.collection;
                 var highlighter = collection.getHighlightRecsByLabel();
 
@@ -234,7 +234,7 @@ GLVIS.Collection.prototype.initLabels = function () {
                 collection: this
             };
 
-            var text_element = new GLVIS.Text(
+            var text_element = new IQHN.Text(
                     text,
                     {font_size: fontsize, opacity: opacity},
             {color: config.highlight_color},
@@ -253,12 +253,12 @@ GLVIS.Collection.prototype.initLabels = function () {
 /**
  * Render the collection and its sub-objects
  */
-GLVIS.Collection.prototype.render = function () {
+IQHN.Collection.prototype.render = function () {
 
     if (!this.dirty_)
         return;
 
-    GLVIS.Debugger.debug("Collection",
+    IQHN.Debugger.debug("Collection",
             "Collection with id " + this.id_ + " rendered!",
             6);
 
@@ -271,7 +271,7 @@ GLVIS.Collection.prototype.render = function () {
     }
 
     var pos = this.getPosition();
-    var z_pos = GLVIS.config.collection.center_node.circle.z_value;
+    var z_pos = IQHN.config.collection.center_node.circle.z_value;
     this.vis_data_.mesh_container.position.set(
             pos.x,
             pos.y,
@@ -280,7 +280,7 @@ GLVIS.Collection.prototype.render = function () {
 
     //Render all recommendations
     for (var i = 0; i < this.recommendations_.length; i++) {
-        /** @type {GLVIS.Recommendation} **/
+        /** @type {IQHN.Recommendation} **/
         var curr_rec = this.recommendations_[i];
         curr_rec.render();
     }
@@ -301,22 +301,22 @@ GLVIS.Collection.prototype.render = function () {
 /**
  * Called by interactionhandler. Function registered in mesh-objects
  */
-GLVIS.Collection.prototype.handleCenterClick = function () {
+IQHN.Collection.prototype.handleCenterClick = function () {
 
 };
 
 /**
  * Called by interactionhandler. Function registered in mesh-objects
  */
-GLVIS.Collection.prototype.handleClick = function () {
-    if (this.getStatus() === GLVIS.Collection.STATUSFLAGS.HIDDEN)
+IQHN.Collection.prototype.handleClick = function () {
+    if (this.getStatus() === IQHN.Collection.STATUSFLAGS.HIDDEN)
         return;
 
-    GLVIS.Debugger.debug("Collection",
+    IQHN.Debugger.debug("Collection",
             "Collection " + this.getId() + " CLICKED!",
             3);
 
-    GLVIS.Debugger.debug("Collection",
+    IQHN.Debugger.debug("Collection",
             this,
             5);
 
@@ -328,7 +328,7 @@ GLVIS.Collection.prototype.handleClick = function () {
 /**
  * Called by interactionhandler. Function registered in mesh-objects
  */
-GLVIS.Collection.prototype.handleCenterMouseover = function () {
+IQHN.Collection.prototype.handleCenterMouseover = function () {
 
     if (!this.vis_data_.is_currently_animated)
         this.connectSameRecsFromOtherCollections();
@@ -339,7 +339,7 @@ GLVIS.Collection.prototype.handleCenterMouseover = function () {
 /**
  * May be called by interactionhandler. Function registered in mesh-objects
  */
-GLVIS.Collection.prototype.handleMouseover = function () {
+IQHN.Collection.prototype.handleMouseover = function () {
 
     //Do nothing at the moment...
 };
@@ -348,30 +348,30 @@ GLVIS.Collection.prototype.handleMouseover = function () {
  * Create connections from own recommendations to those which are the same in 
  * other collections
  */
-GLVIS.Collection.prototype.connectSameRecsFromOtherCollections = function () {
+IQHN.Collection.prototype.connectSameRecsFromOtherCollections = function () {
 
     /*
      * If allready existing, skip
      */
-    if (_.indexOf(GLVIS.RecConnector.activatedAtCollections, this) !== -1) {
+    if (_.indexOf(IQHN.RecConnector.activatedAtCollections, this) !== -1) {
         return;
     }
 
-    var connector = GLVIS.Scene.getCurrentScene().getRecConnector();
+    var connector = IQHN.Scene.getCurrentScene().getRecConnector();
 
     _.each(this.getRecommendations(), function (rec) {
         connector.connectSameRecs(rec);
     });
 
-    GLVIS.RecConnector.activatedAtCollections.push(this);
+    IQHN.RecConnector.activatedAtCollections.push(this);
 };
 
 /**
  * Remove all connections from own recommendation to their twins in other collections
  */
-GLVIS.Collection.prototype.unconnectSameRecsFromOtherCollections = function () {
+IQHN.Collection.prototype.unconnectSameRecsFromOtherCollections = function () {
 
-    if (_.indexOf(GLVIS.RecConnector.activatedAtCollections, this) === -1) {
+    if (_.indexOf(IQHN.RecConnector.activatedAtCollections, this) === -1) {
         return;
     }
 
@@ -379,39 +379,39 @@ GLVIS.Collection.prototype.unconnectSameRecsFromOtherCollections = function () {
         rec.deleteAllRecSplines();
     });
 
-    var index_to_delete = _.indexOf(GLVIS.RecConnector.activatedAtCollections, this);
+    var index_to_delete = _.indexOf(IQHN.RecConnector.activatedAtCollections, this);
 
-    GLVIS.RecConnector.activatedAtCollections.splice(index_to_delete, 1);
+    IQHN.RecConnector.activatedAtCollections.splice(index_to_delete, 1);
 };
 
 /**
- * Calls the @see{GLVIS.NavigationHandler.focusCollection} function
+ * Calls the @see{IQHN.NavigationHandler.focusCollection} function
  * to zoom and move to the collection.
  * Additionaly informs the Rec Dashboard Handler about the click
  * @param {function} cb Callback
  */
-GLVIS.Collection.prototype.selectAndFocus = function (cb) {
-    //this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
+IQHN.Collection.prototype.selectAndFocus = function (cb) {
+    //this.setStatus(IQHN.Collection.STATUSFLAGS.SELECTED);
 
-    GLVIS.Collection.curr_focus_coll = this;
+    IQHN.Collection.curr_focus_coll = this;
 
-    GLVIS.Scene.getCurrentScene().getNavigationHandler().focusCollection(this, function () {
-        GLVIS.Debugger.debug("Collection",
+    IQHN.Scene.getCurrentScene().getNavigationHandler().focusCollection(this, function () {
+        IQHN.Debugger.debug("Collection",
                 "FOCUSGRAPH: Callback finish!",
                 3);
         if (cb)
             cb();
     }.bind(this));
-    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onCollectionClick(this);
+    IQHN.Scene.getCurrentScene().getRecDashboardHandler().onCollectionClick(this);
 };
 
 
 /**
  * Rotate the collection that it faces directly another collection
- * @param {GLVIS.Collection} coll
+ * @param {IQHN.Collection} coll
  * @param {bool} animate
  */
-GLVIS.Collection.prototype.lookAtCollection = function (goal_coll, animate) {
+IQHN.Collection.prototype.lookAtCollection = function (goal_coll, animate) {
 
     var my_pos = this.getPosition();
     var my_vec = new THREE.Vector3(my_pos.x, my_pos.y, my_pos.z);
@@ -433,7 +433,7 @@ GLVIS.Collection.prototype.lookAtCollection = function (goal_coll, animate) {
  * Reset the collection's rotation to the initial value
  * @param {bool} animate
  */
-GLVIS.Collection.prototype.resetLookAt = function (animate) {
+IQHN.Collection.prototype.resetLookAt = function (animate) {
     if (this.vis_data_.init_rotation_degree === null)
         throw ("Could not reset Rotation. No init value set!");
     this.setRotation(this.vis_data_.init_rotation_degree, animate);
@@ -443,15 +443,15 @@ GLVIS.Collection.prototype.resetLookAt = function (animate) {
  * Just moving the camera back a little bit
  * Be sure to call this only if no other collection gets selected at the same time! (Conflicts!)
  */
-GLVIS.Collection.prototype.deselect = function () {
-    GLVIS.Scene.getCurrentScene().getNavigationHandler().defocusCollection();
-    GLVIS.Collection.curr_focus_coll = null;
+IQHN.Collection.prototype.deselect = function () {
+    IQHN.Scene.getCurrentScene().getNavigationHandler().defocusCollection();
+    IQHN.Collection.curr_focus_coll = null;
 };
 
 /**
  * Setting all Objects holding GL Objects dirty
  */
-GLVIS.Collection.prototype.setMyGlObjectsDirty_ = function () {
+IQHN.Collection.prototype.setMyGlObjectsDirty_ = function () {
     for (var key in this.vis_data_.gl_objects) {
         if (this.vis_data_.gl_objects.hasOwnProperty(key)) {
             if (this.vis_data_.gl_objects[key])
@@ -464,16 +464,16 @@ GLVIS.Collection.prototype.setMyGlObjectsDirty_ = function () {
  * Return all renderable objects that contain gl-related stuff
  * @returns {object}
  */
-GLVIS.Collection.prototype.getGlObjects = function () {
+IQHN.Collection.prototype.getGlObjects = function () {
 
     return this.vis_data_.gl_objects;
 };
 
-GLVIS.Collection.prototype.getId = function () {
+IQHN.Collection.prototype.getId = function () {
     return this.id_;
 };
 
-GLVIS.Collection.prototype.getPosition = function () {
+IQHN.Collection.prototype.getPosition = function () {
     return this.vis_data_.position;
 };
 
@@ -485,7 +485,7 @@ GLVIS.Collection.prototype.getPosition = function () {
  * @param {float} y
  * @param {float} z
  */
-GLVIS.Collection.prototype.setPosition = function (x, y, z) {
+IQHN.Collection.prototype.setPosition = function (x, y, z) {
     if (x !== undefined && x !== null)
         this.vis_data_.position.x = x;
 
@@ -505,7 +505,7 @@ GLVIS.Collection.prototype.setPosition = function (x, y, z) {
  * used for animation
  * @param {object} pos containing x,y,z
  */
-GLVIS.Collection.prototype.setPositionObj = function (pos) {
+IQHN.Collection.prototype.setPositionObj = function (pos) {
     this.setPosition(pos.x, pos.y, pos.z);
 };
 
@@ -514,14 +514,14 @@ GLVIS.Collection.prototype.setPositionObj = function (pos) {
  * hold absolute positions too, need new x and y values.
  * @returns {undefined}
  */
-GLVIS.Collection.prototype.rebuildLabelPositions = function () {
+IQHN.Collection.prototype.rebuildLabelPositions = function () {
 
-    GLVIS.Debugger.debug("Collection", "Rebuilding Text positions", 7);
+    IQHN.Debugger.debug("Collection", "Rebuilding Text positions", 7);
 
     if (!this.labels_.length)
         return;
 
-    var config = GLVIS.config.collection.labels;
+    var config = IQHN.config.collection.labels;
     var vert_dist = config.distance;
 
     var vert_offset = config.vertical_offset;
@@ -561,7 +561,7 @@ GLVIS.Collection.prototype.rebuildLabelPositions = function () {
      if (label_index >= this.labels_.length)
      break;
      
-     /** @type {GLVIS.Text} /
+     /** @type {IQHN.Text} /
      var curr_label = this.labels_[label_index];
      curr_label.setPosition(c_x, c_y, 0);
      }
@@ -571,24 +571,24 @@ GLVIS.Collection.prototype.rebuildLabelPositions = function () {
 
 /**
  * Get all recommendations holded by the collection
- * @returns {GLVIS.Collection.recommendations_}
+ * @returns {IQHN.Collection.recommendations_}
  */
-GLVIS.Collection.prototype.getRecommendations = function () {
+IQHN.Collection.prototype.getRecommendations = function () {
     return this.recommendations_;
 };
 
 
-GLVIS.Collection.prototype.setIsDirty = function (dirty) {
+IQHN.Collection.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 };
 
 /**
  * Set the status of the collection.
- * See @see{GLVIS.Collection.STATUSFLAGS}
+ * See @see{IQHN.Collection.STATUSFLAGS}
  * @param {type} status
  * @returns {undefined}
  */
-GLVIS.Collection.prototype.setStatus = function (status) {
+IQHN.Collection.prototype.setStatus = function (status) {
 
     if (status === this.vis_data_.status)
         return;
@@ -603,10 +603,10 @@ GLVIS.Collection.prototype.setStatus = function (status) {
 
 /**
  * Returning the current status
- * Available flags: @see{GLVIS.Collection.STATUSFLAG}
+ * Available flags: @see{IQHN.Collection.STATUSFLAG}
  * @returns {integer}
  */
-GLVIS.Collection.prototype.getStatus = function () {
+IQHN.Collection.prototype.getStatus = function () {
     return this.vis_data_.status;
 };
 
@@ -614,7 +614,7 @@ GLVIS.Collection.prototype.getStatus = function () {
  * Setting the id of the parent-collection
  * @param {integer} parent_id
  */
-GLVIS.Collection.prototype.setParentId = function (parent_id) {
+IQHN.Collection.prototype.setParentId = function (parent_id) {
     this.parent_id_ = parent_id;
 };
 
@@ -623,18 +623,18 @@ GLVIS.Collection.prototype.setParentId = function (parent_id) {
  * all nodes and on possible change of collection-network
  * @returns {undefined}
  */
-GLVIS.Collection.prototype.updateParentConnection = function () {
+IQHN.Collection.prototype.updateParentConnection = function () {
     //Set Parent Connection
     if (this.parent_id_ !== null) {
-        var parent_collection = GLVIS.Scene.getCurrentScene().getCollection(this.parent_id_);
+        var parent_collection = IQHN.Scene.getCurrentScene().getCollection(this.parent_id_);
 
         if (parent_collection)
         {
-            GLVIS.Debugger.debug("Collection",
+            IQHN.Debugger.debug("Collection",
                     "parent collection found. Creating connection",
                     8);
 
-            var parent_connection = new GLVIS.ConnectionCollectionCollection(parent_collection, this);
+            var parent_connection = new IQHN.ConnectionCollectionCollection(parent_collection, this);
             this.vis_data_.gl_objects.parent_connection = parent_connection;
             this.dirty_ = true;
         }
@@ -644,24 +644,24 @@ GLVIS.Collection.prototype.updateParentConnection = function () {
 };
 
 /**
- * Creating a @see{GLVIS.RingRepresentation} object.
+ * Creating a @see{IQHN.RingRepresentation} object.
  * It shows several data of the collection and recommendations as rings inside
  * the graph.
  * @param {function} cb Callback
  */
-GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
+IQHN.Collection.prototype.createRingRepresentation = function (cb) {
 
     this.selectAndFocus();
 
-    GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().moveCollectionFromCenter(this, function () {
+    IQHN.Scene.getCurrentScene().getCollectionPositionHandler().moveCollectionFromCenter(this, function () {
     });
 
     this.resetLookAt(true);
     /**
      * Remove all other ringreps
-     * @param {GLVIS.Collection} coll
+     * @param {IQHN.Collection} coll
      */
-    _.each(GLVIS.Scene.getCurrentScene().getCollections(), function (coll) {
+    _.each(IQHN.Scene.getCurrentScene().getCollections(), function (coll) {
         if (coll.getId() === this.getId())
             return;
         coll.deleteRingRepresentation(false);
@@ -670,29 +670,29 @@ GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
 
     /**
      * Create Flipbook
-     * @type {GLVIS.CollectionPosLinear} pos_handler
+     * @type {IQHN.CollectionPosLinear} pos_handler
      */
-    var pos_handler = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler();
+    var pos_handler = IQHN.Scene.getCurrentScene().getCollectionPositionHandler();
     pos_handler.setCollToFocus(this);
     pos_handler.setIsOneFocused(true);
 
 
-    this.setStatus(GLVIS.Collection.STATUSFLAGS.SELECTED);
+    this.setStatus(IQHN.Collection.STATUSFLAGS.SELECTED);
 
     this.unconnectSameRecsFromOtherCollections();
 
 
-    this.ring_representation_ = new GLVIS.RingRepresentation(this);
-    this.setRecPosHandler(new GLVIS.RecommendationPosRingRepresentation(this));
+    this.ring_representation_ = new IQHN.RingRepresentation(this);
+    this.setRecPosHandler(new IQHN.RecommendationPosRingRepresentation(this));
 
     this.vis_data_.is_currently_animated = true;
 
     var recs = this.getRecommendations();
 
     for (var i = 0; i < recs.length; i++) {
-        /** @type {GLVIS.Recommendation} */
+        /** @type {IQHN.Recommendation} */
         var curr_rec = recs[i];
-        curr_rec.setNodeType(GLVIS.Recommendation.NODETYPES.DETAILED);
+        curr_rec.setNodeType(IQHN.Recommendation.NODETYPES.DETAILED);
     }
 
     this.getRecPosHandler().calculatePositions(
@@ -718,9 +718,9 @@ GLVIS.Collection.prototype.createRingRepresentation = function (cb) {
  * for re-distributing the recommendation nodes around the collection
  * @param {bool} deselect Set to false if another collection gets focused! (Conflict!)
  */
-GLVIS.Collection.prototype.deleteRingRepresentation = function (deselect) {
+IQHN.Collection.prototype.deleteRingRepresentation = function (deselect) {
 
-    GLVIS.Debugger.debug("Collection", "Deleting Ring Rep of Coll " + this.getId(), 5);
+    IQHN.Debugger.debug("Collection", "Deleting Ring Rep of Coll " + this.getId(), 5);
 
     if (!this.ring_representation_)
         return;
@@ -731,27 +731,27 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function (deselect) {
     this.toggleRecRelevanceVisualization(false);
 
     //Prevent registered callback of ring-rep-pos-handler to be performed
-    if (this.getRecPosHandler() instanceof GLVIS.RecommendationPosRingRepresentation)
+    if (this.getRecPosHandler() instanceof IQHN.RecommendationPosRingRepresentation)
         this.getRecPosHandler().deleteCallback();
 
-    this.setRecPosHandler(new GLVIS.RecommendationPosDistributed(this));
+    this.setRecPosHandler(new IQHN.RecommendationPosDistributed(this));
 
 
     var recs = this.getRecommendations();
 
     for (var i = 0; i < recs.length; i++) {
-        /** @type {GLVIS.Recommendation} */
+        /** @type {IQHN.Recommendation} */
         var curr_rec = recs[i];
-        curr_rec.setNodeType(GLVIS.Recommendation.NODETYPES.COMMON);
+        curr_rec.setNodeType(IQHN.Recommendation.NODETYPES.COMMON);
     }
     this.getRecPosHandler().calculatePositions();
 
-    GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().moveCollectionToCenter(this);
-    this.setStatus(GLVIS.Collection.STATUSFLAGS.NORMAL);
+    IQHN.Scene.getCurrentScene().getCollectionPositionHandler().moveCollectionToCenter(this);
+    this.setStatus(IQHN.Collection.STATUSFLAGS.NORMAL);
     if (deselect) {
         this.deselect();
-        for (var i = 0; i < GLVIS.Scene.getCurrentScene().getCollections().length; i++) {
-            GLVIS.Scene.getCurrentScene().getCollections()[i].resetLookAt(true);
+        for (var i = 0; i < IQHN.Scene.getCurrentScene().getCollections().length; i++) {
+            IQHN.Scene.getCurrentScene().getCollections()[i].resetLookAt(true);
         }
     }
 
@@ -761,30 +761,30 @@ GLVIS.Collection.prototype.deleteRingRepresentation = function (deselect) {
  * Showing the recommendations relevances or resetting it
  * @param {float} visualize TRUE if relevance should be visualized else FALSE
  */
-GLVIS.Collection.prototype.toggleRecRelevanceVisualization = function (visualize) {
+IQHN.Collection.prototype.toggleRecRelevanceVisualization = function (visualize) {
 
     if (this.vis_data_.rec_relevances_vis === visualize)
         return;
 
     this.vis_data_.rec_relevances_vis = visualize;
 
-    GLVIS.Debugger.debug("GLVIS.Collection", "Toggling rec-relevance-visualization of (" + this.getId() + ") to " + visualize, 5);
+    IQHN.Debugger.debug("IQHN.Collection", "Toggling rec-relevance-visualization of (" + this.getId() + ") to " + visualize, 5);
     var recs = this.getRecommendations();
     for (var i = 0; i < recs.length; i++) {
-        /** @type {GLVIS.Recommendation} **/
+        /** @type {IQHN.Recommendation} **/
         var curr_rec = recs[i];
         curr_rec.toggleVisualizeRelevance(visualize);
     }
 };
 
-GLVIS.Collection.prototype.hideLabels = function () {
+IQHN.Collection.prototype.hideLabels = function () {
 
     for (var i = 0; i < this.labels_.length; i++) {
         this.labels_[i].setIsVisible(false);
     }
 };
 
-GLVIS.Collection.prototype.showLabels = function () {
+IQHN.Collection.prototype.showLabels = function () {
 
     for (var i = 0; i < this.labels_.length; i++) {
         this.labels_[i].setIsVisible(true);
@@ -795,25 +795,25 @@ GLVIS.Collection.prototype.showLabels = function () {
  * Returning the parent-collection's id
  * @returns {integer}
  */
-GLVIS.Collection.prototype.getParentId = function () {
+IQHN.Collection.prototype.getParentId = function () {
     return this.parent_id_;
 };
 
 /**
  * 
- * @returns {GLVIS.RingRepresentation}
+ * @returns {IQHN.RingRepresentation}
  */
-GLVIS.Collection.prototype.getRingRepresentation = function () {
+IQHN.Collection.prototype.getRingRepresentation = function () {
     return this.ring_representation_;
 };
 
 /**
  * Returns the Highlighter for recs by label
- * @returns {GLVIS.HighlightRecsByLabel}
+ * @returns {IQHN.HighlightRecsByLabel}
  */
-GLVIS.Collection.prototype.getHighlightRecsByLabel = function () {
+IQHN.Collection.prototype.getHighlightRecsByLabel = function () {
     if (!this.highlight_recs_by_label_)
-        this.highlight_recs_by_label_ = new GLVIS.HighlightRecsByLabel(this);
+        this.highlight_recs_by_label_ = new IQHN.HighlightRecsByLabel(this);
 
     return this.highlight_recs_by_label_;
 };
@@ -825,7 +825,7 @@ GLVIS.Collection.prototype.getHighlightRecsByLabel = function () {
  * @param {float} degree
  * @param {boolean} animate Animate Rotation
  */
-GLVIS.Collection.prototype.setRotation = function (degree, animate) {
+IQHN.Collection.prototype.setRotation = function (degree, animate) {
 
 
     //Normalize degree
@@ -842,7 +842,7 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
     if (degree === this.vis_data_.rotation_degree)
         return;
 
-    var rotate_config = GLVIS.config.collection.rotation;
+    var rotate_config = IQHN.config.collection.rotation;
     if (animate) {
 
 
@@ -867,7 +867,7 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
         }
 
         this.vis_data_.is_currently_animated = true;
-        GLVIS.Scene.getCurrentScene().getAnimation().register(
+        IQHN.Scene.getCurrentScene().getAnimation().register(
                 rotate_config.prefix + this.getId(),
                 degree,
                 null,
@@ -878,7 +878,7 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
                 rotate_config.pow,
                 rotate_config.threshold,
                 function () {
-                    GLVIS.Debugger.debug("Collection", "Finished rotation", 5);
+                    IQHN.Debugger.debug("Collection", "Finished rotation", 5);
                     this.vis_data_.is_currently_animated = false;
 
                     //If way_forward manipulation -> Reset degree
@@ -913,7 +913,7 @@ GLVIS.Collection.prototype.setRotation = function (degree, animate) {
  * Return the current degree of rotation around the y-axis
  * @returns {float}
  */
-GLVIS.Collection.prototype.getRotation = function () {
+IQHN.Collection.prototype.getRotation = function () {
     return this.vis_data_.rotation_degree;
 };
 
@@ -921,7 +921,7 @@ GLVIS.Collection.prototype.getRotation = function () {
  * Set the initial position for restoring later
  * @param {object} pos containing x,y,z 
  */
-GLVIS.Collection.prototype.setInitPos = function (pos) {
+IQHN.Collection.prototype.setInitPos = function (pos) {
     this.vis_data_.init_pos = pos;
 };
 
@@ -929,7 +929,7 @@ GLVIS.Collection.prototype.setInitPos = function (pos) {
  * Get the stored intial position
  * @returns {object} containing x,y,z
  */
-GLVIS.Collection.prototype.getInitPos = function () {
+IQHN.Collection.prototype.getInitPos = function () {
     return this.vis_data_.init_pos;
 };
 
@@ -940,19 +940,19 @@ GLVIS.Collection.prototype.getInitPos = function () {
  ******************/
 
 
-GLVIS.Collection.current_id = 0;
-GLVIS.Collection.getNewId = function () {
+IQHN.Collection.current_id = 0;
+IQHN.Collection.getNewId = function () {
     var id = this.current_id;
     this.current_id++;
     return id;
 };
 
 
-GLVIS.Collection.STATUSFLAGS = {
+IQHN.Collection.STATUSFLAGS = {
     NORMAL: 0x000,
     HIDDEN: 0x001,
     SELECTED: 0x002
 };
 
 // Current focused coll
-GLVIS.Collection.curr_focus_coll = null;
+IQHN.Collection.curr_focus_coll = null;

@@ -1,15 +1,15 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
-GLVIS.CollectionPosCircularTypeRing = function () {
+IQHN.CollectionPosCircularTypeRing = function () {
 };
 
 
-GLVIS.CollectionPosCircularTypeRing.prototype.getAddEmptySpaces = function (orig_num) {
+IQHN.CollectionPosCircularTypeRing.prototype.getAddEmptySpaces = function (orig_num) {
     return 0;
 };
 
 
-GLVIS.CollectionPosCircularTypeRing.prototype.getCollCircleRadius = function () {
-    return GLVIS.config.scene.circle_radius_ring;
+IQHN.CollectionPosCircularTypeRing.prototype.getCollCircleRadius = function () {
+    return IQHN.config.scene.circle_radius_ring;
 };

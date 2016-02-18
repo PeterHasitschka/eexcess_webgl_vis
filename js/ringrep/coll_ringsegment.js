@@ -1,12 +1,12 @@
 
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
 /**
  * Holding the visual representation and data of a segment in one of the rings
- * in the @see{GLVIS.RingRepresentation}.
+ * in the @see{IQHN.RingRepresentation}.
  * 
- * @param {GLVIS.RingRepresentation} ring_representation Ring Representation
+ * @param {IQHN.RingRepresentation} ring_representation Ring Representation
  * @param {integer} level Between 0 and *. Ring number
  * @param {float} start_percent 0...100 percent to start. 0 is on the top
  * @param {float} end_percent 0...100 percent to end. 0 is on the top
@@ -14,11 +14,11 @@ var GLVIS = GLVIS || {};
  * @param {string} key Key like "language"
  * @param {string} val Value like "de"
  */
-GLVIS.RingSegment = function (ring_representation, level, start_percent, end_percent, color, key, val, recs) {
+IQHN.RingSegment = function (ring_representation, level, start_percent, end_percent, color, key, val, recs) {
 
-    /** @type{GLVIS.RingRepresentation} **/
+    /** @type{IQHN.RingRepresentation} **/
 
-    GLVIS.Debugger.debug("RingSegment", [level, start_percent, end_percent], 6);
+    IQHN.Debugger.debug("RingSegment", [level, start_percent, end_percent], 6);
 
     this.ring_representation_ = ring_representation;
 
@@ -54,9 +54,9 @@ GLVIS.RingSegment = function (ring_representation, level, start_percent, end_per
  * Initialize the ring-segments GL Objects.
  * These are the segment itself (Ring Geometry) and the label
  */
-GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
+IQHN.RingSegment.prototype.initAndRegisterGlObj = function () {
 
-    var ring_config = GLVIS.config.collection.ring.ring_segment;
+    var ring_config = IQHN.config.collection.ring.ring_segment;
 
     var material =
             new THREE.MeshBasicMaterial(
@@ -95,7 +95,7 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
     var ring_geometry = new THREE.RingGeometry(rad_inner, rad_outer, seg_num, phi_seg_num, ring_start, seg_length);
     var mesh = new THREE.Mesh(ring_geometry, material);
 
-    /** @type {GLVIS.Collection} **/
+    /** @type {IQHN.Collection} **/
     var collection = this.ring_representation_.getCollection();
     collection.getMeshContainerNode().add(mesh);
 
@@ -111,7 +111,7 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
     /**
      * Label
      */
-    var label_config = GLVIS.config.collection.ring.ring_segment.label;
+    var label_config = IQHN.config.collection.ring.ring_segment.label;
 
     var label_options = {
         color: label_config.color,
@@ -125,13 +125,13 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
     var text = this.data_.val;
     text = text.replace(" ", "\n");
     text = this.getShortText_(text);
-    var label = new GLVIS.Text(text, label_options, null, null, null, null, collection);
+    var label = new IQHN.Text(text, label_options, null, null, null, null, collection);
     this.webgl_objects_.label = label;
 
 
     //Check if corresponding filter is set -> Select
     if (this.data_.key.type === "facet") {
-        var filters = GLVIS.Scene.getCurrentScene().getFilterHandler().getFilters();
+        var filters = IQHN.Scene.getCurrentScene().getFilterHandler().getFilters();
         var f_id = this.data_.key.id;
         var f_val = this.data_.val;
 
@@ -155,7 +155,7 @@ GLVIS.RingSegment.prototype.initAndRegisterGlObj = function () {
  * @param {string} text
  * @returns {string} cutted text
  */
-GLVIS.RingSegment.prototype.getShortText_ = function (text) {
+IQHN.RingSegment.prototype.getShortText_ = function (text) {
 
     var re = /http[s]?:\/\/.*\/+([^\/]+)\/?/;
     var result = re.exec(text);
@@ -168,18 +168,18 @@ GLVIS.RingSegment.prototype.getShortText_ = function (text) {
 /**
  * Rendering the ring segment
  */
-GLVIS.RingSegment.prototype.render = function () {
+IQHN.RingSegment.prototype.render = function () {
 
     if (!this.dirty_)
         return;
 
-    GLVIS.Debugger.debug("RingSegment",
+    IQHN.Debugger.debug("RingSegment",
             "Rendering RING SEGMENT",
             7);
 
     var pos = {x: 0, y: 0, z: 0};
 
-    var z_pos = GLVIS.config.collection.ring.ring_segment.z_value;
+    var z_pos = IQHN.config.collection.ring.ring_segment.z_value;
 
     this.webgl_objects_.ring_seg.position.set(
             pos.x,
@@ -187,14 +187,14 @@ GLVIS.RingSegment.prototype.render = function () {
             z_pos
             );
 
-    GLVIS.Debugger.debug("RingSegment",
+    IQHN.Debugger.debug("RingSegment",
             "Setting pos to: " + pos.x + " " + pos.y + " " + z_pos,
             6);
 
     if (this.is_selected_)
         this.webgl_objects_.ring_seg.material.opacity = 1;
     else
-        this.webgl_objects_.ring_seg.material.opacity = GLVIS.config.collection.ring.ring_segment.opacity;
+        this.webgl_objects_.ring_seg.material.opacity = IQHN.config.collection.ring.ring_segment.opacity;
 
 
     this.webgl_objects_.label.setPosition(
@@ -210,8 +210,8 @@ GLVIS.RingSegment.prototype.render = function () {
 
 
 
-GLVIS.RingSegment.prototype.handleClick = function () {
-    GLVIS.Debugger.debug("RingSegment",
+IQHN.RingSegment.prototype.handleClick = function () {
+    IQHN.Debugger.debug("RingSegment",
             ["RING SEGMENT CLICKED", this],
             3);
 
@@ -226,11 +226,11 @@ GLVIS.RingSegment.prototype.handleClick = function () {
  * Visually select a ringsegment and apply a corresponding filter if flag is set
  * @param {bool} skip_filter_applying if true the segment only gets visually selected. No filter will be applied
  */
-GLVIS.RingSegment.prototype.select = function (skip_filter_applying) {
+IQHN.RingSegment.prototype.select = function (skip_filter_applying) {
     if (this.is_selected_ === true)
         return;
 
-    GLVIS.Debugger.debug("RingSegment",
+    IQHN.Debugger.debug("RingSegment",
             "Selecting ring segment",
             6);
 
@@ -240,7 +240,7 @@ GLVIS.RingSegment.prototype.select = function (skip_filter_applying) {
     var other_ringsegs = this.ring_representation_.getRingSegments();
     for (var i = 0; i < other_ringsegs.length; i++) {
 
-        /** @type{GLVIS.RingSegment} **/
+        /** @type{IQHN.RingSegment} **/
         var curr_ringseg = other_ringsegs[i];
         if (this.getLevel() !== curr_ringseg.getLevel() || curr_ringseg.getValue() === this.getValue())
             continue;
@@ -248,9 +248,9 @@ GLVIS.RingSegment.prototype.select = function (skip_filter_applying) {
     }
 
     if (this.data_.key.type === "facet" && !skip_filter_applying) {
-        var filter = new GLVIS.Filter(this.data_.key.id, this.data_.val);
-        GLVIS.Scene.getCurrentScene().getFilterHandler().addFilter(filter);
-        GLVIS.Scene.getCurrentScene().getFilterHandler().apply();
+        var filter = new IQHN.Filter(this.data_.key.id, this.data_.val);
+        IQHN.Scene.getCurrentScene().getFilterHandler().addFilter(filter);
+        IQHN.Scene.getCurrentScene().getFilterHandler().apply();
     }
 
 
@@ -264,31 +264,31 @@ GLVIS.RingSegment.prototype.select = function (skip_filter_applying) {
  * Visually deselect a ringsegment and remove a corresponding filter if flag is set
  * @param {bool} skip_filter_applying if true the segment only gets visually deselected. No filter will be removed
  */
-GLVIS.RingSegment.prototype.deSelect = function (skip_filter_applying) {
+IQHN.RingSegment.prototype.deSelect = function (skip_filter_applying) {
 
     if (this.is_selected_ === false)
         return;
 
-    GLVIS.Debugger.debug("RingSegment",
+    IQHN.Debugger.debug("RingSegment",
             "Deselecting ring segment",
             6);
 
 
     if (this.data_.key.type === "facet" && !skip_filter_applying) {
 
-        GLVIS.Scene.getCurrentScene().getFilterHandler().removeFilter(this.data_.key.id);
-        GLVIS.Scene.getCurrentScene().getFilterHandler().apply();
+        IQHN.Scene.getCurrentScene().getFilterHandler().removeFilter(this.data_.key.id);
+        IQHN.Scene.getCurrentScene().getFilterHandler().apply();
     }
 
     this.is_selected_ = false;
     this.setIsDirty(true);
 };
 
-GLVIS.RingSegment.prototype.getIsSelected = function () {
+IQHN.RingSegment.prototype.getIsSelected = function () {
     return this.is_selected_;
 };
 
-GLVIS.RingSegment.prototype.setIsDirty = function (dirty) {
+IQHN.RingSegment.prototype.setIsDirty = function (dirty) {
 
     if (dirty === this.dirty_)
         return;
@@ -297,7 +297,7 @@ GLVIS.RingSegment.prototype.setIsDirty = function (dirty) {
     this.ring_representation_.setIsDirty(true);
 };
 
-GLVIS.RingSegment.prototype.getIsDirty = function () {
+IQHN.RingSegment.prototype.getIsDirty = function () {
     return this.dirty_;
 };
 
@@ -305,18 +305,18 @@ GLVIS.RingSegment.prototype.getIsDirty = function () {
  * Get the level of the ring. Starting with 0
  * @returns {float}
  */
-GLVIS.RingSegment.prototype.getLevel = function () {
+IQHN.RingSegment.prototype.getLevel = function () {
     return this.level_;
 };
 
-GLVIS.RingSegment.prototype.getValue = function () {
+IQHN.RingSegment.prototype.getValue = function () {
     return this.data_.val;
 };
 
 /**
  * return object holding key-name and type (e.g. facet)
  */
-GLVIS.RingSegment.prototype.getKey = function () {
+IQHN.RingSegment.prototype.getKey = function () {
     return this.data_.key;
 };
 
@@ -324,15 +324,15 @@ GLVIS.RingSegment.prototype.getKey = function () {
  * Returning all recs that are affected by this segment.
  * @returns {Array}
  */
-GLVIS.RingSegment.prototype.getAffectedRecs = function () {
+IQHN.RingSegment.prototype.getAffectedRecs = function () {
     return this.affected_recs_;
 };
 
 /**
  * Getting the center position around the collection
- * @returns {GLVIS.RingSegment.relative_pos_}
+ * @returns {IQHN.RingSegment.relative_pos_}
  */
-GLVIS.RingSegment.prototype.getRelativePosition = function () {
+IQHN.RingSegment.prototype.getRelativePosition = function () {
     return this.relative_pos_;
 };
 
@@ -340,7 +340,7 @@ GLVIS.RingSegment.prototype.getRelativePosition = function () {
  * Get the length of the segment in Radians
  * @returns {float}
  */
-GLVIS.RingSegment.prototype.getRadLength = function () {
+IQHN.RingSegment.prototype.getRadLength = function () {
 
     var length_perc = this.end_pc_ - this.start_pc_;
     var length_rad = length_perc * 0.01 * Math.PI * 2;
@@ -349,16 +349,16 @@ GLVIS.RingSegment.prototype.getRadLength = function () {
 };
 
 
-GLVIS.RingSegment.prototype.getDefaultColor = function () {
+IQHN.RingSegment.prototype.getDefaultColor = function () {
     return this.default_color_;
 };
 
 /**
  * Delete all webgl-objects
  */
-GLVIS.RingSegment.prototype.delete = function () {
+IQHN.RingSegment.prototype.delete = function () {
 
-    /** @type {GLVIS.Collection} **/
+    /** @type {IQHN.Collection} **/
     var collection = this.ring_representation_.getCollection();
     collection.getMeshContainerNode().remove(this.webgl_objects_.ring_seg);
     this.webgl_objects_.label.delete();

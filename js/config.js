@@ -1,7 +1,7 @@
 
 
-var GLVIS = GLVIS || {};
-GLVIS.config = {
+var IQHN = IQHN || {};
+IQHN.config = {
     scene: {
         queries_to_fetch: 21,
         skip_empty_queries: true,
@@ -17,7 +17,7 @@ GLVIS.config = {
     debug: {
         active: true,
         level: 5, // 1:Very important ... 10:Verbose story telling,
-        prefix: "GLVIS::"
+        prefix: "IQHN::"
     },
     three: {
         camera_ortho: {
@@ -37,7 +37,7 @@ GLVIS.config = {
         raycaster_precision: 0.5,
         /**
          * Key is the max distancefactor
-         * @see {GLVIS.NavigationHandler.prototype.getDistanceFactor}
+         * @see {IQHN.NavigationHandler.prototype.getDistanceFactor}
          */
 
         mousesensitivy: {

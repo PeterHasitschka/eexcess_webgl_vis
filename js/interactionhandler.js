@@ -1,15 +1,15 @@
 
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
 
-GLVIS.InteractionHandler = function (scene) {
+IQHN.InteractionHandler = function (scene) {
 
 
-    /** @var {GLVIS.Scene} **/
+    /** @var {IQHN.Scene} **/
     this.scene_ = scene;
 
-    var config = GLVIS.config.interaction;
+    var config = IQHN.config.interaction;
     var nh = this.scene_.getNavigationHandler();
 
 
@@ -136,7 +136,7 @@ GLVIS.InteractionHandler = function (scene) {
  * @param {event} event 
  * @param {string} interaction_type e.g  'mouseclick', 'mouseover' ...
  */
-GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interaction_type) {
+IQHN.InteractionHandler.prototype.handleInteraction_ = function (event, interaction_type) {
     /*
      if (interaction_type === "mouseclick")
      this.deselectAllCollections();
@@ -144,23 +144,23 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
 
     var intersected = this.getIntersectedObjects_(event);
 
-    GLVIS.Debugger.debug("InteractionHandler",
+    IQHN.Debugger.debug("InteractionHandler",
             "HANDLING SCENE INTERACTION EVENT '" + interaction_type + "'", 6);
 
     var single_ids_already_clicked = [];
 
     //For flagging if some button was re-hovered
-    GLVIS.RecDetailNodeButton.new_hovered = false;
+    IQHN.RecDetailNodeButton.new_hovered = false;
 
 
     for (var i = 0; i < intersected.length; i++) {
         var curr_intersect_obj = intersected[i].object;
-        GLVIS.Debugger.debug("InteractionHandler",
+        IQHN.Debugger.debug("InteractionHandler",
                 ["Going through intersected object:", curr_intersect_obj], 9);
 
         if (curr_intersect_obj.interaction instanceof Object)
         {
-            GLVIS.Debugger.debug("InteractionHandler",
+            IQHN.Debugger.debug("InteractionHandler",
                     "...which is an Object", 9);
             if (
                     curr_intersect_obj.interaction[interaction_type] !== undefined &&
@@ -182,7 +182,7 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
 
 
 
-                GLVIS.Debugger.debug("InteractionHandler",
+                IQHN.Debugger.debug("InteractionHandler",
                         "Intersected Object has following interaction-type: '" + interaction_type + "'", 8);
                 curr_intersect_obj.interaction[interaction_type](curr_intersect_obj);
 
@@ -194,9 +194,9 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
     }
 
     //Unhovering button if not hovered again.
-    if (!GLVIS.RecDetailNodeButton.new_hovered && GLVIS.RecDetailNodeButton.current_hovered) {
-        GLVIS.RecDetailNodeButton.current_hovered.unhover();
-        GLVIS.RecDetailNodeButton.current_hovered = null;
+    if (!IQHN.RecDetailNodeButton.new_hovered && IQHN.RecDetailNodeButton.current_hovered) {
+        IQHN.RecDetailNodeButton.current_hovered.unhover();
+        IQHN.RecDetailNodeButton.current_hovered = null;
     }
 
     if (!intersected.length)
@@ -207,10 +207,10 @@ GLVIS.InteractionHandler.prototype.handleInteraction_ = function (event, interac
  * Handling clicks defined in constructor
  * @param {Event} e
  */
-GLVIS.InteractionHandler.prototype.handleKeyClick = function (e) {
+IQHN.InteractionHandler.prototype.handleKeyClick = function (e) {
     var is = this.keyinteractions_;
 
-    GLVIS.Debugger.debug("InteractionHandler", ["Key-Click", e.type, e.which], 7);
+    IQHN.Debugger.debug("InteractionHandler", ["Key-Click", e.type, e.which], 7);
 
     var type_is = is[e.type];
     if (type_is === undefined)
@@ -226,14 +226,14 @@ GLVIS.InteractionHandler.prototype.handleKeyClick = function (e) {
  * Performing several deselections of no object was intersected
  * @param {String} interaction_type
  */
-GLVIS.InteractionHandler.prototype.handleEmptyClick = function (interaction_type) {
+IQHN.InteractionHandler.prototype.handleEmptyClick = function (interaction_type) {
 
     /**
      * Unhighlighting last highlighted text if exists.
      */
-    if (GLVIS.Text.current_selected) {
-        GLVIS.Text.current_selected.handleMouseleave();
-        GLVIS.Text.current_selected = null;
+    if (IQHN.Text.current_selected) {
+        IQHN.Text.current_selected.handleMouseleave();
+        IQHN.Text.current_selected = null;
     }
 
 
@@ -242,29 +242,29 @@ GLVIS.InteractionHandler.prototype.handleEmptyClick = function (interaction_type
      * Remove rec-rec-splines when leaving objects with mouse
      */
     if (interaction_type === "mouseover") {
-        _.each(GLVIS.RecConnector.activatedAtCollections, function (coll) {
+        _.each(IQHN.RecConnector.activatedAtCollections, function (coll) {
 
             if (!coll)
                 return;
             coll.unconnectSameRecsFromOtherCollections();
         });
 
-        _.each(GLVIS.RecConnector.activatedAtSingleRecs, function (rec) {
+        _.each(IQHN.RecConnector.activatedAtSingleRecs, function (rec) {
 
             if (!rec)
                 return;
             rec.deleteAllRecSplines();
         });
-        GLVIS.RecConnector.activatedAtSingleRecs = [];
+        IQHN.RecConnector.activatedAtSingleRecs = [];
     }
 };
 
 /**
  * Get Objects this are intersected
  * @param event Mouse over / down etc. event
- * @returns {GLVIS.InteractionHandler.getIntersectedObjects_@pro;raycaster_@call;intersectObjects}
+ * @returns {IQHN.InteractionHandler.getIntersectedObjects_@pro;raycaster_@call;intersectObjects}
  */
-GLVIS.InteractionHandler.prototype.getIntersectedObjects_ = function (event) {
+IQHN.InteractionHandler.prototype.getIntersectedObjects_ = function (event) {
     var renderer = this.scene_.getWebGlHandler().getThreeRenderer();
     var camera = this.scene_.getWebGlHandler().getCamera();
 
@@ -284,6 +284,6 @@ GLVIS.InteractionHandler.prototype.getIntersectedObjects_ = function (event) {
 /**
  * For external usage (e.g. stop event propagation in creating bookmark form)
  */
-GLVIS.InteractionHandler.prototype.getEvents = function () {
+IQHN.InteractionHandler.prototype.getEvents = function () {
     return this.events_;
 };

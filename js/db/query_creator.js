@@ -1,15 +1,15 @@
 
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
-GLVIS.DbQueryCreator = function (query_data) {
+IQHN.DbQueryCreator = function (query_data) {
     this.query_data_ = query_data;
 };
 
 
-GLVIS.DbQueryCreator.prototype.createQueries = function (end_index, length, load_duplicates) {
+IQHN.DbQueryCreator.prototype.createQueries = function (end_index, length, load_duplicates) {
 
-    GLVIS.Debugger.debug("DbQueryCreator",
+    IQHN.Debugger.debug("DbQueryCreator",
             "Creating " + length + " queries until index " + end_index,
             3);
 
@@ -24,7 +24,7 @@ GLVIS.DbQueryCreator.prototype.createQueries = function (end_index, length, load
         if (selected_query_datas.length >= length)
             break;
 
-        /** @type{GLVIS.DbQueryObj} **/
+        /** @type{IQHN.DbQueryObj} **/
         var curr_query_data = this.query_data_[back_count];
 
         //If no duplicates wanted and is duplicate, continue
@@ -32,10 +32,10 @@ GLVIS.DbQueryCreator.prototype.createQueries = function (end_index, length, load
             continue;
 
         //If settings forbid empty queries, skip if no recs
-        if (GLVIS.config.scene.skip_empty_queries) {
+        if (IQHN.config.scene.skip_empty_queries) {
             if (!curr_query_data.getRecs().length) {
 
-                GLVIS.Debugger.debug("DbQueryCreator",
+                IQHN.Debugger.debug("DbQueryCreator",
                         "Skipping empty query while loading from db data",
                         5);
 
@@ -66,24 +66,24 @@ GLVIS.DbQueryCreator.prototype.createQueries = function (end_index, length, load
 
 /**
  * Creates a query from the db-data
- * @param {GLVIS.DbQueryObj} query_data_obj
- * @returns {GLVIS.Collection}
+ * @param {IQHN.DbQueryObj} query_data_obj
+ * @returns {IQHN.Collection}
  */
-GLVIS.DbQueryCreator.prototype.createCollection = function (query_data_obj) {
+IQHN.DbQueryCreator.prototype.createCollection = function (query_data_obj) {
 
-    var collection = new GLVIS.Collection(query_data_obj.getData());
+    var collection = new IQHN.Collection(query_data_obj.getData());
     var rec_data_array = query_data_obj.getRecs();
 
     for (var r_count = 0; r_count < rec_data_array.length; r_count++) {
         var curr_rec_data = rec_data_array[r_count];
-        var curr_rec = new GLVIS.Recommendation(curr_rec_data, collection);
+        var curr_rec = new IQHN.Recommendation(curr_rec_data, collection);
 
         //Add relevance. The first has the highest
         curr_rec.setRelevance(1 - (r_count / rec_data_array.length));
         collection.addRecommendation(curr_rec);
     }
 
-    GLVIS.Debugger.debug("DbQueryCreator",
+    IQHN.Debugger.debug("DbQueryCreator",
             "Collection from query with ID " + collection.getId() + " created", 6);
 
     return collection;

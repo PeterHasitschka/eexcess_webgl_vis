@@ -1,14 +1,14 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
 /**
  * Repesenting data of a collection through a sunburst diagram.
  * It's built from several rings inside the recommendations. These rings hold
- * segments, that are represented by @see{GLVIS.RingSegment} objects.
+ * segments, that are represented by @see{IQHN.RingSegment} objects.
  * @param {type} collection
  * @returns {undefined}
  */
-GLVIS.RingRepresentation = function (collection) {
+IQHN.RingRepresentation = function (collection) {
     this.collection_ = collection;
     this.dirty_ = true;
     this.ring_segments_ = [];
@@ -23,21 +23,21 @@ GLVIS.RingRepresentation = function (collection) {
     this.initAndRegisterGlObj();
 
 
-    GLVIS.RingRepresentation.activeRepresentations.push(this);
+    IQHN.RingRepresentation.activeRepresentations.push(this);
 };
 
 
-GLVIS.RingRepresentation.prototype.buildTree_ = function () {
+IQHN.RingRepresentation.prototype.buildTree_ = function () {
 
-    GLVIS.Debugger.debug("RingRepresentation",
+    IQHN.Debugger.debug("RingRepresentation",
             "Building data-tree for Ring representation", 3);
-    this.tree_ = new GLVIS.RingTree(this.collection_.getRecommendations());
+    this.tree_ = new IQHN.RingTree(this.collection_.getRecommendations());
 };
 
 
-GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
+IQHN.RingRepresentation.prototype.initAndRegisterGlObj = function () {
 
-    GLVIS.Debugger.debug("RingRepresentation",
+    IQHN.Debugger.debug("RingRepresentation",
             "Initializing Ring-Webgl-Objects", 4);
 
     if (!this.tree_)
@@ -45,7 +45,7 @@ GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
 
     var ring_structure = this.tree_.getRingStructure();
 
-    GLVIS.Debugger.debug("RingRepresentation",
+    IQHN.Debugger.debug("RingRepresentation",
             ["Ring Structure", ring_structure], 4);
 
 
@@ -61,7 +61,7 @@ GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
             if (curr_ring_data_elm.my_id.type === "facet") {
                 var facet_name = curr_ring_data_elm.my_id.id;
                 var facet_val = curr_ring_data_elm.my_val;
-                var color_config = GLVIS.config.collection.recommendation.colors;
+                var color_config = IQHN.config.collection.recommendation.colors;
                 if (color_config[facet_name] !== undefined)
                     if (color_config[facet_name][facet_val] !== undefined)
                         color = color_config[facet_name][facet_val];
@@ -95,7 +95,7 @@ GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
 
             var key = curr_ring_data_elm.my_id;
             var val = curr_ring_data_elm.my_val;
-            this.ring_segments_.push(new GLVIS.RingSegment(this, ring_count, seg_start, seg_end, color, key, val, curr_ring_data_elm.recs));
+            this.ring_segments_.push(new IQHN.RingSegment(this, ring_count, seg_start, seg_end, color, key, val, curr_ring_data_elm.recs));
         }
     }
 
@@ -108,11 +108,11 @@ GLVIS.RingRepresentation.prototype.initAndRegisterGlObj = function () {
  * Called by collection. Only performs if dirty flag is true
  * @returns {undefined}
  */
-GLVIS.RingRepresentation.prototype.render = function () {
+IQHN.RingRepresentation.prototype.render = function () {
     if (!this.dirty_)
         return;
 
-    GLVIS.Debugger.debug("RingRepresentation",
+    IQHN.Debugger.debug("RingRepresentation",
             "Rendering RINGREPRESENTATION " + this.collection_.getId(),
             5);
 
@@ -124,7 +124,7 @@ GLVIS.RingRepresentation.prototype.render = function () {
 };
 
 
-GLVIS.RingRepresentation.prototype.setIsDirty = function (dirty) {
+IQHN.RingRepresentation.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
     this.collection_.setIsDirty(true);
 };
@@ -132,28 +132,28 @@ GLVIS.RingRepresentation.prototype.setIsDirty = function (dirty) {
 /**
  * Delete all webgl-objects
  */
-GLVIS.RingRepresentation.prototype.delete = function () {
+IQHN.RingRepresentation.prototype.delete = function () {
 
     for (var i = 0; i < this.ring_segments_.length; i++) {
         this.ring_segments_[i].delete();
     }
 
-    var index_to_delete = _.indexOf(GLVIS.RingRepresentation.activeRepresentations, this);
-    GLVIS.RingRepresentation.activeRepresentations = GLVIS.RingRepresentation.activeRepresentations.splice(index_to_delete, 1);
+    var index_to_delete = _.indexOf(IQHN.RingRepresentation.activeRepresentations, this);
+    IQHN.RingRepresentation.activeRepresentations = IQHN.RingRepresentation.activeRepresentations.splice(index_to_delete, 1);
 };
 
 /**
  * 
- * @returns {GLVIS.RingTree}
+ * @returns {IQHN.RingTree}
  */
-GLVIS.RingRepresentation.prototype.getTree = function () {
+IQHN.RingRepresentation.prototype.getTree = function () {
     return this.tree_;
 };
 
 /**
- * @returns {GLVIS.Collection}
+ * @returns {IQHN.Collection}
  */
-GLVIS.RingRepresentation.prototype.getCollection = function () {
+IQHN.RingRepresentation.prototype.getCollection = function () {
     return this.collection_;
 };
 
@@ -161,7 +161,7 @@ GLVIS.RingRepresentation.prototype.getCollection = function () {
  * 
  * @returns {Array}
  */
-GLVIS.RingRepresentation.prototype.getRingSegments = function () {
+IQHN.RingRepresentation.prototype.getRingSegments = function () {
     return this.ring_segments_;
 };
 
@@ -172,12 +172,12 @@ GLVIS.RingRepresentation.prototype.getRingSegments = function () {
  * @param {String} facet_name
  * @returns {Array}
  */
-GLVIS.RingRepresentation.prototype.getColorsOfRing = function (facet_name) {
+IQHN.RingRepresentation.prototype.getColorsOfRing = function (facet_name) {
 
     var ringsecs = this.getRingSegments();
     var colors = [];
     for (var i = 0; i < ringsecs.length; i++) {
-        /** @type{GLVIS.RingSegment} **/
+        /** @type{IQHN.RingSegment} **/
         var curringsec = ringsecs[i];
 
         if (curringsec.getKey().id !== facet_name)
@@ -192,4 +192,4 @@ GLVIS.RingRepresentation.prototype.getColorsOfRing = function (facet_name) {
     return colors;
 };
 
-GLVIS.RingRepresentation.activeRepresentations = [];
+IQHN.RingRepresentation.activeRepresentations = [];

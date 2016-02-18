@@ -1,8 +1,8 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
 
-GLVIS.FilterHandler = function () {
+IQHN.FilterHandler = function () {
 
     this.filters_ = [];
 
@@ -11,9 +11,9 @@ GLVIS.FilterHandler = function () {
 
 /**
  * Add a filter
- * @param {GLVIS.Filter} filter
+ * @param {IQHN.Filter} filter
  */
-GLVIS.FilterHandler.prototype.addFilter = function (filter) {
+IQHN.FilterHandler.prototype.addFilter = function (filter) {
 
     var key = filter.getKey();
 
@@ -34,7 +34,7 @@ GLVIS.FilterHandler.prototype.addFilter = function (filter) {
  * Remove filter.
  * @param {string} identifier filter identifier string (e.g. 'language'
  */
-GLVIS.FilterHandler.prototype.removeFilter = function (identifier) {
+IQHN.FilterHandler.prototype.removeFilter = function (identifier) {
 
 
     for (var i = 0; i < this.filters_.length; i++) {
@@ -50,15 +50,15 @@ GLVIS.FilterHandler.prototype.removeFilter = function (identifier) {
 /**
  * Apply updated filter to the collections
  */
-GLVIS.FilterHandler.prototype.apply = function () {
+IQHN.FilterHandler.prototype.apply = function () {
 
 
-    var collections = GLVIS.Scene.getCurrentScene().getCollections();
+    var collections = IQHN.Scene.getCurrentScene().getCollections();
     var filter_rec_res = [];
     for (var i = 0; i < collections.length; i++) {
 
         //Remove splines because of possible movement of recs
-        /** @type {GLVIS.Collection} */
+        /** @type {IQHN.Collection} */
         var curr_col = collections[i];
         curr_col.unconnectSameRecsFromOtherCollections();
 
@@ -66,7 +66,7 @@ GLVIS.FilterHandler.prototype.apply = function () {
 
 
         for (var j = 0; j < recs.length; j++) {
-            /** @type{GLVIS.Recommendation} **/
+            /** @type{IQHN.Recommendation} **/
             var curr_rec = recs[j];
 
             filter_rec_res.push({rec: curr_rec, positive_filters: this.applyFiltersToRec_(curr_rec)});
@@ -83,7 +83,7 @@ GLVIS.FilterHandler.prototype.apply = function () {
  * @param {object} data containing rec and positive filters
  * @returns {undefined}
  */
-GLVIS.FilterHandler.prototype.sendFilterRecResForDashboard = function (data) {
+IQHN.FilterHandler.prototype.sendFilterRecResForDashboard = function (data) {
 
     var filters = {};
 
@@ -110,7 +110,7 @@ GLVIS.FilterHandler.prototype.sendFilterRecResForDashboard = function (data) {
 
 
     }
-    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().applyFilters(filters);
+    IQHN.Scene.getCurrentScene().getRecDashboardHandler().applyFilters(filters);
 
 
 
@@ -118,11 +118,11 @@ GLVIS.FilterHandler.prototype.sendFilterRecResForDashboard = function (data) {
 
 /**
  * Update the status of the ring segments of a possible ring-structure
- * @param {GLVIS.Collection} collection
+ * @param {IQHN.Collection} collection
  */
-GLVIS.FilterHandler.prototype.updateRingFilterSegments = function (collection) {
+IQHN.FilterHandler.prototype.updateRingFilterSegments = function (collection) {
 
-    /** @type {GLVIS.RingRepresentation} **/
+    /** @type {IQHN.RingRepresentation} **/
     var ringrep = collection.getRingRepresentation();
     if (!ringrep)
         return;
@@ -131,7 +131,7 @@ GLVIS.FilterHandler.prototype.updateRingFilterSegments = function (collection) {
 
     for (var i = 0; i < segs.length; i++) {
 
-        /** @type{GLVIS.RingSegment} **/
+        /** @type{IQHN.RingSegment} **/
         var seg = segs[i];
         var seg_key = seg.getKey().id;
         var seg_val = seg.getValue();
@@ -141,7 +141,7 @@ GLVIS.FilterHandler.prototype.updateRingFilterSegments = function (collection) {
 
         var filter_match = false;
         for (var j = 0; j < filters.length; j++) {
-            /** @type{GLVIS.Filter} **/
+            /** @type{IQHN.Filter} **/
             var curr_f = filters[j];
 
             var f_key = curr_f.getKey().identifier;
@@ -161,16 +161,16 @@ GLVIS.FilterHandler.prototype.updateRingFilterSegments = function (collection) {
 
 /**
  * Private method to apply all filters to Recommendation
- * @param {GLVIS.Recommendation} rec
+ * @param {IQHN.Recommendation} rec
  */
-GLVIS.FilterHandler.prototype.applyFiltersToRec_ = function (rec) {
+IQHN.FilterHandler.prototype.applyFiltersToRec_ = function (rec) {
 
     var filter_positive = [];
 
     var at_least_one_negative = false;
     for (var i = 0; i < this.filters_.length; i++) {
 
-        /** @type {GLVIS.Filter} **/
+        /** @type {IQHN.Filter} **/
         var curr_filter = this.filters_[i];
 
 
@@ -207,9 +207,9 @@ GLVIS.FilterHandler.prototype.applyFiltersToRec_ = function (rec) {
 
 /**
  * Get all registered filters
- * @returns {[GLVIS.Filter]}
+ * @returns {[IQHN.Filter]}
  */
-GLVIS.FilterHandler.prototype.getFilters = function () {
+IQHN.FilterHandler.prototype.getFilters = function () {
     return this.filters_;
 };
 
@@ -220,11 +220,11 @@ GLVIS.FilterHandler.prototype.getFilters = function () {
  * @param {string} value
  * @returns {Boolean}
  */
-GLVIS.FilterHandler.prototype.isFilterApplied = function (key, value) {
+IQHN.FilterHandler.prototype.isFilterApplied = function (key, value) {
 
     var fs = this.getFilters();
     for (var i = 0; i < fs.length; i++) {
-        /** @var{GLVIS.Filter} **/
+        /** @var{IQHN.Filter} **/
         var curr_f = fs[i];
         if (curr_f.getKey().identifier === key && curr_f.getValue() === value)
             return true;

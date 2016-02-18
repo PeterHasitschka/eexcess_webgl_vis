@@ -1,14 +1,14 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 /**
  * Create a button for rec-detail-nodes with actions, icons etc.
  * 
- * @param {GLVIS.RecommendationDetailNode} parent_node Detail node were button gets added
+ * @param {IQHN.RecommendationDetailNode} parent_node Detail node were button gets added
  * @param {object} options key-values: action, icon, visible
  */
-GLVIS.RecDetailNodeButton = function (parent_node, options) {
+IQHN.RecDetailNodeButton = function (parent_node, options) {
 
-    var config = GLVIS.config.collection.recommendation.detail_node.button;
+    var config = IQHN.config.collection.recommendation.detail_node.button;
 
     this.webgl_objects_ = {
         parent: parent_node.getGroupMesh(),
@@ -37,24 +37,24 @@ GLVIS.RecDetailNodeButton = function (parent_node, options) {
 
 /**
  * Callback for mouseover action.
- * Button gets registered for unhovering (@see{GLVIS.InteractionHandler})
+ * Button gets registered for unhovering (@see{IQHN.InteractionHandler})
  */
-GLVIS.RecDetailNodeButton.prototype.hover = function () {
-    this.webgl_objects_.circle.material.color.setHex(GLVIS.config.collection.recommendation.detail_node.button.hovercolor);
+IQHN.RecDetailNodeButton.prototype.hover = function () {
+    this.webgl_objects_.circle.material.color.setHex(IQHN.config.collection.recommendation.detail_node.button.hovercolor);
 
     if (this.webgl_objects_.label) {
         this.webgl_objects_.label.setIsVisible(true);
         //this.webgl_objects_.label.render();
     }
-    GLVIS.RecDetailNodeButton.current_hovered = this;
-    GLVIS.RecDetailNodeButton.new_hovered = true;
+    IQHN.RecDetailNodeButton.current_hovered = this;
+    IQHN.RecDetailNodeButton.new_hovered = true;
     this.setIsDirty(true);
 };
 
 /**
- * Called by @see{GLVIS.InteractionHandler} if button is not registered as hovered in current raycast
+ * Called by @see{IQHN.InteractionHandler} if button is not registered as hovered in current raycast
  */
-GLVIS.RecDetailNodeButton.prototype.unhover = function () {
+IQHN.RecDetailNodeButton.prototype.unhover = function () {
 
 
     if (!this.webgl_objects_.circle)
@@ -72,9 +72,9 @@ GLVIS.RecDetailNodeButton.prototype.unhover = function () {
  * Create and add webgl-objects to scene
  * @param {THREE.Mesh} parent_node ThreeJS Node handled as parent for the button. Comes from rec-detail-node
  */
-GLVIS.RecDetailNodeButton.prototype.initAndRegisterGlObj = function (parent_node) {
+IQHN.RecDetailNodeButton.prototype.initAndRegisterGlObj = function (parent_node) {
 
-    var config = GLVIS.config.collection.recommendation.detail_node.button;
+    var config = IQHN.config.collection.recommendation.detail_node.button;
 
     var circleMaterial = new THREE.MeshBasicMaterial(
             {
@@ -103,11 +103,11 @@ GLVIS.RecDetailNodeButton.prototype.initAndRegisterGlObj = function (parent_node
     parent_node.add(icon_mesh);
 
     if (this.icon_) {
-        var icon_path = GLVIS.config.scene.media_folder + this.icon_;
+        var icon_path = IQHN.config.scene.media_folder + this.icon_;
 
         THREE.ImageUtils.loadTexture(icon_path, {}, function (texture) {
 
-            GLVIS.Debugger.debug("RecDetailNodeButton", "Icon loaded. Creating texture", 5);
+            IQHN.Debugger.debug("RecDetailNodeButton", "Icon loaded. Creating texture", 5);
             texture.minFilter = THREE.LinearMipMapLinearFilter;
             icon_mesh.material = new THREE.MeshBasicMaterial({
                 map: texture,
@@ -125,7 +125,7 @@ GLVIS.RecDetailNodeButton.prototype.initAndRegisterGlObj = function (parent_node
     }
 
     if (this.title_) {
-        var label = new GLVIS.Text(
+        var label = new IQHN.Text(
                 this.title_,
                 {
                     font_size: config.label.font_size,
@@ -150,7 +150,7 @@ GLVIS.RecDetailNodeButton.prototype.initAndRegisterGlObj = function (parent_node
  * @param {float} x
  * @param {float} y
  */
-GLVIS.RecDetailNodeButton.prototype.setPosition = function (x, y) {
+IQHN.RecDetailNodeButton.prototype.setPosition = function (x, y) {
 
     if (x !== null)
         this.pos.x = x;
@@ -166,21 +166,21 @@ GLVIS.RecDetailNodeButton.prototype.setPosition = function (x, y) {
  * Setting the visibility of the button
  * @param {bool} visible
  */
-GLVIS.RecDetailNodeButton.prototype.setIsVisible = function (visible) {
+IQHN.RecDetailNodeButton.prototype.setIsVisible = function (visible) {
     if (visible !== this.visible_)
         this.setIsDirty(true);
     this.visible_ = visible;
 };
 
 
-GLVIS.RecDetailNodeButton.prototype.setIsDirty = function (dirty) {
+IQHN.RecDetailNodeButton.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 
     if (dirty)
         this.parent_.setIsDirty(dirty);
 };
 
-GLVIS.RecDetailNodeButton.prototype.getIsDirty = function () {
+IQHN.RecDetailNodeButton.prototype.getIsDirty = function () {
     return this.dirty_;
 };
 
@@ -189,7 +189,7 @@ GLVIS.RecDetailNodeButton.prototype.getIsDirty = function () {
  * The interactions are set here dynamically because they depend on the visibility
  * of the button
  */
-GLVIS.RecDetailNodeButton.prototype.render = function () {
+IQHN.RecDetailNodeButton.prototype.render = function () {
 
     if (!this.dirty_)
         return;
@@ -228,10 +228,10 @@ GLVIS.RecDetailNodeButton.prototype.render = function () {
             this.pos.z + 0.001
             );
 
-    /** @type {GLVIS.Text} **/
+    /** @type {IQHN.Text} **/
     var label = this.webgl_objects_.label;
     if (label) {
-        var y_offset = GLVIS.config.collection.recommendation.detail_node.button.label.y_offset;
+        var y_offset = IQHN.config.collection.recommendation.detail_node.button.label.y_offset;
         //label.setIsVisible(this.visible_);
         label.setPosition(this.pos.x, this.pos.y + y_offset, this.pos.z + 0.001);
         label.render();
@@ -243,7 +243,7 @@ GLVIS.RecDetailNodeButton.prototype.render = function () {
 /**
  * Deleting webgl-objects
  */
-GLVIS.RecDetailNodeButton.prototype.delete = function () {
+IQHN.RecDetailNodeButton.prototype.delete = function () {
     delete this.webgl_objects_.circle;
     delete this.webgl_objects_.icon;
 
@@ -256,6 +256,6 @@ GLVIS.RecDetailNodeButton.prototype.delete = function () {
 
 
 
-/** @type {GLVIS.RecDetailNodeButton} **/
-GLVIS.RecDetailNodeButton.current_hovered = null;
-GLVIS.RecDetailNodeButton.new_hovered = false;
+/** @type {IQHN.RecDetailNodeButton} **/
+IQHN.RecDetailNodeButton.current_hovered = null;
+IQHN.RecDetailNodeButton.new_hovered = false;

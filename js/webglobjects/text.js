@@ -1,5 +1,5 @@
 
-GLVIS = GLVIS || {};
+IQHN = IQHN || {};
 
 /*
  * 
@@ -9,16 +9,16 @@ GLVIS = GLVIS || {};
  * @param {function} mouseover_fct Function called at mouse-over. First param: This object. Second param: mouse_fct
  * @param {function} mouseleave_fct Function called at mouse-over. First param: This object. Second param: mouse_fct
  * @param {function} mouse_fct_data Mouse-Fct-Data: Additional parameters for call
- * @param {GLVIS.Collection} collection Optional: Collection to add the label-mesh to a mesh-container
+ * @param {IQHN.Collection} collection Optional: Collection to add the label-mesh to a mesh-container
  * @param {THREE.Mesh} parent_container Alternative: Container to add the label
  *
  */
-GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouseleave_fct, mouse_fct_data, collection, parent_container) {
+IQHN.Text = function (text, options, highlight_options, mouseover_fct, mouseleave_fct, mouse_fct_data, collection, parent_container) {
 
     if (text.length === 0)
         throw ("EMPTY TEXT NOT ALLOWED!");
 
-    var config = GLVIS.config.text;
+    var config = IQHN.config.text;
     var init_data = {
         color: config.color,
         bg_color: null,
@@ -90,7 +90,7 @@ GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouselea
         this.mesh_container_ = parent_container;
     }
     else {
-        var scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+        var scene = IQHN.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
         this.mesh_container_ = scene;
     }
 
@@ -102,7 +102,7 @@ GLVIS.Text = function (text, options, highlight_options, mouseover_fct, mouselea
  * Div has to be appended to body
  * @returns {Array} Holding width and height
  */
-GLVIS.Text.prototype.calculateSize_ = function () {
+IQHN.Text.prototype.calculateSize_ = function () {
 
     var testDivHtml = "<div id='size_calc_tmp'>" + this.text_ + "</div>";
     var testDiv = jQuery(testDivHtml);
@@ -114,18 +114,18 @@ GLVIS.Text.prototype.calculateSize_ = function () {
     var height = testDiv.height();
     testDiv.remove();
     var ret = [width, height];
-    GLVIS.Debugger.debug("Text", ["Calculated size of text: ", ret], 8);
+    IQHN.Debugger.debug("Text", ["Calculated size of text: ", ret], 8);
     return ret;
 };
-GLVIS.Text.prototype.buildFontString_ = function () {
-    this.font_ = (this.font_size_ * this.render_factor_) + "px " + GLVIS.config.text.font;
+IQHN.Text.prototype.buildFontString_ = function () {
+    this.font_ = (this.font_size_ * this.render_factor_) + "px " + IQHN.config.text.font;
 };
 /**
  * Has to be called on initialization but also on changes like font, color etc.
  */
-GLVIS.Text.prototype.updateWebGlObj = function () {
+IQHN.Text.prototype.updateWebGlObj = function () {
 
-    GLVIS.Debugger.debug("Text",
+    IQHN.Debugger.debug("Text",
             "Updating WebGl-Object",
             7);
     this.size_ = this.calculateSize_();
@@ -152,9 +152,9 @@ GLVIS.Text.prototype.updateWebGlObj = function () {
  * @param {type} opacity
  * @returns {THREE.Mesh}
  */
-GLVIS.Text.prototype.createMesh = function (font, font_size, color, bg_color, opacity) {
+IQHN.Text.prototype.createMesh = function (font, font_size, color, bg_color, opacity) {
 
-    var config = GLVIS.config.text;
+    var config = IQHN.config.text;
     var canvas = document.createElement('canvas');
     var w = this.size_[0];
     var h = this.size_[1];
@@ -209,33 +209,33 @@ GLVIS.Text.prototype.createMesh = function (font, font_size, color, bg_color, op
 /**
  * Handling a mouseover event. Called by the mesh's mouseover callback
  */
-GLVIS.Text.prototype.handleMouseover = function () {
+IQHN.Text.prototype.handleMouseover = function () {
 
     if (!this.getIsVisible())
         return;
     this.highlight();
-    if (GLVIS.Text.current_selected && GLVIS.Text.current_selected !== this)
-        GLVIS.Text.current_selected.unHighlight();
-    GLVIS.Text.current_selected = this;
+    if (IQHN.Text.current_selected && IQHN.Text.current_selected !== this)
+        IQHN.Text.current_selected.unHighlight();
+    IQHN.Text.current_selected = this;
     if (this.mouse_over_fct_)
         this.mouse_over_fct_(this, this.mouse_fct_data_);
 };
 /**
  * Handling mouse-leave. Called by interaction handler
  */
-GLVIS.Text.prototype.handleMouseleave = function () {
+IQHN.Text.prototype.handleMouseleave = function () {
 
     if (!this.getIsVisible())
         return;
     this.unHighlight();
-    GLVIS.Text.current_selected = null;
+    IQHN.Text.current_selected = null;
     if (this.mouse_leave_fct_)
         this.mouse_leave_fct_(this, this.mouse_fct_data_);
 };
 /**
  * Swapping normal and hightlight mesh
  */
-GLVIS.Text.prototype.highlight = function () {
+IQHN.Text.prototype.highlight = function () {
     if (!this.h_active)
         return;
 
@@ -245,7 +245,7 @@ GLVIS.Text.prototype.highlight = function () {
 /**
  * Swapping normal and hightlight mesh
  */
-GLVIS.Text.prototype.unHighlight = function () {
+IQHN.Text.prototype.unHighlight = function () {
 
     if (!this.h_active)
         return;
@@ -256,14 +256,14 @@ GLVIS.Text.prototype.unHighlight = function () {
 /**
  * Rendering the Text object and its meshes
  */
-GLVIS.Text.prototype.render = function () {
+IQHN.Text.prototype.render = function () {
 
     if (!this.dirty_) {
         return;
     }
 
-    var config = GLVIS.config.text;
-    GLVIS.Debugger.debug("Text",
+    var config = IQHN.config.text;
+    IQHN.Debugger.debug("Text",
             "Rendering TEXT",
             7);
     var pos_x = parseFloat(this.pos_.x);
@@ -281,7 +281,7 @@ GLVIS.Text.prototype.render = function () {
  * Sets color. Leads to recreation of WebGl-Object
  * @param {mixed} color Color value
  */
-GLVIS.Text.prototype.setColor = function (color) {
+IQHN.Text.prototype.setColor = function (color) {
     this.color_ = color;
     this.updateWebGlObj();
 };
@@ -289,7 +289,7 @@ GLVIS.Text.prototype.setColor = function (color) {
  * Sets backgorund-color. Leads to recreation of WebGl-Object
  * @param {mixed} bg_color Color value
  */
-GLVIS.Text.prototype.setBgColor = function (bg_color) {
+IQHN.Text.prototype.setBgColor = function (bg_color) {
     this.bg_color_ = bg_color;
     this.updateWebGlObj();
 };
@@ -297,7 +297,7 @@ GLVIS.Text.prototype.setBgColor = function (bg_color) {
  * Sets font-size. Leads to recreation of WebGl-Object
  * @param {float} fontsize Fontsize
  */
-GLVIS.Text.prototype.setFontSize = function (fontsize) {
+IQHN.Text.prototype.setFontSize = function (fontsize) {
     this.font_size_ = fontsize;
     this.updateWebGlObj();
 };
@@ -305,7 +305,7 @@ GLVIS.Text.prototype.setFontSize = function (fontsize) {
  * Sets text. Leads to recreation of WebGl-Object
  * @param {string} text Text to render
  */
-GLVIS.Text.prototype.setText = function (text) {
+IQHN.Text.prototype.setText = function (text) {
     this.text_ = text;
     this.updateWebGlObj();
 };
@@ -313,14 +313,14 @@ GLVIS.Text.prototype.setText = function (text) {
  * Return text
  * @return{String} Setted Text of label
  */
-GLVIS.Text.prototype.getText = function () {
+IQHN.Text.prototype.getText = function () {
     return this.text_;
 };
 /**
  * Sets opacity
  * @param {float} opacity Opacity
  */
-GLVIS.Text.prototype.setOpacity = function (opacity) {
+IQHN.Text.prototype.setOpacity = function (opacity) {
     this.opacity_ = opacity;
     this.setIsDirty(true);
 };
@@ -331,7 +331,7 @@ GLVIS.Text.prototype.setOpacity = function (opacity) {
  * @param {float | null} z Z-Position
  * @returns {undefined}
  */
-GLVIS.Text.prototype.setPosition = function (x, y, z) {
+IQHN.Text.prototype.setPosition = function (x, y, z) {
     if (x === undefined)
         x = null;
     if (y === undefined)
@@ -340,7 +340,7 @@ GLVIS.Text.prototype.setPosition = function (x, y, z) {
         z = null;
     if (x === this.pos_.x && y === this.pos_.y && z === this.pos_.z)
         return;
-    GLVIS.Debugger.debug("Text", "Setting pos: " + x + " " + y + " " + z, 8);
+    IQHN.Debugger.debug("Text", "Setting pos: " + x + " " + y + " " + z, 8);
     if (x !== null)
         this.pos_.x = x;
     if (y !== null)
@@ -349,16 +349,16 @@ GLVIS.Text.prototype.setPosition = function (x, y, z) {
         this.pos_.z = z;
     this.setIsDirty(true);
 };
-GLVIS.Text.prototype.setIsDirty = function (dirty) {
+IQHN.Text.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 };
-GLVIS.Text.prototype.getIsDirty = function () {
+IQHN.Text.prototype.getIsDirty = function () {
     return this.dirty_;
 };
-GLVIS.Text.prototype.getIsVisible = function () {
+IQHN.Text.prototype.getIsVisible = function () {
     return this.visible_;
 };
-GLVIS.Text.prototype.setIsVisible = function (visible) {
+IQHN.Text.prototype.setIsVisible = function (visible) {
 
     if (this.visible_ === visible)
         return;
@@ -368,7 +368,7 @@ GLVIS.Text.prototype.setIsVisible = function (visible) {
 /**
  * Delete all webgl-objects
  */
-GLVIS.Text.prototype.delete = function () {
+IQHN.Text.prototype.delete = function () {
     this.mesh_container_.remove(this.webgl_objects_.mesh);
 };
-GLVIS.Text.current_selected = null;
+IQHN.Text.current_selected = null;

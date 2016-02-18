@@ -1,12 +1,12 @@
 
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 /**
  * Holding and managing everything for the scene according to web-gl
  * @param {} canvas jQuery object of the canvas
  * @returns {undefined}
  */
-GLVIS.WebGlHandler = function (canvas) {
+IQHN.WebGlHandler = function (canvas) {
 
     this.canvas_ = canvas;
 
@@ -16,7 +16,7 @@ GLVIS.WebGlHandler = function (canvas) {
         camera: null
     };
 
-    this.cameraconfig_ = GLVIS.config.three.camera_perspective;
+    this.cameraconfig_ = IQHN.config.three.camera_perspective;
     this.three_.scene = new THREE.Scene();
 
     //Creating and adding the camera
@@ -38,7 +38,7 @@ GLVIS.WebGlHandler = function (canvas) {
 /**
  * Creating a perspective camera
  */
-GLVIS.WebGlHandler.prototype.createPerspectiveCamera_ = function () {
+IQHN.WebGlHandler.prototype.createPerspectiveCamera_ = function () {
 
     var scene_width = this.canvas_.width();
     var scene_height = this.canvas_.height();
@@ -61,7 +61,7 @@ GLVIS.WebGlHandler.prototype.createPerspectiveCamera_ = function () {
 /**
  * Creating an orthographic camera
  */
-GLVIS.WebGlHandler.prototype.createOrthoCamera_ = function () {
+IQHN.WebGlHandler.prototype.createOrthoCamera_ = function () {
 
     var scene_width = this.canvas_.width();
     var scene_height = this.canvas_.height();
@@ -83,9 +83,9 @@ GLVIS.WebGlHandler.prototype.createOrthoCamera_ = function () {
 /**
  * Creating renderer and adding GL-Scene to the canvas
  */
-GLVIS.WebGlHandler.prototype.createRenderer = function () {
+IQHN.WebGlHandler.prototype.createRenderer = function () {
 
-    var background_color = GLVIS.config.three.canvas_color;
+    var background_color = IQHN.config.three.canvas_color;
 
     var scene_width = this.canvas_.width();
     var scene_height = this.canvas_.height();
@@ -102,7 +102,7 @@ GLVIS.WebGlHandler.prototype.createRenderer = function () {
 /**
  * Calling the THREE-JS Render function
  */
-GLVIS.WebGlHandler.prototype.render = function () {
+IQHN.WebGlHandler.prototype.render = function () {
     this.three_.renderer.render(this.three_.scene, this.three_.camera);
 };
 
@@ -110,7 +110,7 @@ GLVIS.WebGlHandler.prototype.render = function () {
  * 
  * @returns {Three.Scene}
  */
-GLVIS.WebGlHandler.prototype.getThreeScene = function () {
+IQHN.WebGlHandler.prototype.getThreeScene = function () {
     return this.three_.scene;
 };
 
@@ -118,7 +118,7 @@ GLVIS.WebGlHandler.prototype.getThreeScene = function () {
  * 
  * @returns {Three.Renderer}
  */
-GLVIS.WebGlHandler.prototype.getThreeRenderer = function () {
+IQHN.WebGlHandler.prototype.getThreeRenderer = function () {
     return this.three_.renderer;
 };
 
@@ -126,7 +126,7 @@ GLVIS.WebGlHandler.prototype.getThreeRenderer = function () {
  * 
  * @returns {Three.Camera}
  */
-GLVIS.WebGlHandler.prototype.getCamera = function () {
+IQHN.WebGlHandler.prototype.getCamera = function () {
     return this.three_.camera;
 };
 
@@ -135,6 +135,6 @@ GLVIS.WebGlHandler.prototype.getCamera = function () {
  * 
  * @returns Canvas
  */
-GLVIS.WebGlHandler.prototype.getCanvas = function () {
+IQHN.WebGlHandler.prototype.getCanvas = function () {
     return this.canvas_;
 };

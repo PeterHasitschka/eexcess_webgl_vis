@@ -1,18 +1,18 @@
 
-GLVIS = GLVIS || {};
+IQHN = IQHN || {};
 
 
 /**
  * Representing plane of a Collection in WebGl
- * @param {GLVIS.Collection} collection collection that node represents
+ * @param {IQHN.Collection} collection collection that node represents
  * @param {THREE.Object3D | null} mesh_parent Object to use as webgl-parent
  */
-GLVIS.CollectionPlane = function (collection, mesh_parent) {
+IQHN.CollectionPlane = function (collection, mesh_parent) {
 
-    /** @type{GLVIS.Collection} **/
+    /** @type{IQHN.Collection} **/
     this.collection_ = collection;
 
-    this.default_color_ = GLVIS.config.collection.plane.color;
+    this.default_color_ = IQHN.config.collection.plane.color;
 
     this.dirty_ = true;
 
@@ -23,9 +23,9 @@ GLVIS.CollectionPlane = function (collection, mesh_parent) {
     this.initAndRegisterGlObj(mesh_parent);
 };
 
-GLVIS.CollectionPlane.prototype.initAndRegisterGlObj = function (mesh_parent) {
+IQHN.CollectionPlane.prototype.initAndRegisterGlObj = function (mesh_parent) {
 
-    var plane_config = GLVIS.config.collection.plane;
+    var plane_config = IQHN.config.collection.plane;
 
     var circleMaterial =
             new THREE.MeshBasicMaterial(
@@ -36,7 +36,7 @@ GLVIS.CollectionPlane.prototype.initAndRegisterGlObj = function (mesh_parent) {
                         opacity: plane_config.opacity
                     });
 
-    var rad = GLVIS.config.collection.plane.radius;
+    var rad = IQHN.config.collection.plane.radius;
     var mesh = new THREE.CircleGeometry(rad, plane_config.segments);
 
     var circle = new THREE.Mesh(
@@ -55,7 +55,7 @@ GLVIS.CollectionPlane.prototype.initAndRegisterGlObj = function (mesh_parent) {
     
     
     if (!mesh_parent) {
-        var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
+        var webgl_handler = IQHN.Scene.getCurrentScene().getWebGlHandler();
         webgl_handler.getThreeScene().add(circle);
     }
     else
@@ -68,17 +68,17 @@ GLVIS.CollectionPlane.prototype.initAndRegisterGlObj = function (mesh_parent) {
 
 
 
-GLVIS.CollectionPlane.prototype.render = function () {
+IQHN.CollectionPlane.prototype.render = function () {
 
     if (!this.dirty_)
         return;
 
 
-    GLVIS.Debugger.debug("CollectionPlane",
+    IQHN.Debugger.debug("CollectionPlane",
             "Rendering COLLECTION PLANE  for collection " + this.collection_.getId(),
             7);
 
-    var z_pos = GLVIS.config.collection.plane.z_value;
+    var z_pos = IQHN.config.collection.plane.z_value;
     this.webgl_objects_.circle.position.setZ(
             z_pos
             );
@@ -92,10 +92,10 @@ GLVIS.CollectionPlane.prototype.render = function () {
 
 
 
-GLVIS.CollectionPlane.prototype.setIsDirty = function (dirty) {
+IQHN.CollectionPlane.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 };
 
-GLVIS.CollectionPlane.prototype.getIsDirty = function () {
+IQHN.CollectionPlane.prototype.getIsDirty = function () {
     return this.dirty_;
 };

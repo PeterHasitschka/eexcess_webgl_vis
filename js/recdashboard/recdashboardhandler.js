@@ -1,19 +1,19 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
-GLVIS.RecDashboardHandler = function () {
+IQHN.RecDashboardHandler = function () {
 
     this.last_clicked_rec = null;
     this.last_clicked_col = null;
 
-    this.toolbar = new GLVIS.ToolbarHandler();
+    this.toolbar = new IQHN.ToolbarHandler();
 };
 
 /**
  * Handles visualization of click on collection in rec-dashboard html
- * @param {GLVIS.Collection} collection
+ * @param {IQHN.Collection} collection
  */
-GLVIS.RecDashboardHandler.prototype.onCollectionClick = function (collection) {
+IQHN.RecDashboardHandler.prototype.onCollectionClick = function (collection) {
     this.last_clicked_col = collection;
     this.toolbar.getButton("rec_focusparentcol").hide();
 };
@@ -21,26 +21,26 @@ GLVIS.RecDashboardHandler.prototype.onCollectionClick = function (collection) {
 
 /**
  * Handles visualization of click on recommendation in rec-dashboard html
- * @param {GLVIS.Recommendation} recommendation
+ * @param {IQHN.Recommendation} recommendation
  */
-GLVIS.RecDashboardHandler.prototype.onRecommendationClick = function (recommendation) {
+IQHN.RecDashboardHandler.prototype.onRecommendationClick = function (recommendation) {
     this.last_clicked_rec = recommendation;
     this.toolbar.getButton("rec_focusparentcol").show();
 };
 
 /**
  * Open the vis-dashboard's bookmark dialog for saving a recommendation in a bookmark
- * @param {GLVIS.Recommendation} rec
+ * @param {IQHN.Recommendation} rec
  * @returns {Boolean}
  */
-GLVIS.RecDashboardHandler.prototype.openBookmarkForm = function (rec) {
+IQHN.RecDashboardHandler.prototype.openBookmarkForm = function (rec) {
 
     if (!visTemplate) {
         console.error("Could not find 'visTemplate' object for communicating with the bookmark dialog!");
         return false;
     }
 
-    var events = GLVIS.Scene.getCurrentScene().getInteractionHandler().getEvents();
+    var events = IQHN.Scene.getCurrentScene().getInteractionHandler().getEvents();
     events.md.stopPropagation();
     events.mc.stopPropagation();
 
@@ -65,10 +65,10 @@ GLVIS.RecDashboardHandler.prototype.openBookmarkForm = function (rec) {
 /**
  * Determine the index of the current rec in the vis' result list.
  * If not in list it's getting set to null.
- * @param {GLVIS.Recommendation} rec
+ * @param {IQHN.Recommendation} rec
  * @returns {null|Integer}
  */
-GLVIS.RecDashboardHandler.prototype.determineListIndex = function (rec) {
+IQHN.RecDashboardHandler.prototype.determineListIndex = function (rec) {
     if (!visTemplate) {
         console.error("Could not find 'visTemplate' object for communicating with the Result-List!");
         return false;
@@ -85,7 +85,7 @@ GLVIS.RecDashboardHandler.prototype.determineListIndex = function (rec) {
 };
 
 
-GLVIS.RecDashboardHandler.prototype.applyFilters = function (filters) {
+IQHN.RecDashboardHandler.prototype.applyFilters = function (filters) {
 
     console.log(filters);
     console.warn("TODO: Apply filters to rec-dashboard sidebar!!!");
@@ -96,7 +96,7 @@ GLVIS.RecDashboardHandler.prototype.applyFilters = function (filters) {
      * P.H. 13.11.15
      */
     
-    var curr_col = GLVIS.Collection.curr_focus_coll;
+    var curr_col = IQHN.Collection.curr_focus_coll;
     var filterAllData = [];
     
     for (var i=0; i< curr_col.getRecommendations().length; i++) {

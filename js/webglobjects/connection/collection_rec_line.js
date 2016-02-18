@@ -1,14 +1,14 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
 /**
  * 
- * @param {GLVIS.Recommendation} recommendation
+ * @param {IQHN.Recommendation} recommendation
  * @param {THREE.Object3D} mesh_parent 
  */
-GLVIS.ConnectionCollectionRecommendation = function (recommendation, mesh_parent) {
+IQHN.ConnectionCollectionRecommendation = function (recommendation, mesh_parent) {
 
-    /** @type{GLVIS.Recommendation} **/
+    /** @type{IQHN.Recommendation} **/
     this.recommendation_ = recommendation;
     this.dirty_ = true;
 
@@ -19,9 +19,9 @@ GLVIS.ConnectionCollectionRecommendation = function (recommendation, mesh_parent
     this.initAndRegisterGlObj(mesh_parent);
 };
 
-GLVIS.ConnectionCollectionRecommendation.prototype.initAndRegisterGlObj = function (mesh_parent) {
+IQHN.ConnectionCollectionRecommendation.prototype.initAndRegisterGlObj = function (mesh_parent) {
 
-    var config = GLVIS.config.connection.recommendation_collection;
+    var config = IQHN.config.connection.recommendation_collection;
 
 
     var line_material = new THREE.LineBasicMaterial({
@@ -53,19 +53,19 @@ GLVIS.ConnectionCollectionRecommendation.prototype.initAndRegisterGlObj = functi
 };
 
 
-GLVIS.ConnectionCollectionRecommendation.prototype.render = function () {
+IQHN.ConnectionCollectionRecommendation.prototype.render = function () {
 
     if (!this.dirty_)
         return;
 
-    var config = GLVIS.config.connection.recommendation_collection;
-    /** @type{GLVIS.Recommendation} **/
+    var config = IQHN.config.connection.recommendation_collection;
+    /** @type{IQHN.Recommendation} **/
     var rec = this.recommendation_;
     var rec_pos = rec.getRelativePosition();
 
     var coll_pos = rec.getCollection().getPosition();
 
-    GLVIS.Debugger.debug("ConnectionCollectionRecommendation",
+    IQHN.Debugger.debug("ConnectionCollectionRecommendation",
             "Rendering CONNECTION for recommendation " + rec.getId(),
             7);
 
@@ -84,10 +84,10 @@ GLVIS.ConnectionCollectionRecommendation.prototype.render = function () {
 
 
 
-GLVIS.ConnectionCollectionRecommendation.prototype.setIsDirty = function (dirty) {
+IQHN.ConnectionCollectionRecommendation.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 };
 
-GLVIS.ConnectionCollectionRecommendation.prototype.getIsDirty = function () {
+IQHN.ConnectionCollectionRecommendation.prototype.getIsDirty = function () {
     return this.dirty_;
 };

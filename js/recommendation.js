@@ -1,23 +1,23 @@
 
 
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 /**
  * Holding information and GL-Representations of one search Result / One Recommendation
  * @param {object} eexcess_data Data from the database
- * @param {GLVIS.Collection} collection optional collection
+ * @param {IQHN.Collection} collection optional collection
  * @returns {undefined}
  */
-GLVIS.Recommendation = function (eexcess_data, collection) {
+IQHN.Recommendation = function (eexcess_data, collection) {
 
     /**
      * Internal increment id
      */
-    this.id_ = GLVIS.Recommendation.getNewId();
+    this.id_ = IQHN.Recommendation.getNewId();
 
     /**
      * Collection that has this recommendation
-     * @type{GLVIS.Collection} 
+     * @type{IQHN.Collection} 
      */
     this.collection_ = collection ? collection : null;
 
@@ -38,15 +38,15 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
      * Everything related to visualization
      */
     this.vis_data_ = {
-        status: GLVIS.Recommendation.STATUSFLAGS.NORMAL,
+        status: IQHN.Recommendation.STATUSFLAGS.NORMAL,
         relative_position: {
             x: 0,
             y: 0,
             z: 0
         },
-        radius: GLVIS.config.collection.recommendation.radius,
+        radius: IQHN.config.collection.recommendation.radius,
         color: 0x000000,
-        color_data: GLVIS.Recommendation.COLORDATA.LANGUAGE,
+        color_data: IQHN.Recommendation.COLORDATA.LANGUAGE,
         spline_color: null,
         opacity: 1,
         distance_factor: 1,
@@ -70,7 +70,7 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
 
     this.initGlNode();
 
-    GLVIS.Debugger.debug("Recommendation",
+    IQHN.Debugger.debug("Recommendation",
             "Recommendation with id " + this.id_ + " created!",
             6);
 };
@@ -78,10 +78,10 @@ GLVIS.Recommendation = function (eexcess_data, collection) {
 
 /**
  * Add a spline to the recommendation
- * @param {GLVIS.ConnectionRecRecSpline} spline
+ * @param {IQHN.ConnectionRecRecSpline} spline
  * @returns {undefined}
  */
-GLVIS.Recommendation.prototype.registerRecSpline = function (spline) {
+IQHN.Recommendation.prototype.registerRecSpline = function (spline) {
     this.connections_.splines.push(spline);
 };
 
@@ -89,9 +89,9 @@ GLVIS.Recommendation.prototype.registerRecSpline = function (spline) {
  * Returns a (random) color value for a spline.
  * @returns {integer}
  */
-GLVIS.Recommendation.prototype.getSplineColor = function () {
+IQHN.Recommendation.prototype.getSplineColor = function () {
     if (!this.vis_data_.spline_color) {
-        var config = GLVIS.config.connection.rec_spline;
+        var config = IQHN.config.connection.rec_spline;
         this.vis_data_.spline_color = config.base_color - parseInt(Math.random() * config.color_diff);
     }
     return this.vis_data_.spline_color;
@@ -100,10 +100,10 @@ GLVIS.Recommendation.prototype.getSplineColor = function () {
 
 /**
  * Remove a registered spline from the recommendation
- * @param {GLVIS.ConnectionRecRecSpline} spline
+ * @param {IQHN.ConnectionRecRecSpline} spline
  * @returns {undefined}
  */
-GLVIS.Recommendation.prototype.unregisterRecSpline = function (spline) {
+IQHN.Recommendation.prototype.unregisterRecSpline = function (spline) {
 
     var index = _.indexOf(this.connections_.splines, spline);
     if (index >= 0) {
@@ -111,7 +111,7 @@ GLVIS.Recommendation.prototype.unregisterRecSpline = function (spline) {
     }
 };
 
-GLVIS.Recommendation.prototype.deleteAllRecSplines = function () {
+IQHN.Recommendation.prototype.deleteAllRecSplines = function () {
 
     _.each(this.connections_.splines, function (spline) {
         if (!spline)
@@ -128,12 +128,12 @@ GLVIS.Recommendation.prototype.deleteAllRecSplines = function () {
  * Creating a common-node for representing the recommendation
  * @returns {undefined}
  */
-GLVIS.Recommendation.prototype.initGlNode = function () {
+IQHN.Recommendation.prototype.initGlNode = function () {
 
-    var gl_node = new GLVIS.RecommendationCommonNode(this, this.getCollection().getMeshContainerNode());
+    var gl_node = new IQHN.RecommendationCommonNode(this, this.getCollection().getMeshContainerNode());
     this.vis_data_.gl_objects.center_node = gl_node;
 
-    var gl_connection = new GLVIS.ConnectionCollectionRecommendation(this, this.getCollection().getMeshContainerNode());
+    var gl_connection = new IQHN.ConnectionCollectionRecommendation(this, this.getCollection().getMeshContainerNode());
     this.vis_data_.gl_objects.connection_col = gl_connection;
 
     this.setBaseColor();
@@ -143,23 +143,23 @@ GLVIS.Recommendation.prototype.initGlNode = function () {
 
 /**
  * 
- * @param {GLVIS.Recommendation.COLORDATA} colordata
+ * @param {IQHN.Recommendation.COLORDATA} colordata
  * @returns {undefined}
  */
-GLVIS.Recommendation.prototype.setColorData = function (colordata) {
+IQHN.Recommendation.prototype.setColorData = function (colordata) {
     this.vis_data_.color_data = colordata;
 };
 
 /**
  * Set node-color depending on the eexcess-data
  */
-GLVIS.Recommendation.prototype.setBaseColor = function () {
+IQHN.Recommendation.prototype.setBaseColor = function () {
 
 
-    var color = GLVIS.config.collection.recommendation.init_color;
+    var color = IQHN.config.collection.recommendation.init_color;
 
 
-    var config = GLVIS.config.collection.recommendation.colors;
+    var config = IQHN.config.collection.recommendation.colors;
 
     if (!config[this.vis_data_.color_data]) {
         throw ("Color-data " + this.vis_data_.color_data + " not found");
@@ -184,12 +184,12 @@ GLVIS.Recommendation.prototype.setBaseColor = function () {
 /**
  * Render the collection and its subnodes
  */
-GLVIS.Recommendation.prototype.render = function () {
+IQHN.Recommendation.prototype.render = function () {
 
     if (!this.dirty_)
         return;
 
-    GLVIS.Debugger.debug("Recommendation",
+    IQHN.Debugger.debug("Recommendation",
             "Recommendation with id " + this.id_ + " rendered!",
             6);
 
@@ -206,9 +206,9 @@ GLVIS.Recommendation.prototype.render = function () {
 
 /**
  * Setting the collection that the recommendation belongs to
- * @param {GLVIS.Collection} collection Collection;
+ * @param {IQHN.Collection} collection Collection;
  */
-GLVIS.Recommendation.prototype.setCollection = function (collection) {
+IQHN.Recommendation.prototype.setCollection = function (collection) {
     this.collection_ = collection;
 };
 
@@ -216,17 +216,17 @@ GLVIS.Recommendation.prototype.setCollection = function (collection) {
  * Called by interactionhandler. Function registered in mesh-objects
  * @returns {undefined}
  */
-GLVIS.Recommendation.prototype.handleDetailNodeClick = function () {
-    if (this.getStatus() === GLVIS.Recommendation.STATUSFLAGS.HIDDEN)
+IQHN.Recommendation.prototype.handleDetailNodeClick = function () {
+    if (this.getStatus() === IQHN.Recommendation.STATUSFLAGS.HIDDEN)
         return;
 
-    GLVIS.Debugger.debug("Recommendation",
+    IQHN.Debugger.debug("Recommendation",
             ["RECOMMENDATION " + this.getId() + " clicked", this],
             3);
 
     //Don't do focus etc. if clicked before --> Zoom out to collection
     /*
-     if (GLVIS.Recommendation.current_selected_rec && GLVIS.Recommendation.current_selected_rec === this) {
+     if (IQHN.Recommendation.current_selected_rec && IQHN.Recommendation.current_selected_rec === this) {
      this.defocusAndZoomOut();
      return;
      }
@@ -239,10 +239,10 @@ GLVIS.Recommendation.prototype.handleDetailNodeClick = function () {
 /**
  * If Click on common node: First create ring-rep (with detail nodes) then click on new detail node
  */
-GLVIS.Recommendation.prototype.handleCommonNodeClick = function () {
+IQHN.Recommendation.prototype.handleCommonNodeClick = function () {
 
 
-    if (this.getCollection().getStatus() === GLVIS.Collection.STATUSFLAGS.HIDDEN)
+    if (this.getCollection().getStatus() === IQHN.Collection.STATUSFLAGS.HIDDEN)
         return;
 
     if (!this.getCollection().getRingRepresentation())
@@ -253,52 +253,52 @@ GLVIS.Recommendation.prototype.handleCommonNodeClick = function () {
 };
 
 
-GLVIS.Recommendation.prototype.handleMouseover = function () {
+IQHN.Recommendation.prototype.handleMouseover = function () {
 
     //Do not show rec-splines when zoomed in to rec
-    if (GLVIS.Recommendation.current_selected_rec && GLVIS.Recommendation.current_selected_rec === this)
+    if (IQHN.Recommendation.current_selected_rec && IQHN.Recommendation.current_selected_rec === this)
         return;
 
 
 
-    /** @type {GLVIS.RecConnector} **/
-    var connector = GLVIS.Scene.getCurrentScene().getRecConnector();
+    /** @type {IQHN.RecConnector} **/
+    var connector = IQHN.Scene.getCurrentScene().getRecConnector();
     connector.connectSameRecs(this);
-    GLVIS.RecConnector.activatedAtSingleRecs.push(this);
+    IQHN.RecConnector.activatedAtSingleRecs.push(this);
 };
 
 /**
  * Swap the (no detailed) common node object with a Detail-Node.
  * Afterwards zoom and move in to the recommendation
  */
-GLVIS.Recommendation.prototype.focusAndZoom = function () {
+IQHN.Recommendation.prototype.focusAndZoom = function () {
 
     //Replace common node with detail node
-    GLVIS.Debugger.debug("Recommendation", "Setting node type to DETAILED and zoom in afterwards", 5);
-    this.setNodeType(GLVIS.Recommendation.NODETYPES.DETAILED);
+    IQHN.Debugger.debug("Recommendation", "Setting node type to DETAILED and zoom in afterwards", 5);
+    this.setNodeType(IQHN.Recommendation.NODETYPES.DETAILED);
 
-    var nav_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
+    var nav_handler = IQHN.Scene.getCurrentScene().getNavigationHandler();
     nav_handler.focusRecommendation(this);
 
 
-    if (GLVIS.Recommendation.current_selected_rec) {
-        //GLVIS.Debugger.debug("Recommendation", "Setting node type to COMMON of FORMER FOCUSED", 5);
-        //GLVIS.Recommendation.current_selected_rec.setNodeType(GLVIS.Recommendation.NODETYPES.COMMON);
+    if (IQHN.Recommendation.current_selected_rec) {
+        //IQHN.Debugger.debug("Recommendation", "Setting node type to COMMON of FORMER FOCUSED", 5);
+        //IQHN.Recommendation.current_selected_rec.setNodeType(IQHN.Recommendation.NODETYPES.COMMON);
     }
 
-    if (GLVIS.Recommendation.current_selected_rec)
-        GLVIS.Recommendation.current_selected_rec.setDetailNodeButtonVisibility(false);
+    if (IQHN.Recommendation.current_selected_rec)
+        IQHN.Recommendation.current_selected_rec.setDetailNodeButtonVisibility(false);
     this.vis_data_.gl_objects.center_node.setButtonsVisible(true);
 
 
-    GLVIS.Recommendation.current_selected_rec = this;
-    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
+    IQHN.Recommendation.current_selected_rec = this;
+    IQHN.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
 };
 
 
-GLVIS.Recommendation.prototype.setDetailNodeButtonVisibility = function (visible) {
+IQHN.Recommendation.prototype.setDetailNodeButtonVisibility = function (visible) {
 
-    if (this.vis_data_.gl_objects.center_node instanceof GLVIS.RecommendationDetailNode)
+    if (this.vis_data_.gl_objects.center_node instanceof IQHN.RecommendationDetailNode)
         this.vis_data_.gl_objects.center_node.setButtonsVisible(visible);
 };
 
@@ -306,37 +306,37 @@ GLVIS.Recommendation.prototype.setDetailNodeButtonVisibility = function (visible
  * De-Focus the Recommendation node.
  * Swap the detail node to a common node and move and zoom to the collection
  */
-GLVIS.Recommendation.prototype.defocusAndZoomOut = function () {
+IQHN.Recommendation.prototype.defocusAndZoomOut = function () {
 
     //Replace detail node with common node
     this.vis_data_.gl_objects.center_node.setButtonsVisible(false);
 
-    var scene = GLVIS.Scene.getCurrentScene();
+    var scene = IQHN.Scene.getCurrentScene();
     scene.getAnimation().stopCameraMovementAnimations();
     this.getCollection().selectAndFocus(function () {
 
     });
 
-    GLVIS.Recommendation.current_selected_rec = null;
-    GLVIS.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
+    IQHN.Recommendation.current_selected_rec = null;
+    IQHN.Scene.getCurrentScene().getRecDashboardHandler().onRecommendationClick(this);
 };
 
 /**
  * Swap the node type (e.g. common node or detailed node).
  * Each other registered type of node will be deleted from the gl list and will
  * be destroyed.
- * @param {Object} type Instance of @see{GLVIS.Recommendation.NODETYPES}
+ * @param {Object} type Instance of @see{IQHN.Recommendation.NODETYPES}
  */
-GLVIS.Recommendation.prototype.setNodeType = function (type) {
+IQHN.Recommendation.prototype.setNodeType = function (type) {
 
     var rec_node_type_exists = false;
 
-    GLVIS.Debugger.debug("Recommendation", "Creating new node type.", 5);
+    IQHN.Debugger.debug("Recommendation", "Creating new node type.", 5);
 
     //Check if that kind of node already exists
     if (this.vis_data_.center_node instanceof type) {
         rec_node_type_exists = true;
-        GLVIS.Debugger.debug("Recommendation", "Node of type " + type + " exists... skip creating it.", 6);
+        IQHN.Debugger.debug("Recommendation", "Node of type " + type + " exists... skip creating it.", 6);
     }
     if (rec_node_type_exists)
         return;
@@ -351,36 +351,36 @@ GLVIS.Recommendation.prototype.setNodeType = function (type) {
 
 /**
  * Returns the Node depending on the LOD
- * @returns {GLVIS.RecommendationCommonNode | GLVIS.RecommendationDetailNode}
+ * @returns {IQHN.RecommendationCommonNode | IQHN.RecommendationDetailNode}
  */
-GLVIS.Recommendation.prototype.getRecNode = function () {
+IQHN.Recommendation.prototype.getRecNode = function () {
     return this.vis_data_.gl_objects.center_node;
 };
 
 /**
  * Return parent-collection
- * @returns {GLVIS.Collection}
+ * @returns {IQHN.Collection}
  */
-GLVIS.Recommendation.prototype.getCollection = function () {
+IQHN.Recommendation.prototype.getCollection = function () {
     return this.collection_;
 };
 
 /**
  * Getting the status of the Recommendation
- * See @see{GLVIS.Recommendation.STATUSFLAGS}
+ * See @see{IQHN.Recommendation.STATUSFLAGS}
  * @returns {type}
  */
-GLVIS.Recommendation.prototype.getStatus = function () {
+IQHN.Recommendation.prototype.getStatus = function () {
     return this.vis_data_.status;
 };
 
 /**
  * Set the status of the Recommendation.
- * See @see{GLVIS.Recommendation.STATUSFLAGS}
+ * See @see{IQHN.Recommendation.STATUSFLAGS}
  * @param {type} status
  * @returns {undefined}
  */
-GLVIS.Recommendation.prototype.setStatus = function (status) {
+IQHN.Recommendation.prototype.setStatus = function (status) {
 
     if (status === this.vis_data_.status)
         return;
@@ -394,7 +394,7 @@ GLVIS.Recommendation.prototype.setStatus = function (status) {
 /**
  * Setting all sub-objects that hold GL Objects dirty
  */
-GLVIS.Recommendation.prototype.setMyGlObjectsDirty_ = function () {
+IQHN.Recommendation.prototype.setMyGlObjectsDirty_ = function () {
 
     for (var key in this.vis_data_.gl_objects) {
         if (this.vis_data_.gl_objects.hasOwnProperty(key) && this.vis_data_.gl_objects[key]) {
@@ -410,18 +410,18 @@ GLVIS.Recommendation.prototype.setMyGlObjectsDirty_ = function () {
 
 /**
  * Get Relative position to the collection
- * @returns {GLVIS.Recommendation.prototype.getPosition.pos}
+ * @returns {IQHN.Recommendation.prototype.getPosition.pos}
  */
-GLVIS.Recommendation.prototype.getRelativePosition = function () {
+IQHN.Recommendation.prototype.getRelativePosition = function () {
     return this.vis_data_.relative_position;
 };
 
 /**
  * Get Absolute position
  * @param {bool} physical Get Position of the mesh nodes (Necessary at e.g rotated recs)
- * @returns {GLVIS.Recommendation.prototype.getPosition.pos}
+ * @returns {IQHN.Recommendation.prototype.getPosition.pos}
  */
-GLVIS.Recommendation.prototype.getPosition = function (physical) {
+IQHN.Recommendation.prototype.getPosition = function (physical) {
     var coll_pos = this.getCollection().getPosition();
 
     var pos;
@@ -459,9 +459,9 @@ GLVIS.Recommendation.prototype.getPosition = function (physical) {
 
 /**
  * Getting the relative position of the recommendation related to the collection
- * @returns {GLVIS.Recommendation.prototype.getRelativePosition.pos}
+ * @returns {IQHN.Recommendation.prototype.getRelativePosition.pos}
  */
-GLVIS.Recommendation.prototype.getRelativePosition = function () {
+IQHN.Recommendation.prototype.getRelativePosition = function () {
     var pos = {
         x: this.vis_data_.relative_position.x,
         y: this.vis_data_.relative_position.y,
@@ -479,7 +479,7 @@ GLVIS.Recommendation.prototype.getRelativePosition = function () {
  * @param {float} y
  * @param {float} z
  */
-GLVIS.Recommendation.prototype.setRelativePosition = function (x, y, z) {
+IQHN.Recommendation.prototype.setRelativePosition = function (x, y, z) {
 
     if (x === null || x === undefined)
         x = this.vis_data_.relative_position.x;
@@ -497,7 +497,7 @@ GLVIS.Recommendation.prototype.setRelativePosition = function (x, y, z) {
      var y_rotate = this.getCollection() ? this.getCollection().getRotation() : 0;
      if (parseFloat(y_rotate) !== 0.0) {
      var vec = new THREE.Vector3(x, y, z);
-     rotated = GLVIS.Tools.getRotation(2, y_rotate, vec);
+     rotated = IQHN.Tools.getRotation(2, y_rotate, vec);
      }
      
      this.vis_data_.relative_position.x = rotated.x;
@@ -516,40 +516,40 @@ GLVIS.Recommendation.prototype.setRelativePosition = function (x, y, z) {
  * Set the position by a radians value.
  * Necessary for animation. The "that" parameter is necessary as it is used as
  * registered function in the animation without any knowlege about the object.
- * @param{GLVIS.Recommendation | null} that Reference to THIS object. (Animation doesn't know me...)
+ * @param{IQHN.Recommendation | null} that Reference to THIS object. (Animation doesn't know me...)
  * @param {float} rad Radians
  */
-GLVIS.Recommendation.prototype.setRelativePositionByRad = function (that, rad) {
+IQHN.Recommendation.prototype.setRelativePositionByRad = function (that, rad) {
     if (!that)
         that = this;
 
-    var init_distance = GLVIS.config.collection.recommendation.init_distance;
+    var init_distance = IQHN.config.collection.recommendation.init_distance;
 
     var node_type_secific_add_distance = this.vis_data_.gl_objects.center_node.add_distance;
 
     //this.updateNodeDistance();
     var distance = that.vis_data_.distance_factor * init_distance + node_type_secific_add_distance;
-    var pos = GLVIS.Tools.getPosFromRad(rad, distance);
-    that.setRelativePosition(pos.x, pos.y, GLVIS.config.collection.recommendation.init_z);
+    var pos = IQHN.Tools.getPosFromRad(rad, distance);
+    that.setRelativePosition(pos.x, pos.y, IQHN.config.collection.recommendation.init_z);
 };
 
 /**
  * Get the radians of the node around the collection.
  * Necessary for animation. The "that" parameter is necessary as it is used as
  * ŕegistered function in the animation without any knowlege about the object.
- * @param{GLVIS.Recommendation | null} that Reference to THIS object. (Animation doesn't know me...)
+ * @param{IQHN.Recommendation | null} that Reference to THIS object. (Animation doesn't know me...)
  * @returns {float} Radians
  */
-GLVIS.Recommendation.prototype.getRelativePositionRad = function (that) {
+IQHN.Recommendation.prototype.getRelativePositionRad = function (that) {
     if (!that)
         that = this;
 
-    var distance = GLVIS.config.collection.recommendation.init_distance;
+    var distance = IQHN.config.collection.recommendation.init_distance;
 
 
     var pos = that.getRelativePosition();
 
-    return GLVIS.Tools.getRadFromPos(pos.x, pos.y);
+    return IQHN.Tools.getRadFromPos(pos.x, pos.y);
 
 };
 
@@ -558,20 +558,20 @@ GLVIS.Recommendation.prototype.getRelativePositionRad = function (that) {
  * @param {bool} visualize If TRUE relevance gets visualized else not.
  * @returns {undefined}
  */
-GLVIS.Recommendation.prototype.toggleVisualizeRelevance = function (visualize) {
+IQHN.Recommendation.prototype.toggleVisualizeRelevance = function (visualize) {
 
-    GLVIS.Debugger.debug("Recommendation", "Toggle rel vis of rec " + this.getId() + " called ", 7);
+    IQHN.Debugger.debug("Recommendation", "Toggle rel vis of rec " + this.getId() + " called ", 7);
     if (visualize) {
         var relevance = this.getRelevance();
 
-        var config = GLVIS.config.collection.recommendation.relevance;
+        var config = IQHN.config.collection.recommendation.relevance;
 
         this.setSizeFactor(relevance * config.sizefactor + config.sizeoffset, true);
     }
     else {
-        var config = GLVIS.config.collection.recommendation;
-        GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(config.size_animation.id_prefix + this.getId());
-        GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(config.distfact_animation.id_prefix + this.getId());
+        var config = IQHN.config.collection.recommendation;
+        IQHN.Scene.getCurrentScene().getAnimation().finishAnimation(config.size_animation.id_prefix + this.getId());
+        IQHN.Scene.getCurrentScene().getAnimation().finishAnimation(config.distfact_animation.id_prefix + this.getId());
         this.setSizeFactor(1, false);
     }
 
@@ -583,17 +583,17 @@ GLVIS.Recommendation.prototype.toggleVisualizeRelevance = function (visualize) {
  * @param {float} factor Factor to be multiplied with radius
  * @param {bool} animate TRUE if animation should be performed
  */
-GLVIS.Recommendation.prototype.setSizeFactor = function (factor, animate) {
+IQHN.Recommendation.prototype.setSizeFactor = function (factor, animate) {
 
-    GLVIS.Debugger.debug("Recommendation", "Setting size factor of rec " + this.getId() + " to " + factor, 7);
+    IQHN.Debugger.debug("Recommendation", "Setting size factor of rec " + this.getId() + " to " + factor, 7);
     if (!animate) {
         this.vis_data_.size_factor = factor;
         this.setIsDirty(true);
     }
     else {
 
-        var config = GLVIS.config.collection.recommendation.size_animation;
-        GLVIS.Scene.getCurrentScene().getAnimation().register(
+        var config = IQHN.config.collection.recommendation.size_animation;
+        IQHN.Scene.getCurrentScene().getAnimation().register(
                 config.id_prefix + this.getId(),
                 factor,
                 null,
@@ -615,7 +615,7 @@ GLVIS.Recommendation.prototype.setSizeFactor = function (factor, animate) {
  * A value that represents a 'relevance' of the current rec in the collection 
  * @param {float} relevance A Value between 0 and 1
  */
-GLVIS.Recommendation.prototype.setRelevance = function (relevance) {
+IQHN.Recommendation.prototype.setRelevance = function (relevance) {
 
     if (relevance < 0 || relevance > 1)
         throw ("Relevance must be between 0 and 1");
@@ -627,27 +627,27 @@ GLVIS.Recommendation.prototype.setRelevance = function (relevance) {
  * A value that represents a 'relevance' of the current rec in the collection 
  * @returns {float} The 'relevance' value of the rec
  */
-GLVIS.Recommendation.prototype.getRelevance = function () {
+IQHN.Recommendation.prototype.getRelevance = function () {
     return this.vis_data_.relevance;
 };
 
 /**
  * @return {float} Factor to be multiplied with radius
  */
-GLVIS.Recommendation.prototype.getSizeFactor = function () {
+IQHN.Recommendation.prototype.getSizeFactor = function () {
     return this.vis_data_.size_factor;
 };
 
 
 
-GLVIS.Recommendation.prototype.setRadius = function (radius) {
+IQHN.Recommendation.prototype.setRadius = function (radius) {
     if (this.vis_data_.radius === radius)
         return;
     this.vis_data_.radius = radius;
     this.setIsDirty(true);
 };
 
-GLVIS.Recommendation.prototype.getRadius = function () {
+IQHN.Recommendation.prototype.getRadius = function () {
     return this.vis_data_.radius;
 };
 
@@ -657,9 +657,9 @@ GLVIS.Recommendation.prototype.getRadius = function () {
  * @param {float} factor
  * @param {bool} animate TRUE if animation should be started, FALSE if not
  */
-GLVIS.Recommendation.prototype.setDistanceFactor = function (factor, animate) {
+IQHN.Recommendation.prototype.setDistanceFactor = function (factor, animate) {
 
-    GLVIS.Debugger.debug("Recommendation", "Setting distance factor of rec " + this.getId() + " to " + factor, 7);
+    IQHN.Debugger.debug("Recommendation", "Setting distance factor of rec " + this.getId() + " to " + factor, 7);
     if (!animate) {
         this.vis_data_.distance_factor = factor;
         this.setRelativePositionByRad(this, this.getRelativePositionRad());
@@ -667,9 +667,9 @@ GLVIS.Recommendation.prototype.setDistanceFactor = function (factor, animate) {
     }
     else {
 
-        var config = GLVIS.config.collection.recommendation.distfact_animation;
+        var config = IQHN.config.collection.recommendation.distfact_animation;
 
-        GLVIS.Scene.getCurrentScene().getAnimation().register(
+        IQHN.Scene.getCurrentScene().getAnimation().register(
                 config.id_prefix + this.getId(),
                 factor,
                 null,
@@ -690,14 +690,14 @@ GLVIS.Recommendation.prototype.setDistanceFactor = function (factor, animate) {
          * Getting a factor for moving the rec more far or near relative to the collection center
          * return {float}
          */
-        GLVIS.Recommendation.prototype.getDistanceFactor = function () {
+        IQHN.Recommendation.prototype.getDistanceFactor = function () {
             return this.vis_data_.distance_factor;
         },
         /**
          * 
          * @param {integer} color e.g. 0xFF0000
          */
-        GLVIS.Recommendation.prototype.setColor = function (color) {
+        IQHN.Recommendation.prototype.setColor = function (color) {
             if (this.vis_data_.color === color)
                 return;
             this.vis_data_.color = color;
@@ -708,7 +708,7 @@ GLVIS.Recommendation.prototype.setDistanceFactor = function (factor, animate) {
  * @param {float} opacity 0 - Transparent, 1 - Full visible
  * @param {bool} animate TRUE if animation, FALSE if not
  */
-GLVIS.Recommendation.prototype.setOpacity = function (opacity, animate) {
+IQHN.Recommendation.prototype.setOpacity = function (opacity, animate) {
     if (this.vis_data_.opacity === opacity)
         return;
 
@@ -718,8 +718,8 @@ GLVIS.Recommendation.prototype.setOpacity = function (opacity, animate) {
     }
     else {
 
-        var config = GLVIS.config.collection.recommendation.opacity_animation;
-        GLVIS.Scene.getCurrentScene().getAnimation().register(
+        var config = IQHN.config.collection.recommendation.opacity_animation;
+        IQHN.Scene.getCurrentScene().getAnimation().register(
                 config.id_prefix + this.getId(),
                 opacity,
                 null,
@@ -741,13 +741,13 @@ GLVIS.Recommendation.prototype.setOpacity = function (opacity, animate) {
  * Apply a positive or negative match of the filter's result to visualize that.
  * @param {bool} positive
  */
-GLVIS.Recommendation.prototype.setFilterPositive = function (positive) {
+IQHN.Recommendation.prototype.setFilterPositive = function (positive) {
 
     if (this.vis_data_.is_filter_positive === positive)
         return;
 
     //Only animate if current collection selected
-    var animate = this.getCollection().getStatus() === GLVIS.Collection.STATUSFLAGS.SELECTED ? true : false;
+    var animate = this.getCollection().getStatus() === IQHN.Collection.STATUSFLAGS.SELECTED ? true : false;
     if (positive) {
         this.setOpacity(1, animate);
         //this.setDistanceFactor(1, animate);
@@ -765,8 +765,8 @@ GLVIS.Recommendation.prototype.setFilterPositive = function (positive) {
     /*
      var relevance = this.getRelevance();
      
-     var filter_distance_fact = positive ? 1 : GLVIS.config.collection.recommendation.filter.distance_factor;
-     var dist_fact = GLVIS.config.collection.recommendation.relevance.distfactor;
+     var filter_distance_fact = positive ? 1 : IQHN.config.collection.recommendation.filter.distance_factor;
+     var dist_fact = IQHN.config.collection.recommendation.relevance.distfactor;
      
      if (this.vis_data_.relevance_shown)
      this.setDistanceFactor((1 + relevance * dist_fact) * filter_distance_fact, true);
@@ -778,14 +778,14 @@ GLVIS.Recommendation.prototype.setFilterPositive = function (positive) {
     this.setIsDirty(true);
 };
 
-GLVIS.Recommendation.prototype.updateNodeDistance = function () {
+IQHN.Recommendation.prototype.updateNodeDistance = function () {
     var relevance = this.getRelevance();
     var filter_positive = this.vis_data_.is_filter_positive;
 
-    var filter_distance_fact = filter_positive ? 1 : GLVIS.config.collection.recommendation.filter.distance_factor;
-    var dist_fact = GLVIS.config.collection.recommendation.relevance.distfactor;
+    var filter_distance_fact = filter_positive ? 1 : IQHN.config.collection.recommendation.filter.distance_factor;
+    var dist_fact = IQHN.config.collection.recommendation.relevance.distfactor;
 
-    var dist_config = GLVIS.config.collection.recommendation.distance;
+    var dist_config = IQHN.config.collection.recommendation.distance;
 
     var goal_fact;
     var min_dist = dist_config.min_dist_fct;
@@ -813,17 +813,17 @@ GLVIS.Recommendation.prototype.updateNodeDistance = function () {
  * Else FALSE
  * @returns {bool}
  */
-GLVIS.Recommendation.prototype.getFilterPositive = function () {
+IQHN.Recommendation.prototype.getFilterPositive = function () {
     return this.vis_data_.is_filter_positive;
 };
 
 
-GLVIS.Recommendation.prototype.getOpacity = function (/* include_distance */) {
+IQHN.Recommendation.prototype.getOpacity = function (/* include_distance */) {
 
     var depth_opacity_fact = 1;
     /*
-     var depth_strength = GLVIS.config.collection.recommendation.opacity_depth.strength;
-     var depth_weaken = GLVIS.config.collection.recommendation.opacity_depth.weakness;
+     var depth_strength = IQHN.config.collection.recommendation.opacity_depth.strength;
+     var depth_weaken = IQHN.config.collection.recommendation.opacity_depth.weakness;
      if (include_distance) {
      depth_opacity_fact = Math.min(1, (1 - this.getPosition().z * depth_strength)) * depth_weaken + (1 - depth_weaken);
      }
@@ -834,26 +834,26 @@ GLVIS.Recommendation.prototype.getOpacity = function (/* include_distance */) {
 };
 
 
-GLVIS.Recommendation.prototype.getColor = function () {
+IQHN.Recommendation.prototype.getColor = function () {
     return this.vis_data_.color;
 };
 
-GLVIS.Recommendation.prototype.setIsDirty = function (dirty) {
+IQHN.Recommendation.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
     if (dirty) {
         this.setMyGlObjectsDirty_();
     }
 };
 
-GLVIS.Recommendation.prototype.getId = function () {
+IQHN.Recommendation.prototype.getId = function () {
     return this.id_;
 };
 
-GLVIS.Recommendation.prototype.getEexcessData = function () {
+IQHN.Recommendation.prototype.getEexcessData = function () {
     return this.eexcess_data_;
 };
 
-GLVIS.Recommendation.prototype.openLink = function () {
+IQHN.Recommendation.prototype.openLink = function () {
 
     var win = window.open(this.eexcess_data_.result.uri, '_blank');
 };
@@ -866,26 +866,26 @@ GLVIS.Recommendation.prototype.openLink = function () {
  ******************/
 
 
-GLVIS.Recommendation.current_id = 0;
-GLVIS.Recommendation.getNewId = function () {
+IQHN.Recommendation.current_id = 0;
+IQHN.Recommendation.getNewId = function () {
     var id = this.current_id;
     this.current_id++;
     return id;
 };
-GLVIS.Recommendation.STATUSFLAGS = {
+IQHN.Recommendation.STATUSFLAGS = {
     NORMAL: 0x000,
     HIDDEN: 0x001
 };
 
-GLVIS.Recommendation.NODETYPES = {
-    COMMON: GLVIS.RecommendationCommonNode,
-    DETAILED: GLVIS.RecommendationDetailNode
+IQHN.Recommendation.NODETYPES = {
+    COMMON: IQHN.RecommendationCommonNode,
+    DETAILED: IQHN.RecommendationDetailNode
 };
 
 
-GLVIS.Recommendation.COLORDATA = {
+IQHN.Recommendation.COLORDATA = {
     PROVIDER: "provider",
     LANGUAGE: "language"
 };
 
-GLVIS.Recommendation.current_selected_rec = null;
+IQHN.Recommendation.current_selected_rec = null;

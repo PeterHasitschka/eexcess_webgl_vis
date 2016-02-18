@@ -1,7 +1,7 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
-GLVIS.DbHandlerLocalStorage = function () {
+IQHN.DbHandlerLocalStorage = function () {
 
     /** @type{QueryResultDb} **/
     this.db_ = queryDb;
@@ -14,7 +14,7 @@ GLVIS.DbHandlerLocalStorage = function () {
 };
 
 
-GLVIS.DbHandlerLocalStorage.prototype.getCollections = function () {
+IQHN.DbHandlerLocalStorage.prototype.getCollections = function () {
 
     var db_results = this.db_.getAllQueriesOrdered();
     var queries_used = [];
@@ -51,16 +51,16 @@ GLVIS.DbHandlerLocalStorage.prototype.getCollections = function () {
             timestamp: 000000
         };
 
-        var collection = new GLVIS.Collection(eexcess_data);
+        var collection = new IQHN.Collection(eexcess_data);
         if (last_coll)
             collection.setParentId(last_coll.getId());
 
-        var max_length = GLVIS.config.db.max_recs_to_load;
+        var max_length = IQHN.config.db.max_recs_to_load;
         
         var result_length = curr_item.result.length;
         
         if (max_length !== null && result_length > max_length) {
-            GLVIS.Debugger.debug("DbHandlerLocalStorage", "WARNING! Limiting result count (" + 
+            IQHN.Debugger.debug("DbHandlerLocalStorage", "WARNING! Limiting result count (" + 
                     result_length + ") to " + max_length, 3);
             result_length = max_length;
         }
@@ -73,7 +73,7 @@ GLVIS.DbHandlerLocalStorage.prototype.getCollections = function () {
                 result: curr_res_data
             };
 
-            var rec = new GLVIS.Recommendation(res_eexcess_data, collection);
+            var rec = new IQHN.Recommendation(res_eexcess_data, collection);
 
             //Add relevance. The first has the highest
             rec.setRelevance(1 - (j / curr_item.result.length));
@@ -91,7 +91,7 @@ GLVIS.DbHandlerLocalStorage.prototype.getCollections = function () {
  * 
  * Not necessary anymore. Data structure the same as before
  * 
- GLVIS.DbHandlerLocalStorage.prototype.enrichQuery = function (query_string) {
+ IQHN.DbHandlerLocalStorage.prototype.enrichQuery = function (query_string) {
  
  var query_words = query_string.split(" ");
  

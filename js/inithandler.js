@@ -1,15 +1,15 @@
 
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
-GLVIS.InitHandler = function () {
+IQHN.InitHandler = function () {
     this.bookmarks_to_vis = null;
 };
 
-GLVIS.InitHandler.setBookmarks = function (bms) {
+IQHN.InitHandler.setBookmarks = function (bms) {
     this.bookmarks_to_vis = bms;
 };
 
-GLVIS.InitHandler.libs_loaded = false;
+IQHN.InitHandler.libs_loaded = false;
 
 
 /**
@@ -20,7 +20,7 @@ GLVIS.InitHandler.libs_loaded = false;
  * @param {object | null} bookmarks If not empty, those bookmarks are getting shown
  * @returns {undefined}
  */
-GLVIS.InitHandler.init = function (root_element, cb, bookmarks) {
+IQHN.InitHandler.init = function (root_element, cb, bookmarks) {
 
     if (bookmarks)
         this.bookmarks_to_vis = bookmarks;
@@ -41,7 +41,7 @@ GLVIS.InitHandler.init = function (root_element, cb, bookmarks) {
  * when using the dashboard in a standalone environment without extension or server
  * @param {object} root_element Jquery object
  */
-GLVIS.InitHandler.appendHtmlStuff = function (root_element) {
+IQHN.InitHandler.appendHtmlStuff = function (root_element) {
 
     var media_folder = "../WebGlVisualization/media/";
     if (typeof (standalone_folder_prefix) !== "undefined")
@@ -72,9 +72,9 @@ GLVIS.InitHandler.appendHtmlStuff = function (root_element) {
  * @param {object} root_element jQuery element
  * @param {string} path prefix for all files 
  * @param {function} cb Callback after loading
- * @returns {GLVIS.InitHandler.loadFiles}
+ * @returns {IQHN.InitHandler.loadFiles}
  */
-GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
+IQHN.InitHandler.loadFiles = function (root_element, path, cb) {
 
     var folder_prefix;
     if (typeof (standalone_folder_prefix) !== "undefined")
@@ -83,7 +83,7 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
         folder_prefix = "../WebGlVisualization/";
 
 
-    if (!GLVIS.InitHandler.libs_loaded) {
+    if (!IQHN.InitHandler.libs_loaded) {
         this.load_([
             folder_prefix + "lib/underscore/underscore.js",
             folder_prefix + "lib/three.js/three.min.js",
@@ -139,7 +139,7 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
                         }.bind(this));
             }
     else {
-        GLVIS.InitHandler.initScene(this.scene, this.db_handler, cb);
+        IQHN.InitHandler.initScene(this.scene, this.db_handler, cb);
     }
 };
 
@@ -150,14 +150,14 @@ GLVIS.InitHandler.loadFiles = function (root_element, path, cb) {
  * @param {type} cb
  * @returns {undefined}
  */
-GLVIS.InitHandler.afterFilesLoaded_ = function (root_element, path, cb) {
-    GLVIS.Debugger.debug("InitHandler",
+IQHN.InitHandler.afterFilesLoaded_ = function (root_element, path, cb) {
+    IQHN.Debugger.debug("InitHandler",
             "finished calling js files for webglvis-plugin",
             3);
 
-    GLVIS.InitHandler.initScene(this.scene, this.db_handler, cb);
+    IQHN.InitHandler.initScene(this.scene, this.db_handler, cb);
 
-    GLVIS.InitHandler.libs_loaded = true;
+    IQHN.InitHandler.libs_loaded = true;
 };
 
 /**
@@ -167,7 +167,7 @@ GLVIS.InitHandler.afterFilesLoaded_ = function (root_element, path, cb) {
  * @param {array[string]} files
  * @param {function} cb Callback
  */
-GLVIS.InitHandler.load_ = function (files, cb) {
+IQHN.InitHandler.load_ = function (files, cb) {
 
     if (!Modernizr) {
         require(files, cb);
@@ -180,9 +180,9 @@ GLVIS.InitHandler.load_ = function (files, cb) {
             },
             complete: function (d) {
                 var millisecs = 200;
-                GLVIS.Debugger.debug("InitHandler", "Waiting for " + millisecs + "ms to complete class initializations...", 3);
+                IQHN.Debugger.debug("InitHandler", "Waiting for " + millisecs + "ms to complete class initializations...", 3);
                 setTimeout(function () {
-                    GLVIS.Debugger.debug("InitHandler", "Finished waiting", 3);
+                    IQHN.Debugger.debug("InitHandler", "Finished waiting", 3);
                     cb();
                 }, millisecs);
 
@@ -194,21 +194,21 @@ GLVIS.InitHandler.load_ = function (files, cb) {
 
 /**
  * Create DB-Handler and Scene. 
- * @param {GLVIS.Scene} scene
- * @param {GLVIS.DbHandlerIndexedDb} db_handler
+ * @param {IQHN.Scene} scene
+ * @param {IQHN.DbHandlerIndexedDb} db_handler
  * @param {function} cb callback
  */
-GLVIS.InitHandler.initScene = function (scene, db_handler, cb) {
+IQHN.InitHandler.initScene = function (scene, db_handler, cb) {
 
-    scene = new GLVIS.Scene(jQuery(GLVIS.config.rec_dashboard.selector));
+    scene = new IQHN.Scene(jQuery(IQHN.config.rec_dashboard.selector));
 
     var collections = null;
     if (!this.bookmarks_to_vis) {
-        db_handler = new GLVIS.DbHandlerLocalStorage();
+        db_handler = new IQHN.DbHandlerLocalStorage();
         collections = db_handler.getCollections();
     }
     else {
-        var bm_handler = new GLVIS.BookmarkHandler(this.bookmarks_to_vis);
+        var bm_handler = new IQHN.BookmarkHandler(this.bookmarks_to_vis);
         collections = bm_handler.getCollections();
     }
 
@@ -217,21 +217,21 @@ GLVIS.InitHandler.initScene = function (scene, db_handler, cb) {
     }
 
     scene.initCollectionNetwork();
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getCanvas().show();
+    IQHN.Scene.getCurrentScene().getWebGlHandler().getCanvas().show();
 
-    GLVIS.Scene.animate();
+    IQHN.Scene.animate();
 
     if (cb)
         cb();
 };
 
 
-GLVIS.InitHandler.cleanup = function () {
+IQHN.InitHandler.cleanup = function () {
 
-    GLVIS.Debugger.debug("InitHandler",
+    IQHN.Debugger.debug("InitHandler",
             "Cleaning up!",
             3);
 
-    delete GLVIS.Scene.getCurrentScene();
-    GLVIS.Scene.current_scene = null;
+    delete IQHN.Scene.getCurrentScene();
+    IQHN.Scene.current_scene = null;
 };

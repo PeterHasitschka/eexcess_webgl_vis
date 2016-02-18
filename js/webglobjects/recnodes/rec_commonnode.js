@@ -1,13 +1,13 @@
 
-GLVIS = GLVIS || {};
+IQHN = IQHN || {};
 
 
 /**
  * Representing a common recommendation of a Collection in WebGl
- * @param {GLVIS.Recommendation} recommendation recommendation that node represents
+ * @param {IQHN.Recommendation} recommendation recommendation that node represents
  * @param {THREE.Object3D} mesh-parent
  */
-GLVIS.RecommendationCommonNode = function (recommendation, mesh_parent) {
+IQHN.RecommendationCommonNode = function (recommendation, mesh_parent) {
 
     this.dirty_ = true;
     this.recommendation_ = recommendation;
@@ -23,14 +23,14 @@ GLVIS.RecommendationCommonNode = function (recommendation, mesh_parent) {
 
     this.initAndRegisterGlObj(mesh_parent);
 
-    this.add_distance = GLVIS.config.collection.recommendation.common_node.add_dinstance;
+    this.add_distance = IQHN.config.collection.recommendation.common_node.add_dinstance;
 };
 
 
 
-GLVIS.RecommendationCommonNode.prototype.initAndRegisterGlObj = function (mesh_parent) {
+IQHN.RecommendationCommonNode.prototype.initAndRegisterGlObj = function (mesh_parent) {
 
-    var config = GLVIS.config.collection.recommendation.common_node;
+    var config = IQHN.config.collection.recommendation.common_node;
 
     var circleMaterial =
             new THREE.MeshBasicMaterial(
@@ -62,7 +62,7 @@ GLVIS.RecommendationCommonNode.prototype.initAndRegisterGlObj = function (mesh_p
 
 };
 
-GLVIS.RecommendationCommonNode.prototype.render = function () {
+IQHN.RecommendationCommonNode.prototype.render = function () {
 
     if (!this.dirty_)
         return;
@@ -71,7 +71,7 @@ GLVIS.RecommendationCommonNode.prototype.render = function () {
     if (!this.webgl_objects_.circle)
         return;
 
-    GLVIS.Debugger.debug(
+    IQHN.Debugger.debug(
             "RecommendationCommonNode",
             "Rendering RECOMMENDATION COMMON-NODE  for recommendation " + this.recommendation_.getId(),
             7);
@@ -95,11 +95,11 @@ GLVIS.RecommendationCommonNode.prototype.render = function () {
 
 };
 
-GLVIS.RecommendationCommonNode.prototype.setIsDirty = function (dirty) {
+IQHN.RecommendationCommonNode.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 };
 
-GLVIS.RecommendationCommonNode.prototype.getIsDirty = function () {
+IQHN.RecommendationCommonNode.prototype.getIsDirty = function () {
     return this.dirty_;
 };
 
@@ -107,15 +107,15 @@ GLVIS.RecommendationCommonNode.prototype.getIsDirty = function () {
  * Returns the mesh of the inner circle
  * @returns {THREE.Mesh}
  */
-GLVIS.RecommendationCommonNode.prototype.getCircle = function () {
+IQHN.RecommendationCommonNode.prototype.getCircle = function () {
     return this.webgl_objects_.circle;
 },
         /**
          * Delete all GL-Objects and remove them from the scene
          */
-        GLVIS.RecommendationCommonNode.prototype.delete = function () {
+        IQHN.RecommendationCommonNode.prototype.delete = function () {
 
-            //var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+            //var three_scene = IQHN.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
             this.mesh_parent_.remove(this.webgl_objects_.circle);
 
             delete this.webgl_objects_.circle;

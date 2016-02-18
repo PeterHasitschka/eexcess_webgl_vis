@@ -1,16 +1,16 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
 
-GLVIS.Forms = function (scene) {
+IQHN.Forms = function (scene) {
     this.scene_ = scene;
 };
 
 /**
  * Create an info-box showing details of a specific recommendation 
- * @param {GLVIS.Recommendation} rec
+ * @param {IQHN.Recommendation} rec
  */
-GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
+IQHN.Forms.prototype.createFormRecInfo = function (rec) {
 
     var e_data = rec.getEexcessData();
 
@@ -90,7 +90,7 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
                 text: 'Open in new Tab'
             }).prop("outerHTML");
 
-        var filter_applied = GLVIS.Scene.getCurrentScene().getFilterHandler().isFilterApplied(key, facets[key]);
+        var filter_applied = IQHN.Scene.getCurrentScene().getFilterHandler().isFilterApplied(key, facets[key]);
 
 
         content_datacontainer2.append(
@@ -181,11 +181,11 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
         var key = this.getAttribute("f_key");
         var val = this.getAttribute("f_val");
 
-        if (!GLVIS.Filter.isFilter(key))
+        if (!IQHN.Filter.isFilter(key))
             return;
 
-        var fh = GLVIS.Scene.getCurrentScene().getFilterHandler();
-        var filter = new GLVIS.Filter(key, val);
+        var fh = IQHN.Scene.getCurrentScene().getFilterHandler();
+        var filter = new IQHN.Filter(key, val);
         fh.addFilter(filter);
         fh.apply();
 
@@ -200,11 +200,11 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
     jQuery('.webgl_rec_infobox_data_filterremove[rec_id=' + rec.getId() + ']').click(function (e) {
         var key = this.getAttribute("f_key");
 
-        if (!GLVIS.Filter.isFilter(key))
+        if (!IQHN.Filter.isFilter(key))
             return;
 
-        var fh = GLVIS.Scene.getCurrentScene().getFilterHandler();
-        var filter = new GLVIS.Filter(key, val);
+        var fh = IQHN.Scene.getCurrentScene().getFilterHandler();
+        var filter = new IQHN.Filter(key, val);
 
         fh.removeFilter(key);
         fh.apply();
@@ -223,7 +223,7 @@ GLVIS.Forms.prototype.createFormRecInfo = function (rec) {
  * @param {string} content HTML-Code that will be shown in the box
  * @returns {undefined}
  */
-GLVIS.Forms.prototype.buildForm_ = function (content) {
+IQHN.Forms.prototype.buildForm_ = function (content) {
 
     var hidden_link = jQuery('<a/>', {
         id: 'webgl_form_link',

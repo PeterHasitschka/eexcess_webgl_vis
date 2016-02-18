@@ -1,4 +1,4 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 /**
  * 
@@ -8,7 +8,7 @@ var GLVIS = GLVIS || {};
 
 
 
-GLVIS.DbQueryObj = function (data) {
+IQHN.DbQueryObj = function (data) {
 
     //For avoiding to join the 'query' array at every compare
     this.query_str_ = null;
@@ -23,10 +23,10 @@ GLVIS.DbQueryObj = function (data) {
 };
 
 /**
- * Set Data coming from @see{GLVIS.DbHandlerIndexedDb.getStorageData_}
+ * Set Data coming from @see{IQHN.DbHandlerIndexedDb.getStorageData_}
  * @param {type} data Obj
  */
-GLVIS.DbQueryObj.prototype.setData = function (data) {
+IQHN.DbQueryObj.prototype.setData = function (data) {
     this.data_ = data;
 
     var words = [];
@@ -37,10 +37,10 @@ GLVIS.DbQueryObj.prototype.setData = function (data) {
 };
 
 /**
- * Returning (processed) data originally from @see{GLVIS.DbHandlerIndexedDb.getStorageData_}.
+ * Returning (processed) data originally from @see{IQHN.DbHandlerIndexedDb.getStorageData_}.
  * @returns {object}
  */
-GLVIS.DbQueryObj.prototype.getData = function () {
+IQHN.DbQueryObj.prototype.getData = function () {
     return this.data_;
 };
 
@@ -48,31 +48,31 @@ GLVIS.DbQueryObj.prototype.getData = function () {
  * Returns the timestamp from the db data
  * @returns {float} timestamp
  */
-GLVIS.DbQueryObj.prototype.getTimestamp = function () {
+IQHN.DbQueryObj.prototype.getTimestamp = function () {
     return this.data_.timestamp;
 };
 
 /**
  * 
- * @param {type} rec_data GLVIS.DbRecObj.data_
- * @returns {GLVIS.DbQueryObj.data_.timestamp}
+ * @param {type} rec_data IQHN.DbRecObj.data_
+ * @returns {IQHN.DbQueryObj.data_.timestamp}
  */
-GLVIS.DbQueryObj.prototype.addRec = function (rec_data) {
+IQHN.DbQueryObj.prototype.addRec = function (rec_data) {
     this.recs_.push(rec_data);
 };
 
 /**
- * Returning array of rec-data @see{GLVIS.DbRecObj}
+ * Returning array of rec-data @see{IQHN.DbRecObj}
  * @returns {Array}
  */
-GLVIS.DbQueryObj.prototype.getRecs = function () {
+IQHN.DbQueryObj.prototype.getRecs = function () {
     return this.recs_;
 };
 
 /**
  * Flag this query data as an duplicate
  */
-GLVIS.DbQueryObj.prototype.flagDuplicate = function () {
+IQHN.DbQueryObj.prototype.flagDuplicate = function () {
     this.duplicate_ = true;
 };
 
@@ -80,7 +80,7 @@ GLVIS.DbQueryObj.prototype.flagDuplicate = function () {
  * Returns true if query-search is an duplicate of another one
  * @returns {Boolean}
  */
-GLVIS.DbQueryObj.prototype.getIsDuplicate = function () {
+IQHN.DbQueryObj.prototype.getIsDuplicate = function () {
     return(this.duplicate_);
 };
 
@@ -88,7 +88,7 @@ GLVIS.DbQueryObj.prototype.getIsDuplicate = function () {
  * Returns the search string
  * @returns {string}
  */
-GLVIS.DbQueryObj.prototype.getQueryStr = function () {
+IQHN.DbQueryObj.prototype.getQueryStr = function () {
     return this.query_str_;
 };
 
@@ -101,12 +101,12 @@ GLVIS.DbQueryObj.prototype.getQueryStr = function () {
  * @param {type} data
  * @returns {Array}
  */
-GLVIS.DbQueryObj.createObjectsFromDbData = function (data) {
+IQHN.DbQueryObj.createObjectsFromDbData = function (data) {
 
     var objects_ = [];
 
     for (var i = 0; i < data.length; i++)
-        objects_.push(new GLVIS.DbQueryObj(data[i]));
+        objects_.push(new IQHN.DbQueryObj(data[i]));
     return objects_;
 };
 

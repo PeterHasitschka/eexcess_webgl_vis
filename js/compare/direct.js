@@ -1,20 +1,20 @@
-var GLIVS = GLVIS || {};
+var GLIVS = IQHN || {};
 
 
 
-GLVIS.DirectCompare = function () {
+IQHN.DirectCompare = function () {
 
-    GLVIS.Debugger.debug("DirectCompare", "Created Direct-Comparer", 5);
+    IQHN.Debugger.debug("DirectCompare", "Created Direct-Comparer", 5);
 
 };
 
 
 
-GLVIS.DirectCompare.prototype.activate = function () {
+IQHN.DirectCompare.prototype.activate = function () {
 
-    GLVIS.Debugger.debug("DirectCompare", "Activating Direct-Compare on the scene", 5);
+    IQHN.Debugger.debug("DirectCompare", "Activating Direct-Compare on the scene", 5);
 
-    var collections = GLVIS.Scene.getCurrentScene().getCollections();
+    var collections = IQHN.Scene.getCurrentScene().getCollections();
 
     var percents = [];
 
@@ -24,11 +24,11 @@ GLVIS.DirectCompare.prototype.activate = function () {
     }
 };
 
-GLVIS.DirectCompare.prototype.deactivate = function () {
+IQHN.DirectCompare.prototype.deactivate = function () {
 
-    GLVIS.Debugger.debug("DirectCompare", "Deactivating Direct-Compare on the scene", 5);
+    IQHN.Debugger.debug("DirectCompare", "Deactivating Direct-Compare on the scene", 5);
 
-    var collections = GLVIS.Scene.getCurrentScene().getCollections();
+    var collections = IQHN.Scene.getCurrentScene().getCollections();
 
 
     for (var col_count = 0; col_count < collections.length; col_count++) {
@@ -38,9 +38,9 @@ GLVIS.DirectCompare.prototype.deactivate = function () {
     }
 };
 
-GLVIS.DirectCompare.prototype.compareCollection_ = function (collection) {
+IQHN.DirectCompare.prototype.compareCollection_ = function (collection) {
 
-    var config = GLVIS.config.collection.compare;
+    var config = IQHN.config.collection.compare;
     var recs = collection.getRecommendations();
 
     var parent_rec_ids = this.getParentsRecIds_(collection);
@@ -68,23 +68,23 @@ GLVIS.DirectCompare.prototype.compareCollection_ = function (collection) {
     var percent_found = found_num_recs_in_parent / recs.length * 100;
 
     this.removeBarFromCollection_(collection);
-    var compare_bar = new GLVIS.DirectCompareBar(collection, percent_found);
+    var compare_bar = new IQHN.DirectCompareBar(collection, percent_found);
     this.addBarToCollection_(collection, compare_bar);
 };
 
 /**
  * Returns a list of all eexcess-recommendation-ids of the parent's recommendations
- * @param {GLVIS.Collection} collection
+ * @param {IQHN.Collection} collection
  * @returns {Array} holding all eexcess-recommendation-ids of the parent collection
  */
-GLVIS.DirectCompare.prototype.getParentsRecIds_ = function (collection) {
+IQHN.DirectCompare.prototype.getParentsRecIds_ = function (collection) {
 
     var parent_id = collection.getParentId();
 
     if (parent_id === null)
         return [];
 
-    var parent_collection = GLVIS.Scene.getCurrentScene().getCollection(parent_id);
+    var parent_collection = IQHN.Scene.getCurrentScene().getCollection(parent_id);
 
     if (!parent_collection)
         throw ("ERROR: CAN'T LOAD COLLECTION WITH ID " + parent_id);
@@ -99,10 +99,10 @@ GLVIS.DirectCompare.prototype.getParentsRecIds_ = function (collection) {
     return rec_ids;
 };
 
-GLVIS.DirectCompare.prototype.resetCollection_ = function (collection) {
+IQHN.DirectCompare.prototype.resetCollection_ = function (collection) {
 
     var recs = collection.getRecommendations();
-    var default_color = GLVIS.config.collection.recommendation.color;
+    var default_color = IQHN.config.collection.recommendation.color;
 
     for (var rec_count = 0; rec_count < recs.length; rec_count++) {
 
@@ -116,10 +116,10 @@ GLVIS.DirectCompare.prototype.resetCollection_ = function (collection) {
 };
 
 /**
- * Remove @see{GLVIS.DirectCompareBar} from Collection
- * @param {GLVIS.Collection} collection
+ * Remove @see{IQHN.DirectCompareBar} from Collection
+ * @param {IQHN.Collection} collection
  */
-GLVIS.DirectCompare.prototype.removeBarFromCollection_ = function (collection) {
+IQHN.DirectCompare.prototype.removeBarFromCollection_ = function (collection) {
 
     var gl_objs = collection.getGlObjects();
 
@@ -131,10 +131,10 @@ GLVIS.DirectCompare.prototype.removeBarFromCollection_ = function (collection) {
 };
 
 /**
- * Add @see{GLVIS.DirectCompareBar} to Collection
- * @param {GLVIS.Collection} collection
+ * Add @see{IQHN.DirectCompareBar} to Collection
+ * @param {IQHN.Collection} collection
  */
-GLVIS.DirectCompare.prototype.addBarToCollection_ = function (collection, bar) {
+IQHN.DirectCompare.prototype.addBarToCollection_ = function (collection, bar) {
 
     var gl_objs = collection.getGlObjects();
     gl_objs.compare_bar = bar;

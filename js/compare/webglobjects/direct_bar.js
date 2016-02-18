@@ -1,13 +1,13 @@
-var GLIVS = GLVIS || {};
+var GLIVS = IQHN || {};
 
 
-GLVIS.DirectCompareBar = function (collection, percent) {
+IQHN.DirectCompareBar = function (collection, percent) {
 
     this.dirty_ = true;
     this.collection_ = collection;
     this.percent_ = percent;
 
-    /** @type {GLVIS.Text} **/
+    /** @type {IQHN.Text} **/
     this.label_ = null;
 
     this.webgl_objects_ = {
@@ -18,9 +18,9 @@ GLVIS.DirectCompareBar = function (collection, percent) {
     this.initGlObjects();
 };
 
-GLVIS.DirectCompareBar.prototype.initGlObjects = function () {
+IQHN.DirectCompareBar.prototype.initGlObjects = function () {
 
-    var config = GLVIS.config.collection.compare.directcompare.bar;
+    var config = IQHN.config.collection.compare.directcompare.bar;
 
     var total_width = config.width;
     var pos_width = total_width * this.percent_ * 0.01;
@@ -81,7 +81,7 @@ GLVIS.DirectCompareBar.prototype.initGlObjects = function () {
     };
 
     var beauty_percent = Math.round(this.percent_);
-    var label = new GLVIS.Text(beauty_percent + " %", label_options, null, null, null, null, this.collection_);
+    var label = new IQHN.Text(beauty_percent + " %", label_options, null, null, null, null, this.collection_);
     this.label_ = label;
 
     var meshcontainer = this.collection_.getMeshContainerNode();
@@ -93,12 +93,12 @@ GLVIS.DirectCompareBar.prototype.initGlObjects = function () {
 
 };
 
-GLVIS.DirectCompareBar.prototype.render = function () {
+IQHN.DirectCompareBar.prototype.render = function () {
 
     if (!this.dirty_)
         return;
 
-    var config = GLVIS.config.collection.compare.directcompare.bar;
+    var config = IQHN.config.collection.compare.directcompare.bar;
 
     var total_width = config.width;
     var pos_width = total_width * this.percent_ * 0.01;
@@ -127,9 +127,9 @@ GLVIS.DirectCompareBar.prototype.render = function () {
     this.setIsDirty(false);
 };
 
-GLVIS.DirectCompareBar.prototype.delete = function () {
+IQHN.DirectCompareBar.prototype.delete = function () {
 
-    var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+    var three_scene = IQHN.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
 
     this.collection_.getMeshContainerNode().remove(this.webgl_objects_.bar_pos);
     this.collection_.getMeshContainerNode().remove(this.webgl_objects_.bar_neg);
@@ -142,10 +142,10 @@ GLVIS.DirectCompareBar.prototype.delete = function () {
 };
 
 
-GLVIS.DirectCompareBar.prototype.setIsDirty = function (dirty) {
+IQHN.DirectCompareBar.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 };
 
-GLVIS.DirectCompareBar.prototype.getIsDirty = function () {
+IQHN.DirectCompareBar.prototype.getIsDirty = function () {
     return this.dirty_;
 };

@@ -1,18 +1,18 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
 /**
  * Handling the visual navigation of the scene
- * @param {GLVIS.Scene} scene Current scene
+ * @param {IQHN.Scene} scene Current scene
  */
-GLVIS.NavigationHandler = function (scene) {
-    /** @type {GLVIS.Scene} **/
+IQHN.NavigationHandler = function (scene) {
+    /** @type {IQHN.Scene} **/
     this.scene_ = scene;
 
     /** @type {THREE.Vector3} **/
     this.lookat_lock_ = null;
 
-    this.animationconfig_ = GLVIS.config.navigation.animation_ids;
+    this.animationconfig_ = IQHN.config.navigation.animation_ids;
 };
 
 /**
@@ -28,7 +28,7 @@ GLVIS.NavigationHandler = function (scene) {
  * @param {bool} animate
  * @param {function} cb Only called if animated
  */
-GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z, distance_fact, animate, cb) {
+IQHN.NavigationHandler.prototype.setCameraToCircle = function (x, y, z, distance_fact, animate, cb) {
 
     if (x === undefined)
         x = null;
@@ -54,22 +54,22 @@ GLVIS.NavigationHandler.prototype.setCameraToCircle = function (x, y, z, distanc
  * Convert the current Camera position to a relative H and V degree to the zero point
  * @returns {object} Holding 'h' (Horizontal degree), 'v' (Vertical degree)
  */
-GLVIS.NavigationHandler.prototype.getCurrentHVDegree = function () {
-    return GLVIS.Tools.MultVarOps.mult(-1, this.getMissingCameraDegrees(0, 0, 0));
+IQHN.NavigationHandler.prototype.getCurrentHVDegree = function () {
+    return IQHN.Tools.MultVarOps.mult(-1, this.getMissingCameraDegrees(0, 0, 0));
 };
 
 
 /**
- * Difference of the current degree  (@see{GLVIS.NavigationHandler.prototype.getDegreeOnCameraSphere_})
+ * Difference of the current degree  (@see{IQHN.NavigationHandler.prototype.getDegreeOnCameraSphere_})
  * and the camera position.
  * @param {float} goal_x
  * @param {float} goal_y
  * @param {float} goal_z
  * @returns {object} Holding 'h' (Horizontal degree), 'v' (Vertical degree)
  */
-GLVIS.NavigationHandler.prototype.getMissingCameraDegrees = function (goal_x, goal_y, goal_z) {
+IQHN.NavigationHandler.prototype.getMissingCameraDegrees = function (goal_x, goal_y, goal_z) {
 
-    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+    var camera = IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera();
     var camera_degree = this.getDegreeOnCameraSphere_(camera.position.x, camera.position.y, camera.position.z);
 
     var goal_degree = this.getDegreeOnCameraSphere_(goal_x, goal_y, goal_z);
@@ -87,9 +87,9 @@ GLVIS.NavigationHandler.prototype.getMissingCameraDegrees = function (goal_x, go
  * @param {float} z
  * @returns {object} Holding 'h' (Horizontal degree), 'v' (Vertical degree)
  */
-GLVIS.NavigationHandler.prototype.getDegreeOnCameraSphere_ = function (x, y, z) {
+IQHN.NavigationHandler.prototype.getDegreeOnCameraSphere_ = function (x, y, z) {
 
-    var coll_circle_d = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
+    var coll_circle_d = IQHN.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
     ;
     var coll_circle_center_v = new THREE.Vector3(0, 0, 0 - coll_circle_d);
 
@@ -121,8 +121,8 @@ GLVIS.NavigationHandler.prototype.getDegreeOnCameraSphere_ = function (x, y, z) 
 };
 
 
-GLVIS.NavigationHandler.prototype.moveCameraAroundCircleWObj = function (h_v) {
-    GLVIS.NavigationHandler.prototype.moveCameraAroundCircle(h_v.h, h_v.v, true);
+IQHN.NavigationHandler.prototype.moveCameraAroundCircleWObj = function (h_v) {
+    IQHN.NavigationHandler.prototype.moveCameraAroundCircle(h_v.h, h_v.v, true);
 };
 
 /**
@@ -132,7 +132,7 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircleWObj = function (h_v) {
  * @param {float} degree_b_delta Vertical tilt
  * @param {bool} keep_distance If true distance does not get reset to config
  */
-GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_delta, degree_v_delta, keep_distance) {
+IQHN.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_delta, degree_v_delta, keep_distance) {
 
     if (degree_h_delta === null || degree_h_delta === undefined)
         degree_h_delta = 0;
@@ -140,11 +140,11 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
     if (degree_v_delta === null || degree_v_delta === undefined)
         degree_v_delta = 0;
 
-    var coll_circle_radius = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
+    var coll_circle_radius = IQHN.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
     ;
     var coll_circle_vec = new THREE.Vector3(0, 0, 0 - coll_circle_radius);
 
-    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+    var camera = IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera();
 
     /** @type {THREE.Vector3} **/
     var current_camera_pos = camera.position.clone();
@@ -152,7 +152,7 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
     var camera_distance_to_colls;
 
     if (!keep_distance)
-        camera_distance_to_colls = GLVIS.config.three.camera_perspective.DISTANCE;
+        camera_distance_to_colls = IQHN.config.three.camera_perspective.DISTANCE;
     else {
 
         var tmp_camera_vec = current_camera_pos.clone();
@@ -213,7 +213,7 @@ GLVIS.NavigationHandler.prototype.moveCameraAroundCircle = function (degree_h_de
  * is on the sphere described by the coll-circle.
  * @param {bool} animation TRUE for animation
  */
-GLVIS.NavigationHandler.prototype.moveCameraToCircleSphere = function (animation) {
+IQHN.NavigationHandler.prototype.moveCameraToCircleSphere = function (animation) {
     this.setDistanceFactor(1, animation);
 };
 
@@ -224,13 +224,13 @@ GLVIS.NavigationHandler.prototype.moveCameraToCircleSphere = function (animation
  * Else (on the circle) == 1
  * @returns {float}
  */
-GLVIS.NavigationHandler.prototype.getDistanceFactor = function () {
+IQHN.NavigationHandler.prototype.getDistanceFactor = function () {
 
-    var coll_circle_radius = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
-    var camera_distance_to_colls = GLVIS.config.three.camera_perspective.DISTANCE;
+    var coll_circle_radius = IQHN.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
+    var camera_distance_to_colls = IQHN.config.three.camera_perspective.DISTANCE;
     var total_distance_to_center = coll_circle_radius + camera_distance_to_colls;
 
-    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+    var camera = IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera();
     var current_camera_pos = camera.position.clone();
     var circle_center = new THREE.Vector3(0, 0, coll_circle_radius);
     var camera_center_vec = circle_center.clone().add(current_camera_pos);
@@ -250,17 +250,17 @@ GLVIS.NavigationHandler.prototype.getDistanceFactor = function () {
  * @param {bool} animation
  * @param {function} cb
  */
-GLVIS.NavigationHandler.prototype.setDistanceFactor = function (factor, animation, cb) {
+IQHN.NavigationHandler.prototype.setDistanceFactor = function (factor, animation, cb) {
 
     if (animation) {
-        /** @type {GLVIS.Animation} anim **/
-        var anim = GLVIS.Scene.getCurrentScene().getAnimation();
+        /** @type {IQHN.Animation} anim **/
+        var anim = IQHN.Scene.getCurrentScene().getAnimation();
         //anim.stopCameraMovementAnimations();
 
         if (!cb)
             cb = null;
 
-        var anim_config = GLVIS.config.navigation.camera_move_center;
+        var anim_config = IQHN.config.navigation.camera_move_center;
         anim.register(
                 this.animationconfig_.move_tocircle,
                 factor,
@@ -275,11 +275,11 @@ GLVIS.NavigationHandler.prototype.setDistanceFactor = function (factor, animatio
                 true);
 
     } else {
-        var coll_circle_radius = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
-        var camera_distance_to_colls = GLVIS.config.three.camera_perspective.DISTANCE;
+        var coll_circle_radius = IQHN.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
+        var camera_distance_to_colls = IQHN.config.three.camera_perspective.DISTANCE;
         var total_distance_to_center = coll_circle_radius + camera_distance_to_colls;
 
-        var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+        var camera = IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera();
         var current_camera_pos = camera.position.clone();
         var circle_center = new THREE.Vector3(0, 0, coll_circle_radius);
         var camera_center_vec = circle_center.clone().add(current_camera_pos);
@@ -302,7 +302,7 @@ GLVIS.NavigationHandler.prototype.setDistanceFactor = function (factor, animatio
  * @param {type | null} y
  * @param {type | null} z
  */
-GLVIS.NavigationHandler.prototype.moveCamera = function (x, y, z) {
+IQHN.NavigationHandler.prototype.moveCamera = function (x, y, z) {
 
     if (x === null || x === undefined)
         x = 0;
@@ -311,7 +311,7 @@ GLVIS.NavigationHandler.prototype.moveCamera = function (x, y, z) {
     if (z === null || z === undefined)
         z = 0;
 
-    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+    var camera = IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera();
     camera.position.x += x;
     camera.position.y += y;
     camera.position.z += z;
@@ -326,14 +326,14 @@ GLVIS.NavigationHandler.prototype.moveCamera = function (x, y, z) {
  * Lock the lookat vector for using the moveCamera method
  * @param {THREE.Vector3} vector
  */
-GLVIS.NavigationHandler.prototype.lockLookAt = function (vector) {
+IQHN.NavigationHandler.prototype.lockLookAt = function (vector) {
     this.lookat_lock_ = vector;
 };
 
 /**
  * Unlock the lookat vector for using the moveCamera method
  */
-GLVIS.NavigationHandler.prototype.unlockLookAt = function () {
+IQHN.NavigationHandler.prototype.unlockLookAt = function () {
     this.lookat_lock_ = null;
 };
 
@@ -341,7 +341,7 @@ GLVIS.NavigationHandler.prototype.unlockLookAt = function () {
  * Perform (absolute) zoom
  * @param {float} zoom_factor
  */
-GLVIS.NavigationHandler.prototype.zoom = function (zoom_factor) {
+IQHN.NavigationHandler.prototype.zoom = function (zoom_factor) {
     console.error("ZOOM NOT ALLOWED!");
     return;
 
@@ -349,16 +349,16 @@ GLVIS.NavigationHandler.prototype.zoom = function (zoom_factor) {
     if (zoom_factor < 0)
         zoom_factor = 0;
 
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().zoom = zoom_factor;
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().updateProjectionMatrix();
+    IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera().zoom = zoom_factor;
+    IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera().updateProjectionMatrix();
 };
 
 /**
  * Getting the zoom level of the THREE.js Camera
  * @returns {Three.Camera.zoom}
  */
-GLVIS.NavigationHandler.prototype.getZoomFactor = function () {
-    var zoom = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().zoom;
+IQHN.NavigationHandler.prototype.getZoomFactor = function () {
+    var zoom = IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera().zoom;
     return zoom;
 };
 
@@ -366,24 +366,24 @@ GLVIS.NavigationHandler.prototype.getZoomFactor = function () {
  * Perform zoom relative
  * @param {float} delta_zoom_factor
  */
-GLVIS.NavigationHandler.prototype.zoomDelta = function (delta_zoom_factor) {
+IQHN.NavigationHandler.prototype.zoomDelta = function (delta_zoom_factor) {
     console.error("ZOOM NOT ALLOWED!");
     return;
 
 
-    var zoom = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().zoom + (delta_zoom_factor / 100);
+    var zoom = IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera().zoom + (delta_zoom_factor / 100);
 
     //"this" may be unknown... 
-    GLVIS.Scene.getCurrentScene().getNavigationHandler().zoom(zoom);
+    IQHN.Scene.getCurrentScene().getNavigationHandler().zoom(zoom);
 };
 
 
 /**
  * At first move camera to the circle Sphere
  * Then move it horizontal and vertical to the correct position on the circle
- * @param {GLVIS.Collection} collection
+ * @param {IQHN.Collection} collection
  */
-GLVIS.NavigationHandler.prototype.animatedCollectionFocus = function (collection) {
+IQHN.NavigationHandler.prototype.animatedCollectionFocus = function (collection) {
 
 
     //move 
@@ -405,9 +405,9 @@ GLVIS.NavigationHandler.prototype.animatedCollectionFocus = function (collection
  * @param {type} zoom_goal zoom level to reach
  * @param {type} callback_fct
  */
-GLVIS.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_fct) {
+IQHN.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_fct) {
 
-    var config = GLVIS.config.navigation.zoom.animated;
+    var config = IQHN.config.navigation.zoom.animated;
     var threshold = config.threshold;
     var pow = config.pow;
     var factor = config.speed_fct;
@@ -415,9 +415,9 @@ GLVIS.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_f
     var getter = this.getZoomFactor;
     var setter = this.zoomDelta;
 
-    //GLVIS.Scene.getCurrentScene().getAnimation().finishAnimation(this.animationconfig_.zoom_id);
+    //IQHN.Scene.getCurrentScene().getAnimation().finishAnimation(this.animationconfig_.zoom_id);
 
-    GLVIS.Scene.getCurrentScene().getAnimation().register(
+    IQHN.Scene.getCurrentScene().getAnimation().register(
             this.animationconfig_.zoom_id,
             zoom_goal,
             null,
@@ -434,31 +434,31 @@ GLVIS.NavigationHandler.prototype.animatedZoom = function (zoom_goal, callback_f
 /**
  * Resetting both movement-animations
  */
-GLVIS.NavigationHandler.prototype.resetAnimationMovement = function () {
-    GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animationconfig_.move);
+IQHN.NavigationHandler.prototype.resetAnimationMovement = function () {
+    IQHN.Scene.getCurrentScene().getAnimation().unregister(this.animationconfig_.move);
 };
 
 /**
  * Resetting the zoom-animation
  */
-GLVIS.NavigationHandler.prototype.resetAnimationZoom = function () {
-    GLVIS.Scene.getCurrentScene().getAnimation().unregister(this.animationconfig_.zoom_id);
+IQHN.NavigationHandler.prototype.resetAnimationZoom = function () {
+    IQHN.Scene.getCurrentScene().getAnimation().unregister(this.animationconfig_.zoom_id);
 };
 
 /**
  * Move the camera in front of the collection
- * @param {GLVIS.Collection} collection
+ * @param {IQHN.Collection} collection
  * @param {function} callback_fct callback when ready
  */
-GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callback_fct) {
+IQHN.NavigationHandler.prototype.focusCollection = function (collection, callback_fct) {
 
-    var goal_dist_fct = GLVIS.config.collection.init_distance_fct;
+    var goal_dist_fct = IQHN.config.collection.init_distance_fct;
 
-    var anim = GLVIS.Scene.getCurrentScene().getAnimation();
+    var anim = IQHN.Scene.getCurrentScene().getAnimation();
     anim.stopCameraMovementAnimations();
 
 
-    GLVIS.Scene.getCurrentScene().getNavigationHandler().setDistanceFactor(1, true);
+    IQHN.Scene.getCurrentScene().getNavigationHandler().setDistanceFactor(1, true);
 
 
     var move_goal = this.getDegreeOnCameraSphere_(
@@ -467,7 +467,7 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
             collection.getPosition().z
             );
 
-    var anim_config = GLVIS.config.navigation.move.animated;
+    var anim_config = IQHN.config.navigation.move.animated;
     anim.register(
             this.animationconfig_.move,
             move_goal,
@@ -488,13 +488,13 @@ GLVIS.NavigationHandler.prototype.focusCollection = function (collection, callba
 /**
  * Do nothing instead of stopping the camera movement.
  */
-GLVIS.NavigationHandler.prototype.defocusCollection = function () {
+IQHN.NavigationHandler.prototype.defocusCollection = function () {
 
-    var colls = GLVIS.Scene.getCurrentScene().getCollections();
+    var colls = IQHN.Scene.getCurrentScene().getCollections();
     for (var i = 0; i < colls.length; i++) {
         colls[i].unconnectSameRecsFromOtherCollections();
     }
-    var anim = GLVIS.Scene.getCurrentScene().getAnimation();
+    var anim = IQHN.Scene.getCurrentScene().getAnimation();
     anim.stopCameraMovementAnimations();
     this.setDistanceFactor(1, true);
 };
@@ -503,15 +503,15 @@ GLVIS.NavigationHandler.prototype.defocusCollection = function () {
  * Moving camera to recommendation
  * Has its own workflow because the camera does NOT point to the center in the end
  * 
- * @param {GLVIS.Recommendation} rec
+ * @param {IQHN.Recommendation} rec
  */
-GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
+IQHN.NavigationHandler.prototype.focusRecommendation = function (rec) {
 
     var abs_pos = rec.getPosition(true);
     var abs_pos_vec = new THREE.Vector3(abs_pos.x, abs_pos.y, abs_pos.z);
     // @TODO: Calculate accurate offset
 
-    var camera_distance = GLVIS.config.collection.recommendation.camera_distance;
+    var camera_distance = IQHN.config.collection.recommendation.camera_distance;
     /*
      * The camera distance vector has the same direction as the connection between 
      * the circle-center and the collection
@@ -519,12 +519,12 @@ GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
 
     var coll_pos = rec.getCollection().getPosition();
     var coll_pos_vec = new THREE.Vector3(coll_pos.x, coll_pos.y, coll_pos.z);
-    var circle_center_vec = new THREE.Vector3(0, 0, -GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius());
+    var circle_center_vec = new THREE.Vector3(0, 0, -IQHN.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius());
     var dir_vec = coll_pos_vec.clone().sub(circle_center_vec).normalize();
     var final_pos = abs_pos_vec.clone().add(dir_vec.multiplyScalar(camera_distance));
-    var camera = GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera();
+    var camera = IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera();
     this.lockLookAt(abs_pos_vec);
-    var move_config = GLVIS.config.collection.recommendation.focus_animation.move;
+    var move_config = IQHN.config.collection.recommendation.focus_animation.move;
     var move_setter = this.moveCamera;
     var move_getter_x = this.getPosX;
     var move_setter_param_x = 0;
@@ -536,10 +536,10 @@ GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
     var move_pow = move_config.pow;
     var move_threshold = move_config.threshold;
 
-    GLVIS.Scene.getCurrentScene().getAnimation().stopCameraMovementAnimations();
+    IQHN.Scene.getCurrentScene().getAnimation().stopCameraMovementAnimations();
 
     //X
-    GLVIS.Scene.getCurrentScene().getAnimation().register(
+    IQHN.Scene.getCurrentScene().getAnimation().register(
             this.animationconfig_.move_id_x,
             final_pos.x,
             null,
@@ -554,7 +554,7 @@ GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
             }.bind(this)
             );
     //Y
-    GLVIS.Scene.getCurrentScene().getAnimation().register(
+    IQHN.Scene.getCurrentScene().getAnimation().register(
             this.animationconfig_.move_id_y,
             final_pos.y,
             null,
@@ -569,7 +569,7 @@ GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
             }.bind(this)
             );
     //Z
-    GLVIS.Scene.getCurrentScene().getAnimation().register(
+    IQHN.Scene.getCurrentScene().getAnimation().register(
             this.animationconfig_.move_id_z,
             final_pos.z,
             null,
@@ -584,15 +584,15 @@ GLVIS.NavigationHandler.prototype.focusRecommendation = function (rec) {
             }.bind(this)
             );
 };
-GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_objects) {
+IQHN.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_objects) {
     var is_positive = e.deltaY < 0 ? true : false;
 
     for (var i = 0; i < intersected_objects.length; i++) {
         if (intersected_objects[i].object && intersected_objects[i].object.scene_obj) {
             var i_obj = intersected_objects[i].object.scene_obj;
-            if (i_obj instanceof GLVIS.Collection) {
+            if (i_obj instanceof IQHN.Collection) {
 
-                /** @type{GLVIS.Collection} i_obj **/
+                /** @type{IQHN.Collection} i_obj **/
                 if (is_positive) {
                     if (!i_obj.getRingRepresentation())
                         i_obj.createRingRepresentation();
@@ -601,7 +601,7 @@ GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_ob
                     /**
                      * Find the coll with ring-rep and defocus
                      */
-                    var cs = GLVIS.Scene.getCurrentScene().getCollections();
+                    var cs = IQHN.Scene.getCurrentScene().getCollections();
                     for (var i = 0; i < cs.length; i++) {
                         if (cs[i].getRingRepresentation()) {
                             cs[i].deleteRingRepresentation(true);
@@ -611,9 +611,9 @@ GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_ob
                 }
 
                 break;
-            } else if (i_obj instanceof GLVIS.Recommendation) {
+            } else if (i_obj instanceof IQHN.Recommendation) {
 
-                /** @type{GLVIS.Recommendation} i_obj **/
+                /** @type{IQHN.Recommendation} i_obj **/
                 if (is_positive) {
 
                     if (i_obj.getCollection().getRingRepresentation())
@@ -623,7 +623,7 @@ GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_ob
                 }
                 else {
                     if (i_obj.getCollection().getRingRepresentation()) {
-                        if (i_obj === GLVIS.Recommendation.current_selected_rec)
+                        if (i_obj === IQHN.Recommendation.current_selected_rec)
                             i_obj.defocusAndZoomOut();
                         else
                             i_obj.getCollection().deleteRingRepresentation(true);
@@ -642,21 +642,21 @@ GLVIS.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_ob
  * Single getter for animation
  * @returns {float}
  */
-GLVIS.NavigationHandler.prototype.getPosX = function () {
-    return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.x;
+IQHN.NavigationHandler.prototype.getPosX = function () {
+    return IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera().position.x;
 };
 /**
  * Single getter for animation
  * @returns {float}
  */
-GLVIS.NavigationHandler.prototype.getPosY = function () {
-    return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.y;
+IQHN.NavigationHandler.prototype.getPosY = function () {
+    return IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera().position.y;
 };
 /**
  * Single getter for animation
  * @returns {float}
  */
-GLVIS.NavigationHandler.prototype.getPosZ = function () {
-    return GLVIS.Scene.getCurrentScene().getWebGlHandler().getCamera().position.z;
+IQHN.NavigationHandler.prototype.getPosZ = function () {
+    return IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera().position.z;
 };
 

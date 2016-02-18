@@ -1,4 +1,4 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 /**
  * Button element for the rec-dashboard toolbar
@@ -6,7 +6,7 @@ var GLVIS = GLVIS || {};
  * @param {string} label Label of the button
  * @param {string} icon Element in the media/toolbar folder
  */
-GLVIS.Button = function (id, label, icon) {
+IQHN.Button = function (id, label, icon) {
 
     this.id_ = id;
 
@@ -15,15 +15,15 @@ GLVIS.Button = function (id, label, icon) {
 
     this.on_click_fct_ = null;
 
-    GLVIS.Debugger.debug("Button", "Created button '" + id + "'", 5);
+    IQHN.Debugger.debug("Button", "Created button '" + id + "'", 5);
 };
 
 /**
  * Returns the button html
  * @returns {String} Html
  */
-GLVIS.Button.prototype.toHtml = function () {
-    var config = GLVIS.config.rec_dashboard.toolbar;
+IQHN.Button.prototype.toHtml = function () {
+    var config = IQHN.config.rec_dashboard.toolbar;
     var out = "";
 
     out += "<div class='webgl_toolbar_element' id='" + config.button_id_prefix + this.id_ + "'>";
@@ -46,9 +46,9 @@ GLVIS.Button.prototype.toHtml = function () {
  * Register a function that will be called on the button click
  * @param {function} fct
  */
-GLVIS.Button.prototype.onClick = function (fct) {
+IQHN.Button.prototype.onClick = function (fct) {
     this.on_click_fct_ = fct;
-    var config = GLVIS.config.rec_dashboard.toolbar;
+    var config = IQHN.config.rec_dashboard.toolbar;
 
     var elm = jQuery('#' + config.button_id_prefix + this.id_);
 
@@ -56,31 +56,31 @@ GLVIS.Button.prototype.onClick = function (fct) {
     elm.click({btn: this}, this.on_click_fct_);
     elm.btn = this;
 
-    GLVIS.Debugger.debug("Button", "Registered click fct for button '" + this.id_ + "'", 6);
+    IQHN.Debugger.debug("Button", "Registered click fct for button '" + this.id_ + "'", 6);
 };
 
 /**
  * Returns the identificator of the button
  * @returns {String}
  */
-GLVIS.Button.prototype.getId = function () {
+IQHN.Button.prototype.getId = function () {
     return this.id_;
 };
 
 /**
  * Hide the button
  */
-GLVIS.Button.prototype.hide = function () {
-    var config = GLVIS.config.rec_dashboard.toolbar;
+IQHN.Button.prototype.hide = function () {
+    var config = IQHN.config.rec_dashboard.toolbar;
     jQuery('#' + config.button_id_prefix + this.id_).hide();
-    GLVIS.Debugger.debug("Button", "Hiding button '" + this.id_ + "'", 5);
+    IQHN.Debugger.debug("Button", "Hiding button '" + this.id_ + "'", 5);
 };
 
 /**
  * Show the button
  */
-GLVIS.Button.prototype.show = function () {
-    var config = GLVIS.config.rec_dashboard.toolbar;
+IQHN.Button.prototype.show = function () {
+    var config = IQHN.config.rec_dashboard.toolbar;
     jQuery('#' + config.button_id_prefix + this.id_).show();
-    GLVIS.Debugger.debug("Button", "Showing button '" + this.id_ + "'", 5);
+    IQHN.Debugger.debug("Button", "Showing button '" + this.id_ + "'", 5);
 };

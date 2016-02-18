@@ -1,22 +1,22 @@
 
-GLVIS = GLVIS || {};
+IQHN = IQHN || {};
 
 
 /**
  * 
- * @param {GLVIS.Collection} collection
+ * @param {IQHN.Collection} collection
  * @returns {undefined}
  */
-GLVIS.RecommendationPosDistributed = function (collection) {
+IQHN.RecommendationPosDistributed = function (collection) {
 
-    /** @type{GLVIS.Collection} **/
+    /** @type{IQHN.Collection} **/
     this.collection_ = collection;
 };
 
 /**
  * Distributing the recommendations around the collection
  */
-GLVIS.RecommendationPosDistributed.prototype.calculatePositions = function () {
+IQHN.RecommendationPosDistributed.prototype.calculatePositions = function () {
 
     var recommendations = this.collection_.getRecommendations();
 
@@ -27,7 +27,7 @@ GLVIS.RecommendationPosDistributed.prototype.calculatePositions = function () {
     var curr_rad = -Math.PI / 2.0;
 
     for (var i = 0; i < recommendations.length; i++) {
-        /** @type{GLVIS.Recommendation} **/
+        /** @type{IQHN.Recommendation} **/
 
         curr_rad += degree_step;
 

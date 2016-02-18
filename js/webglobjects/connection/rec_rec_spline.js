@@ -1,26 +1,26 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
 /**
  * Spline connection between several recommendation-nodes
  */
-GLVIS.ConnectionRecRecSpline = function () {
+IQHN.ConnectionRecRecSpline = function () {
     this.recs = [];
 
     this.webgl_objects = {
         spline: null
     };
 
-    GLVIS.Debugger.debug("ConnectionRecRecSpline", "Creating a rec-spline", 5);
+    IQHN.Debugger.debug("ConnectionRecRecSpline", "Creating a rec-spline", 5);
 };
 
 
 /**
  * Order the recommendations by their collections
  */
-GLVIS.ConnectionRecRecSpline.prototype.orderRecs = function () {
+IQHN.ConnectionRecRecSpline.prototype.orderRecs = function () {
 
-    GLVIS.Debugger.debug("ConnectionRecRecSpline", "Ordering recommendations", 7);
+    IQHN.Debugger.debug("ConnectionRecRecSpline", "Ordering recommendations", 7);
 
     this.recs = _.sortBy(this.recs, function (rec) {
         return rec.getCollection().getId();
@@ -33,10 +33,10 @@ GLVIS.ConnectionRecRecSpline.prototype.orderRecs = function () {
  * Therefore it will be calculated if the intersection between the line between two recs
  * and the vertical line at the position of the collection is positive or negative.
  */
-GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
+IQHN.ConnectionRecRecSpline.prototype.calculateSpline = function () {
 
-    GLVIS.Debugger.debug("ConnectionRecRecSpline", "Calculating the splines", 6);
-    var config = GLVIS.config.connection.rec_spline;
+    IQHN.Debugger.debug("ConnectionRecRecSpline", "Calculating the splines", 6);
+    var config = IQHN.config.connection.rec_spline;
 
     var numPoints = config.num_vertices;
 
@@ -125,7 +125,7 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
 
 
     this.webgl_objects.spline = tube;
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(tube);
+    IQHN.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(tube);
 };
 
 
@@ -135,9 +135,9 @@ GLVIS.ConnectionRecRecSpline.prototype.calculateSpline = function () {
  * @param {float} dist_to_move Distance to move the position
  * @returns {object} contaning x,y,z
  */
-GLVIS.ConnectionRecRecSpline.prototype.posDirInnerCenter = function (orig_pos, dist_to_move) {
+IQHN.ConnectionRecRecSpline.prototype.posDirInnerCenter = function (orig_pos, dist_to_move) {
 
-    var center = new THREE.Vector3(0, 0, -GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius());
+    var center = new THREE.Vector3(0, 0, -IQHN.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius());
     var pos_vec = new THREE.Vector3(orig_pos.x, orig_pos.y, orig_pos.z);
 
     var new_pos = pos_vec.clone();
@@ -154,10 +154,10 @@ GLVIS.ConnectionRecRecSpline.prototype.posDirInnerCenter = function (orig_pos, d
 
 /**
  * Adds a recommendation to the connection-list
- * @param {GLVIS.Recommendation} rec
+ * @param {IQHN.Recommendation} rec
  */
-GLVIS.ConnectionRecRecSpline.prototype.addRec = function (rec) {
-    GLVIS.Debugger.debug("ConnectionRecRecSpline", "Adding a recommendation", 6);
+IQHN.ConnectionRecRecSpline.prototype.addRec = function (rec) {
+    IQHN.Debugger.debug("ConnectionRecRecSpline", "Adding a recommendation", 6);
     if (rec)
         this.recs.push(rec);
 
@@ -166,20 +166,20 @@ GLVIS.ConnectionRecRecSpline.prototype.addRec = function (rec) {
 
 /**
  * Returns the current list off recommendations
- * @returns {GLVIS.ConnectionRecRecSpline.recs}
+ * @returns {IQHN.ConnectionRecRecSpline.recs}
  */
-GLVIS.ConnectionRecRecSpline.prototype.getRecs = function () {
+IQHN.ConnectionRecRecSpline.prototype.getRecs = function () {
     return this.recs;
 };
 
 /**
  * Delete all webgl-objects from scene
  */
-GLVIS.ConnectionRecRecSpline.prototype.delete = function () {
+IQHN.ConnectionRecRecSpline.prototype.delete = function () {
 
-    GLVIS.Debugger.debug("ConnectionRecRecSpline", "Deleting a rec spline", 5);
+    IQHN.Debugger.debug("ConnectionRecRecSpline", "Deleting a rec spline", 5);
 
-    var three_scene = GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
+    var three_scene = IQHN.Scene.getCurrentScene().getWebGlHandler().getThreeScene();
     three_scene.remove(this.webgl_objects.spline);
     delete this.webgl_objects.spline;
     

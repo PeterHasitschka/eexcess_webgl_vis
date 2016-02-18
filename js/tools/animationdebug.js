@@ -1,7 +1,7 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
-GLVIS.AnimationDebugger = function () {
+IQHN.AnimationDebugger = function () {
 
     this.active = false;
 
@@ -30,10 +30,10 @@ GLVIS.AnimationDebugger = function () {
 };
 
 
-GLVIS.AnimationDebugger.prototype.update = function () {
+IQHN.AnimationDebugger.prototype.update = function () {
 
 
-    var active_anims = GLVIS.Scene.getCurrentScene().getAnimation().animations_;
+    var active_anims = IQHN.Scene.getCurrentScene().getAnimation().animations_;
 
     var htmlrows = "<div class='animationdebugrow'>" +
             "   <div class='animationdebugrow_id'><strong>ID</strong></div>" +

@@ -1,16 +1,16 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
 /**
  * 
- * @param {GLVIS.Collection} collection_1
- * @param {GLVIS.Collection} collection_2
+ * @param {IQHN.Collection} collection_1
+ * @param {IQHN.Collection} collection_2
  */
-GLVIS.ConnectionCollectionCollection = function (collection_1, collection_2) {
+IQHN.ConnectionCollectionCollection = function (collection_1, collection_2) {
 
-    /** @type{GLVIS.Collection} **/
+    /** @type{IQHN.Collection} **/
     this.c1_ = collection_1;
-    /** @type{GLVIS.Collection} **/
+    /** @type{IQHN.Collection} **/
     this.c2_ = collection_2;
     this.dirty_ = true;
 
@@ -24,9 +24,9 @@ GLVIS.ConnectionCollectionCollection = function (collection_1, collection_2) {
     this.initAndRegisterGlObj();
 };
 
-GLVIS.ConnectionCollectionCollection.prototype.initAndRegisterGlObj = function () {
+IQHN.ConnectionCollectionCollection.prototype.initAndRegisterGlObj = function () {
 
-    var config = GLVIS.config.connection.collection_collection;
+    var config = IQHN.config.connection.collection_collection;
 
 
     var line_material = new THREE.LineBasicMaterial({
@@ -56,12 +56,12 @@ GLVIS.ConnectionCollectionCollection.prototype.initAndRegisterGlObj = function (
     this.webgl_objects_.line = new THREE.Line(line_geometry, line_material);
 
 
-    var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
+    var webgl_handler = IQHN.Scene.getCurrentScene().getWebGlHandler();
     webgl_handler.getThreeScene().add(this.webgl_objects_.line);
 };
 
 
-GLVIS.ConnectionCollectionCollection.prototype.render = function () {
+IQHN.ConnectionCollectionCollection.prototype.render = function () {
 
     if (!this.dirty_)
         return;
@@ -69,12 +69,12 @@ GLVIS.ConnectionCollectionCollection.prototype.render = function () {
     if (!this.c1_ || !this.c2_)
         return;
 
-    var config = GLVIS.config.connection.collection_collection;
+    var config = IQHN.config.connection.collection_collection;
     var pos1 = this.c1_.getPosition();
     var pos2 = this.c2_.getPosition();
 
 
-    GLVIS.Debugger.debug("ConnectionCollectionCollection",
+    IQHN.Debugger.debug("ConnectionCollectionCollection",
     "Rendering CONNECTION for Collections " + this.c1_.getId() + "/" + this.c2_.getId(),
     7);
     
@@ -93,10 +93,10 @@ this.webgl_objects_.line.material.opacity = config.opacity;
 
 
 
-GLVIS.ConnectionCollectionCollection.prototype.setIsDirty = function (dirty) {
+IQHN.ConnectionCollectionCollection.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 };
 
-GLVIS.ConnectionCollectionCollection.prototype.getIsDirty = function () {
+IQHN.ConnectionCollectionCollection.prototype.getIsDirty = function () {
     return this.dirty_;
 };

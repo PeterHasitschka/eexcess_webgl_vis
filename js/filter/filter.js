@@ -1,17 +1,17 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 /**
  * A Filter to be applied to the scene's collections
- * @param {string} key @see{GLVIS.Filter.KEYS}
+ * @param {string} key @see{IQHN.Filter.KEYS}
  * @param {string} value
  */
-GLVIS.Filter = function (key, value) {
+IQHN.Filter = function (key, value) {
 
     if (typeof key === 'string') {
-        for (var k in GLVIS.Filter.KEYS) {
+        for (var k in IQHN.Filter.KEYS) {
 
-            if (GLVIS.Filter.KEYS[k].identifier === key) {
-                key = GLVIS.Filter.KEYS[k];
+            if (IQHN.Filter.KEYS[k].identifier === key) {
+                key = IQHN.Filter.KEYS[k];
                 break;
             }
         }
@@ -24,10 +24,10 @@ GLVIS.Filter = function (key, value) {
 };
 
 
-GLVIS.Filter.prototype.getKey = function () {
+IQHN.Filter.prototype.getKey = function () {
     return this.key_;
 };
-GLVIS.Filter.prototype.getValue = function () {
+IQHN.Filter.prototype.getValue = function () {
     return this.value_;
 };
 
@@ -37,10 +37,10 @@ GLVIS.Filter.prototype.getValue = function () {
  * @param {string} key
  * @returns {bool} true if filter possible else false
  */
-GLVIS.Filter.isFilter = function (key) {
+IQHN.Filter.isFilter = function (key) {
 
-    for (var i in GLVIS.Filter.KEYS) {
-        if (GLVIS.Filter.KEYS[i].identifier === key) {
+    for (var i in IQHN.Filter.KEYS) {
+        if (IQHN.Filter.KEYS[i].identifier === key) {
             return true;
         }
     }
@@ -48,7 +48,7 @@ GLVIS.Filter.isFilter = function (key) {
 };
 
 
-GLVIS.Filter.KEYS = {
+IQHN.Filter.KEYS = {
     LANG: {
         identifier: "language",
         type: "eexcess"

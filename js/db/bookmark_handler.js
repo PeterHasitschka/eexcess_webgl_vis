@@ -1,10 +1,10 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 /**
  * 
  * @param {Array[string} bms    Array holding the bookmark-names. Rest of the data gets loaded via local-storage
  */
-GLVIS.BookmarkHandler = function (bms) {
+IQHN.BookmarkHandler = function (bms) {
 
     this.bms_ = bms;
 };
@@ -12,9 +12,9 @@ GLVIS.BookmarkHandler = function (bms) {
  * Build collections with the help of the bookmark-names stored in this.bms_
  * and the stored bookmark-collection in local storage, where the full result-
  * objects are accessible.
- * @return [GLVIS.Collection]
+ * @return [IQHN.Collection]
  */
-GLVIS.BookmarkHandler.prototype.getCollections = function () {
+IQHN.BookmarkHandler.prototype.getCollections = function () {
     var colls = [];
 
     //Load the stored bookmarks from localstorage
@@ -36,7 +36,7 @@ GLVIS.BookmarkHandler.prototype.getCollections = function () {
             id: b_idx,
             timestamp: 000000
         };
-        var coll = new GLVIS.Collection(eexcess_data);
+        var coll = new IQHN.Collection(eexcess_data);
 
         //Search in (enriched) local-Storage data for this bookmark-collection to get full results.
         var curr_stored_bm = stored_bms[bm_key];
@@ -52,7 +52,7 @@ GLVIS.BookmarkHandler.prototype.getCollections = function () {
                 result: curr_item
             };
 
-            var rec = new GLVIS.Recommendation(res_eexcess_data, coll);
+            var rec = new IQHN.Recommendation(res_eexcess_data, coll);
             rec.setRelevance(1);
 
             coll.addRecommendation(rec);

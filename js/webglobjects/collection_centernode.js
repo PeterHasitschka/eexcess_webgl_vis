@@ -1,18 +1,18 @@
 
-GLVIS = GLVIS || {};
+IQHN = IQHN || {};
 
 
 /**
  * Representing the node of a Collection in WebGl
- * @param {GLVIS.Collection} collection collection that node represents
+ * @param {IQHN.Collection} collection collection that node represents
  * @param {THREE.Object3D | null} mesh_parent Object to use as webgl-parent
  */
-GLVIS.CollectionCenterNode = function (collection, mesh_parent) {
+IQHN.CollectionCenterNode = function (collection, mesh_parent) {
 
-    /** @type{GLVIS.Collection} **/
+    /** @type{IQHN.Collection} **/
     this.collection_ = collection;
 
-    this.default_color_ = GLVIS.config.collection.center_node.circle.color;
+    this.default_color_ = IQHN.config.collection.center_node.circle.color;
 
     this.dirty_ = true;
 
@@ -23,9 +23,9 @@ GLVIS.CollectionCenterNode = function (collection, mesh_parent) {
     this.initAndRegisterGlObj(mesh_parent);
 };
 
-GLVIS.CollectionCenterNode.prototype.initAndRegisterGlObj = function (mesh_parent) {
+IQHN.CollectionCenterNode.prototype.initAndRegisterGlObj = function (mesh_parent) {
 
-    var circle_config = GLVIS.config.collection.center_node.circle;
+    var circle_config = IQHN.config.collection.center_node.circle;
 
     var circleMaterial =
             new THREE.MeshBasicMaterial(
@@ -51,7 +51,7 @@ GLVIS.CollectionCenterNode.prototype.initAndRegisterGlObj = function (mesh_paren
     circle.scene_obj = this.collection_;
 
     if (!mesh_parent) {
-        var webgl_handler = GLVIS.Scene.getCurrentScene().getWebGlHandler();
+        var webgl_handler = IQHN.Scene.getCurrentScene().getWebGlHandler();
         webgl_handler.getThreeScene().add(circle);
     }
     else
@@ -64,20 +64,20 @@ GLVIS.CollectionCenterNode.prototype.initAndRegisterGlObj = function (mesh_paren
 
 
 
-GLVIS.CollectionCenterNode.prototype.render = function () {
+IQHN.CollectionCenterNode.prototype.render = function () {
 
     if (!this.dirty_)
         return;
 
 
-    GLVIS.Debugger.debug("CollectionCenterNode",
+    IQHN.Debugger.debug("CollectionCenterNode",
             "Rendering COLLECTION CENTER-NODE  for collection " + this.collection_.getId(),
             7);
 
 
     var circle_color;
-    if (this.collection_.getStatus() === GLVIS.Collection.STATUSFLAGS.SELECTED)
-        circle_color = GLVIS.config.collection.center_node.circle.select_color;
+    if (this.collection_.getStatus() === IQHN.Collection.STATUSFLAGS.SELECTED)
+        circle_color = IQHN.config.collection.center_node.circle.select_color;
     else
         circle_color = this.default_color_;
 
@@ -85,7 +85,7 @@ GLVIS.CollectionCenterNode.prototype.render = function () {
 
 
 
-    var z_pos = GLVIS.config.collection.center_node.circle.z_value;
+    var z_pos = IQHN.config.collection.center_node.circle.z_value;
     this.webgl_objects_.circle.position.setZ(
             z_pos
             );
@@ -94,7 +94,7 @@ GLVIS.CollectionCenterNode.prototype.render = function () {
      
      var pos = this.collection_.getPosition();
      
-     var z_pos = GLVIS.config.collection.center_node.circle.z_value;
+     var z_pos = IQHN.config.collection.center_node.circle.z_value;
      this.webgl_objects_.circle.position.set(
      pos.x,
      pos.y,
@@ -110,10 +110,10 @@ GLVIS.CollectionCenterNode.prototype.render = function () {
 
 
 
-GLVIS.CollectionCenterNode.prototype.setIsDirty = function (dirty) {
+IQHN.CollectionCenterNode.prototype.setIsDirty = function (dirty) {
     this.dirty_ = dirty;
 };
 
-GLVIS.CollectionCenterNode.prototype.getIsDirty = function () {
+IQHN.CollectionCenterNode.prototype.getIsDirty = function () {
     return this.dirty_;
 };

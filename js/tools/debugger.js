@@ -1,10 +1,10 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
-GLVIS.Debugger = {
-    active_: GLVIS.config.debug.active,
-    level_: GLVIS.config.debug.level,
-    prefix_: GLVIS.config.debug.prefix,
+IQHN.Debugger = {
+    active_: IQHN.config.debug.active,
+    level_: IQHN.config.debug.level,
+    prefix_: IQHN.config.debug.prefix,
     css: "font-weight:bold;",
     classname_css: "color:green;"
 };
@@ -16,7 +16,7 @@ GLVIS.Debugger = {
  * @param {integer} level 1-10: 1:Urgent, 5:e.g. Something was created, 10:Story telling
  * @returns {undefined}
  */
-GLVIS.Debugger.debug = function (class_name, value, level) {
+IQHN.Debugger.debug = function (class_name, value, level) {
 
     if (!this.active_ || level > this.level_)
         return;

@@ -1,27 +1,27 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 
 /**
  * 
- * @param {GLVIS.Scene} scene
+ * @param {IQHN.Scene} scene
  */
-GLVIS.RecConnector = function (scene) {
-    GLVIS.Debugger.debug("RecConnector", "RecConnector created", 5);
+IQHN.RecConnector = function (scene) {
+    IQHN.Debugger.debug("RecConnector", "RecConnector created", 5);
     this.scene_ = scene;
     this.splines_ = [];
 };
 
 /**
  * Connect all recommendations that have the same data over the scene
- * @param {GLVIS.Recommendation} recommendation
+ * @param {IQHN.Recommendation} recommendation
  */
-GLVIS.RecConnector.prototype.connectSameRecs = function (recommendation) {
+IQHN.RecConnector.prototype.connectSameRecs = function (recommendation) {
 
-    GLVIS.Debugger.debug("RecConnector", ["Connecting recommendations for rec", recommendation], 6);
+    IQHN.Debugger.debug("RecConnector", ["Connecting recommendations for rec", recommendation], 6);
 
     var colls = this.scene_.getCollections();
 
-    var spline = new GLVIS.ConnectionRecRecSpline();
+    var spline = new IQHN.ConnectionRecRecSpline();
 
     var e_data = recommendation.getEexcessData();
     var e_id = e_data.result.id;
@@ -56,9 +56,9 @@ GLVIS.RecConnector.prototype.connectSameRecs = function (recommendation) {
 /*
  * Holding all collections that have activated connections on all their recs
  */
-GLVIS.RecConnector.activatedAtCollections = [];
+IQHN.RecConnector.activatedAtCollections = [];
 
 /*
  * Holding all recs where the connections are activated
  */
-GLVIS.RecConnector.activatedAtSingleRecs = [];
+IQHN.RecConnector.activatedAtSingleRecs = [];

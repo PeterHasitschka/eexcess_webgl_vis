@@ -1,27 +1,27 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 /**
  * This position handler sets all collections on a circular path next to their parents.
  * This means that only one child per collections is supported.
- * @type @see{GLVIS.config.scene.possible_vis_types} circle_type Ring or Bow
+ * @type @see{IQHN.config.scene.possible_vis_types} circle_type Ring or Bow
  * @returns {undefined}
  */
-GLVIS.CollectionPosCircular = function (circle_type) {
+IQHN.CollectionPosCircular = function (circle_type) {
 
-    /** @type {GLVIS.Scene} **/
-    this.scene_ = GLVIS.Scene.getCurrentScene();
+    /** @type {IQHN.Scene} **/
+    this.scene_ = IQHN.Scene.getCurrentScene();
 
 
     this.coll_to_focus_ = null;
 
     this.circle_type_poshelper_ = null;
     switch (circle_type) {
-        case GLVIS.config.scene.possible_vis_types.RING :
-            this.circle_type_poshelper_ = new GLVIS.CollectionPosCircularTypeRing();
+        case IQHN.config.scene.possible_vis_types.RING :
+            this.circle_type_poshelper_ = new IQHN.CollectionPosCircularTypeRing();
             break;
 
-        case GLVIS.config.scene.possible_vis_types.BOW :
-            this.circle_type_poshelper_ = new GLVIS.CollectionPosCircularTypeBow();
+        case IQHN.config.scene.possible_vis_types.BOW :
+            this.circle_type_poshelper_ = new IQHN.CollectionPosCircularTypeBow();
             break;
 
         default:
@@ -32,15 +32,15 @@ GLVIS.CollectionPosCircular = function (circle_type) {
 
 /**
  * Calculate sorted parent-mapping
- * @param {array[GLVIS.Collection]} collections
+ * @param {array[IQHN.Collection]} collections
  * @returns {array}
  */
-GLVIS.CollectionPosCircular.prototype.getParentMapping_ = function (collections) {
+IQHN.CollectionPosCircular.prototype.getParentMapping_ = function (collections) {
     //Store parent-id and key in an array to sort it
     var parent_mapping = [];
     for (var coll_key = 0; coll_key < collections.length; coll_key++) {
 
-        /** @type{GLVIS.Collection} **/
+        /** @type{IQHN.Collection} **/
         var current_collection = collections[coll_key];
 
         var coll_id = current_collection.getId();
@@ -62,9 +62,9 @@ GLVIS.CollectionPosCircular.prototype.getParentMapping_ = function (collections)
 /**
  * Sets the positions of each collections
  */
-GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
+IQHN.CollectionPosCircular.prototype.calculatePositions = function () {
 
-    GLVIS.Debugger.debug("CollectionPosCircular",
+    IQHN.Debugger.debug("CollectionPosCircular",
             "COLLECTION POS HANDLER: Recalculating positions",
             5);
 
@@ -95,9 +95,9 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
     var sphere = new THREE.Mesh(
             mesh,
             sphereMaterial);
-    var coll_ring_radius = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
+    var coll_ring_radius = IQHN.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
     sphere.position.set(0, 0, -coll_ring_radius);
-    GLVIS.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(sphere);
+    IQHN.Scene.getCurrentScene().getWebGlHandler().getThreeScene().add(sphere);
     /**
      * Nice dummy-sphere in the middle of the circle END
      */
@@ -108,7 +108,7 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
     for (var coll_count = 0; coll_count < parent_mapping.length; coll_count++) {
         var collection_key = parent_mapping[coll_count][0];
 
-        /** @type{GLVIS.Collection} **/
+        /** @type{IQHN.Collection} **/
         var current_collection = collections[collection_key];
 
         var index = coll_count + 1;
@@ -125,7 +125,7 @@ GLVIS.CollectionPosCircular.prototype.calculatePositions = function () {
  * @param {integer} numindizies Maximum number of collections to set pos
  * @returns {array}
  */
-GLVIS.CollectionPosCircular.prototype.getPosAndRot = function (index, numindizies) {
+IQHN.CollectionPosCircular.prototype.getPosAndRot = function (index, numindizies) {
 
     var empty_spaces = this.circle_type_poshelper_.getAddEmptySpaces(numindizies);
     index += empty_spaces;
@@ -135,8 +135,8 @@ GLVIS.CollectionPosCircular.prototype.getPosAndRot = function (index, numindizie
 
     var curr_rad = 0 - (index * rad_step) + Math.PI / 2;
 
-    var radius = GLVIS.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
-    var pos = GLVIS.Tools.getPosFromRad(curr_rad, radius);
+    var radius = IQHN.Scene.getCurrentScene().getCollectionPositionHandler().getCollCircleRadius();
+    var pos = IQHN.Tools.getPosFromRad(curr_rad, radius);
 
     var degree = (curr_rad - Math.PI / 2) * 180 / Math.PI * -1;
     return {x: pos.x, z: pos.y - radius, degree: degree};
@@ -144,9 +144,9 @@ GLVIS.CollectionPosCircular.prototype.getPosAndRot = function (index, numindizie
 
 /**
  * Set Collection that gets focused after rendering the collections
- * @param {GLVIS.Collection} coll
+ * @param {IQHN.Collection} coll
  */
-GLVIS.CollectionPosCircular.prototype.setCollToFocus = function (coll) {
+IQHN.CollectionPosCircular.prototype.setCollToFocus = function (coll) {
     this.coll_to_focus_ = coll;
 };
 
@@ -154,19 +154,19 @@ GLVIS.CollectionPosCircular.prototype.setCollToFocus = function (coll) {
  * Dummy
  * @param {bool} val
  */
-GLVIS.CollectionPosCircular.prototype.setIsOneFocused = function (val) {
+IQHN.CollectionPosCircular.prototype.setIsOneFocused = function (val) {
 };
 
 /**
  * Get Collection that is set to be focused after rendering the collections
- * @returns {GLVIS.Collection}
+ * @returns {IQHN.Collection}
  */
-GLVIS.CollectionPosCircular.prototype.getCollToFocus = function () {
+IQHN.CollectionPosCircular.prototype.getCollToFocus = function () {
     return this.coll_to_focus_;
 };
 
 
-GLVIS.CollectionPosCircular.prototype.getCollCircleRadius = function () {
+IQHN.CollectionPosCircular.prototype.getCollCircleRadius = function () {
     return this.circle_type_poshelper_.getCollCircleRadius();
 };
 
@@ -175,14 +175,14 @@ GLVIS.CollectionPosCircular.prototype.getCollCircleRadius = function () {
  * On creating a ring-segment this method is used to move the collection out of
  * the collection-circle to be near the camera. This helps to avoid problems with
  * the perspective. (Either the collections aren't visible or the fish-eye effect is too hard)
- * @param {GLVIS.Collection} collection
+ * @param {IQHN.Collection} collection
  * @param {function} callback_fct
  */
-GLVIS.CollectionPosCircular.prototype.moveCollectionFromCenter = function (collection, callback_fct) {
+IQHN.CollectionPosCircular.prototype.moveCollectionFromCenter = function (collection, callback_fct) {
 
-    GLVIS.Debugger.debug("CollectionPosCircular", "Moving coll " + collection.getId() + " away from center", 6);
+    IQHN.Debugger.debug("CollectionPosCircular", "Moving coll " + collection.getId() + " away from center", 6);
 
-    var config = GLVIS.config.collection.focus;
+    var config = IQHN.config.collection.focus;
 
     var circle_rad = this.getCollCircleRadius();
     var center_point = new THREE.Vector3(0, 0, -circle_rad);
@@ -211,7 +211,7 @@ GLVIS.CollectionPosCircular.prototype.moveCollectionFromCenter = function (colle
     new_pos.add(distance_vec);
     var new_pos_obj = {x: new_pos.x, y: new_pos.y, z: new_pos.z};
 
-    var anim = GLVIS.Scene.getCurrentScene().getAnimation();
+    var anim = IQHN.Scene.getCurrentScene().getAnimation();
     anim.register(
             config.animation.id + collection.getId(),
             new_pos_obj,
@@ -232,15 +232,15 @@ GLVIS.CollectionPosCircular.prototype.moveCollectionFromCenter = function (colle
 /**
  * On removing a ring-segment this method is used to move the collection back to
  * the collection-circle.
- * @param {GLVIS.Collection} collection
+ * @param {IQHN.Collection} collection
  */
-GLVIS.CollectionPosCircular.prototype.moveCollectionToCenter = function (collection) {
+IQHN.CollectionPosCircular.prototype.moveCollectionToCenter = function (collection) {
 
-    GLVIS.Debugger.debug("CollectionPosCircular", "Moving coll " + collection.getId() + " back to the center", 6);
+    IQHN.Debugger.debug("CollectionPosCircular", "Moving coll " + collection.getId() + " back to the center", 6);
     var orig_pos = collection.getInitPos();
-    var config = GLVIS.config.collection.focus;
+    var config = IQHN.config.collection.focus;
 
-    var anim = GLVIS.Scene.getCurrentScene().getAnimation();
+    var anim = IQHN.Scene.getCurrentScene().getAnimation();
     anim.register(
             config.animation.id + collection.getId(),
             orig_pos,

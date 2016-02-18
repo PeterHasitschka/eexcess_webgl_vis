@@ -1,4 +1,4 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 /**
  * 
@@ -6,7 +6,7 @@ var GLVIS = GLVIS || {};
  * 
  */
 
-GLVIS.DbRecObj = function (data) {
+IQHN.DbRecObj = function (data) {
 
     this.data_ = null;
     if (data)
@@ -14,18 +14,18 @@ GLVIS.DbRecObj = function (data) {
 };
 
 /**
- * Set Data coming from @see{GLVIS.DbHandlerIndexedDb.getStorageData_}
+ * Set Data coming from @see{IQHN.DbHandlerIndexedDb.getStorageData_}
  * @param {type} data Obj
  */
-GLVIS.DbRecObj.prototype.setData = function (data) {
+IQHN.DbRecObj.prototype.setData = function (data) {
     this.data_ = data;
 };
 
 /**
- * Returning (processed) data originally from @see{GLVIS.DbHandlerIndexedDb.getStorageData_}.
+ * Returning (processed) data originally from @see{IQHN.DbHandlerIndexedDb.getStorageData_}.
  * @returns {object}
  */
-GLVIS.DbRecObj.prototype.getData = function () {
+IQHN.DbRecObj.prototype.getData = function () {
     return this.data_;
 };
 
@@ -33,17 +33,17 @@ GLVIS.DbRecObj.prototype.getData = function () {
  * Returns the timestamp from the db data
  * @returns {float} timestamp
  */
-GLVIS.DbRecObj.prototype.getTimestamp = function(){
+IQHN.DbRecObj.prototype.getTimestamp = function(){
     return this.data_.timestamp;
 };
 
 
-GLVIS.DbRecObj.createObjectsFromDbData = function (data) {
+IQHN.DbRecObj.createObjectsFromDbData = function (data) {
 
     var objects_ = [];
 
     for (var i = 0; i < data.length; i++)
-        objects_.push(new GLVIS.DbRecObj(data[i]));
+        objects_.push(new IQHN.DbRecObj(data[i]));
 
 
     return objects_;

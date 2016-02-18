@@ -1,15 +1,15 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 /**
  * Some nice little helpers
  */
-GLVIS.Tools = {};
+IQHN.Tools = {};
 /**
  * Getting the angle (radians) of something by passing the coordinates
  * @param {float} x
  * @param {float} y
  * @returns {float}
  */
-GLVIS.Tools.getRadFromPos = function (x, y) {
+IQHN.Tools.getRadFromPos = function (x, y) {
     var rad = Math.atan2(y, x);
     while (rad < 0)
         rad += (Math.PI * 2);
@@ -23,7 +23,7 @@ GLVIS.Tools.getRadFromPos = function (x, y) {
  * @param {float} distance Distance
  * @returns {object} Object holding x and y
  */
-GLVIS.Tools.getPosFromRad = function (rad, distance) {
+IQHN.Tools.getPosFromRad = function (rad, distance) {
 
     while (rad < 0)
         rad += (Math.PI * 2);
@@ -40,7 +40,7 @@ GLVIS.Tools.getPosFromRad = function (rad, distance) {
  * @param {THREE.Vector3} point
  * @return {THREE.Vector3} Rotaded vector
  */
-GLVIS.Tools.getRotation = function (axis, degree, point) {
+IQHN.Tools.getRotation = function (axis, degree, point) {
 
     var rad = degree / 360 * 2 * Math.PI;
     switch (axis) {
@@ -54,7 +54,7 @@ GLVIS.Tools.getRotation = function (axis, degree, point) {
     }
 
 };
-GLVIS.Tools.MultVarOps = {
+IQHN.Tools.MultVarOps = {
     add: function (a, b) {
 
         if (typeof a !== 'object' || typeof b !== 'object')
@@ -156,11 +156,11 @@ GLVIS.Tools.MultVarOps = {
             v: 0
         };
 
-        /** @var {GLVIS.NavigationHandler} nh **/
-        var nh = GLVIS.Scene.getCurrentScene().getNavigationHandler();
+        /** @var {IQHN.NavigationHandler} nh **/
+        var nh = IQHN.Scene.getCurrentScene().getNavigationHandler();
 
 
-        GLVIS.Scene.getCurrentScene().getAnimation().register(
+        IQHN.Scene.getCurrentScene().getAnimation().register(
                 "test_anim",
                 goal,
                 null,

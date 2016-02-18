@@ -1,14 +1,14 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 /**
  * This position handler sets all collections in a line next to their parents.
  * This means that only one child per collections is supported.
  * @returns {undefined}
  */
-GLVIS.CollectionPosLinear = function () {
+IQHN.CollectionPosLinear = function () {
 
-    /** @type {GLVIS.Scene} **/
-    this.scene_ = GLVIS.Scene.getCurrentScene();
+    /** @type {IQHN.Scene} **/
+    this.scene_ = IQHN.Scene.getCurrentScene();
 
     this.is_onefocused_ = false;
     this.coll_to_focus_ = null;
@@ -19,9 +19,9 @@ GLVIS.CollectionPosLinear = function () {
  * Sets the positions of each collections
  * @param {boolean} focus_last If true, the last collection gets focused in the end
  */
-GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
+IQHN.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
 
-    GLVIS.Debugger.debug("CollectionPosLinear",
+    IQHN.Debugger.debug("CollectionPosLinear",
             "COLLECTION POS HANDLER: Recalculating positions",
             5);
 
@@ -36,7 +36,7 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
     var parent_mapping = [];
     for (var coll_key = 0; coll_key < collections.length; coll_key++) {
 
-        /** @type{GLVIS.Collection} **/
+        /** @type{IQHN.Collection} **/
         var current_collection = collections[coll_key];
 
         var coll_id = current_collection.getId();
@@ -55,7 +55,7 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
 
 
     //Use array to get the keys in right order
-    var x_step = GLVIS.config.collection.init_distance;
+    var x_step = IQHN.config.collection.init_distance;
 
     if (this.is_onefocused_) {
         x_step /= 4;
@@ -68,7 +68,7 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
     for (var coll_count = 0; coll_count < parent_mapping.length; coll_count++) {
         var collection_key = parent_mapping[coll_count][0];
 
-        /** @type{GLVIS.Collection} **/
+        /** @type{IQHN.Collection} **/
         var current_collection = collections[collection_key];
 
 
@@ -114,12 +114,12 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
 
     /**
      * Focus last collection
-     * @type {GLVIS.NavigationHandler} navigation_handler
+     * @type {IQHN.NavigationHandler} navigation_handler
      */
-    var navigation_handler = GLVIS.Scene.getCurrentScene().getNavigationHandler();
+    var navigation_handler = IQHN.Scene.getCurrentScene().getNavigationHandler();
     if (coll_to_focus) {
         navigation_handler.focusCollection(coll_to_focus, function () {
-            GLVIS.Debugger.debug("CollectionPosLinear",
+            IQHN.Debugger.debug("CollectionPosLinear",
                     "COLLECTION LINEAR POS: Ready positioning and focusing",
                     6);
         });
@@ -135,29 +135,29 @@ GLVIS.CollectionPosLinear.prototype.calculatePositions = function (focus_last) {
  * @param {boolean} value True if a focus representation should be performed
  * @returns {undefined}
  */
-GLVIS.CollectionPosLinear.prototype.setIsOneFocused = function (value) {
+IQHN.CollectionPosLinear.prototype.setIsOneFocused = function (value) {
     this.is_onefocused_ = value;
 };
 
 /**
  * @returns {Boolean} True if onefocus flag is set
  */
-GLVIS.CollectionPosLinear.prototype.getIsOneFocused = function () {
+IQHN.CollectionPosLinear.prototype.getIsOneFocused = function () {
     return this.is_onefocused_;
 };
 
 /**
  * Set Collection that gets focused after rendering the collections
- * @param {GLVIS.Collection} coll
+ * @param {IQHN.Collection} coll
  */
-GLVIS.CollectionPosLinear.prototype.setCollToFocus = function (coll) {
+IQHN.CollectionPosLinear.prototype.setCollToFocus = function (coll) {
     this.coll_to_focus_ = coll;
 };
 
 /**
  * Get Collection that is set to be focused after rendering the collections
- * @returns {GLVIS.Collection}
+ * @returns {IQHN.Collection}
  */
-GLVIS.CollectionPosLinear.prototype.getCollToFocus = function () {
+IQHN.CollectionPosLinear.prototype.getCollToFocus = function () {
     return this.coll_to_focus_;
 };

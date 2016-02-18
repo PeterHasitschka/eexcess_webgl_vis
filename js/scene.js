@@ -1,42 +1,42 @@
-var GLVIS = GLVIS || {};
+var IQHN = IQHN || {};
 
 /** @constructor 
  *  @param {Object} canvas_element jQuery-object of the container holding the canvas
  */
-GLVIS.Scene = function (canvas) {
+IQHN.Scene = function (canvas) {
 
-    GLVIS.Scene.current_scene = this;
+    IQHN.Scene.current_scene = this;
 
     /**
      * Switch between RING and BOW for different positioning on a virtual ring
      */
-    this.vis_type_ = GLVIS.config.scene.possible_vis_types.BOW;
+    this.vis_type_ = IQHN.config.scene.possible_vis_types.BOW;
 
-    /** @type {GLVIS.NavigationHandler} **/
-    this.navigation_handler_ = new GLVIS.NavigationHandler(this);
+    /** @type {IQHN.NavigationHandler} **/
+    this.navigation_handler_ = new IQHN.NavigationHandler(this);
 
-    /** @type {GLVIS.Filterhandler} **/
-    this.filter_handler_ = new GLVIS.FilterHandler(this);
+    /** @type {IQHN.Filterhandler} **/
+    this.filter_handler_ = new IQHN.FilterHandler(this);
 
     this.db_handler_ = null;
 
-    /** @type {GLVIS.RecDashboardHandler} **/
-    this.recdashboard_handler_ = new GLVIS.RecDashboardHandler();
+    /** @type {IQHN.RecDashboardHandler} **/
+    this.recdashboard_handler_ = new IQHN.RecDashboardHandler();
 
-    /** @type{GLVIS.WebGlHandler} **/
-    this.webgl_handler_ = new GLVIS.WebGlHandler(canvas);
+    /** @type{IQHN.WebGlHandler} **/
+    this.webgl_handler_ = new IQHN.WebGlHandler(canvas);
 
-    /** @type {GLVIS.InteractionHandler} **/
-    this.interaction_handler_ = new GLVIS.InteractionHandler(this);
+    /** @type {IQHN.InteractionHandler} **/
+    this.interaction_handler_ = new IQHN.InteractionHandler(this);
 
-    /** @type{GLVIS.CollectionPosCircular} **/
-    this.collection_position_handler_ = new GLVIS.CollectionPosCircular(this.vis_type_);
+    /** @type{IQHN.CollectionPosCircular} **/
+    this.collection_position_handler_ = new IQHN.CollectionPosCircular(this.vis_type_);
 
-    /** @type{GLVIS.Scene} **/
-    this.forms_ = new GLVIS.Forms(this);
+    /** @type{IQHN.Scene} **/
+    this.forms_ = new IQHN.Forms(this);
 
-    /** @type{GLVIS.Animation} **/
-    this.animation_ = new GLVIS.Animation();
+    /** @type{IQHN.Animation} **/
+    this.animation_ = new IQHN.Animation();
 
     this.time_ = {
         current: null,
@@ -44,26 +44,26 @@ GLVIS.Scene = function (canvas) {
     };
 
     this.compare_ = {
-        direct: new GLVIS.DirectCompare()
+        direct: new IQHN.DirectCompare()
     };
 
-    /** @type{GLVIS.RecConnector} **/
-    this.recconnector_ = new GLVIS.RecConnector(this);
+    /** @type{IQHN.RecConnector} **/
+    this.recconnector_ = new IQHN.RecConnector(this);
 
     /**
-     * Holding @see{GLVIS.Collection} objects
+     * Holding @see{IQHN.Collection} objects
      */
     this.collections_ = [];
 
     //Reset counter of collections / recs
-    GLVIS.Collection.current_id = 0;
-    GLVIS.Recommendation.current_id = 0;
+    IQHN.Collection.current_id = 0;
+    IQHN.Recommendation.current_id = 0;
 };
 
 /**
  * Rendering the whole scene and all its sub-objects
  */
-GLVIS.Scene.prototype.render = function () {
+IQHN.Scene.prototype.render = function () {
 
     //this.getNavigationHandler().moveCameraAroundCircle(0.1, 0);
 
@@ -85,9 +85,9 @@ GLVIS.Scene.prototype.render = function () {
 
 /**
  * Adding a collection to the scene
- * @param {GLVIS.Collection} collection
+ * @param {IQHN.Collection} collection
  */
-GLVIS.Scene.prototype.addCollection = function (collection) {
+IQHN.Scene.prototype.addCollection = function (collection) {
     this.collections_.push(collection);
 
 };
@@ -96,63 +96,63 @@ GLVIS.Scene.prototype.addCollection = function (collection) {
  * Returning all registered collections
  * @returns {Array}
  */
-GLVIS.Scene.prototype.getCollections = function () {
+IQHN.Scene.prototype.getCollections = function () {
     return this.collections_;
 };
 
 /**
  * Getter for the WebGlHandler
- * @returns {GLVIS.WebGlHandler}
+ * @returns {IQHN.WebGlHandler}
  */
-GLVIS.Scene.prototype.getWebGlHandler = function () {
+IQHN.Scene.prototype.getWebGlHandler = function () {
     return this.webgl_handler_;
 };
 
 /**
  * Getter for the NavigationHandler
- * @returns {GLVIS.NavigationHandler}
+ * @returns {IQHN.NavigationHandler}
  */
-GLVIS.Scene.prototype.getNavigationHandler = function () {
+IQHN.Scene.prototype.getNavigationHandler = function () {
     return this.navigation_handler_;
 };
 
 /**
  * Getter for the FilterHandler
- * @returns {GLVIS.FilterHandler}
+ * @returns {IQHN.FilterHandler}
  */
-GLVIS.Scene.prototype.getFilterHandler = function () {
+IQHN.Scene.prototype.getFilterHandler = function () {
     return this.filter_handler_;
 };
 
 /**
  * Getter for the Animation-Object
- * @returns {GLVIS.Animation}
+ * @returns {IQHN.Animation}
  */
-GLVIS.Scene.prototype.getAnimation = function () {
+IQHN.Scene.prototype.getAnimation = function () {
     return this.animation_;
 };
 
 /**
  * Getter for the Rec-Dashboard-Handler
- * @returns {GLVIS.RecDashboardHandler}
+ * @returns {IQHN.RecDashboardHandler}
  */
-GLVIS.Scene.prototype.getRecDashboardHandler = function () {
+IQHN.Scene.prototype.getRecDashboardHandler = function () {
     return this.recdashboard_handler_;
 };
 
 /**
  * Getter for the Interaction-Handler
- * @returns {GLVIS.InteractionHandler}
+ * @returns {IQHN.InteractionHandler}
  */
-GLVIS.Scene.prototype.getInteractionHandler = function () {
+IQHN.Scene.prototype.getInteractionHandler = function () {
     return this.interaction_handler_;
 };
 
 /**
  * Returning the scene's position handler for the collections
- * @returns {GLVIS.CollectionPosLinear}
+ * @returns {IQHN.CollectionPosLinear}
  */
-GLVIS.Scene.prototype.getCollectionPositionHandler = function () {
+IQHN.Scene.prototype.getCollectionPositionHandler = function () {
     return this.collection_position_handler_;
 };
 
@@ -160,24 +160,24 @@ GLVIS.Scene.prototype.getCollectionPositionHandler = function () {
  * Returning the scene's compare objects
  * @returns {}
  */
-GLVIS.Scene.prototype.getComparer = function () {
+IQHN.Scene.prototype.getComparer = function () {
     return this.compare_;
 };
 
 /**
  * Returns the Rec-Connector, that is responsible for (spline) connections
  * between recommendations over several collections
- * @returns {GLVIS.RecConnector}
+ * @returns {IQHN.RecConnector}
  */
-GLVIS.Scene.prototype.getRecConnector = function () {
+IQHN.Scene.prototype.getRecConnector = function () {
     return this.recconnector_;
 };
 
 /**
  * Get the scene's form handler
- * @returns {GLVIS.Forms}
+ * @returns {IQHN.Forms}
  */
-GLVIS.Scene.prototype.getForms = function () {
+IQHN.Scene.prototype.getForms = function () {
     return this.forms_;
 };
 
@@ -185,7 +185,7 @@ GLVIS.Scene.prototype.getForms = function () {
  * 
  * @returns {float} Time Delta for calculating animation steps
  */
-GLVIS.Scene.prototype.getTimeDelta = function () {
+IQHN.Scene.prototype.getTimeDelta = function () {
     return this.time_.delta;
 };
 
@@ -194,7 +194,7 @@ GLVIS.Scene.prototype.getTimeDelta = function () {
  * 
  * @returns {integer} Get vis-type flag (e.g. ring or bow)
  */
-GLVIS.Scene.prototype.getVisType = function () {
+IQHN.Scene.prototype.getVisType = function () {
     return this.vis_type_;
 };
 
@@ -203,7 +203,7 @@ GLVIS.Scene.prototype.getVisType = function () {
  * @param {integer} collection_id
  * @returns {GLIVS.Collection || null}
  */
-GLVIS.Scene.prototype.getCollection = function (collection_id) {
+IQHN.Scene.prototype.getCollection = function (collection_id) {
 
     collection_id = parseInt(collection_id);
 
@@ -219,7 +219,7 @@ GLVIS.Scene.prototype.getCollection = function (collection_id) {
  * Sets positions of the loaded collections and connects them with a connection
  * @returns {undefined}
  */
-GLVIS.Scene.prototype.initCollectionNetwork = function () {
+IQHN.Scene.prototype.initCollectionNetwork = function () {
     this.getCollectionPositionHandler().calculatePositions();
 
     //Creating parent connections
@@ -239,19 +239,19 @@ GLVIS.Scene.prototype.initCollectionNetwork = function () {
  ******************/
 
 
-GLVIS.Scene.current_scene = null;
+IQHN.Scene.current_scene = null;
 
 
-GLVIS.Scene.VISTYPE = {
+IQHN.Scene.VISTYPE = {
     RING: 0x1,
     BOW: 0x2
 };
 
 /**
  * Get current scene
- * @returns {GLVIS.Scene || null}
+ * @returns {IQHN.Scene || null}
  */
-GLVIS.Scene.getCurrentScene = function () {
+IQHN.Scene.getCurrentScene = function () {
     if (!this.current_scene)
         return null;
     return this.current_scene;
@@ -261,19 +261,19 @@ GLVIS.Scene.getCurrentScene = function () {
 var stop_flag = false;
 
 var animation_debugger = null;
-animation_debugger = new GLVIS.AnimationDebugger();
+animation_debugger = new IQHN.AnimationDebugger();
 
 /**
  * Main entry-point for the animation
  */
-GLVIS.Scene.animate = function () {
-    var curr_scene = GLVIS.Scene.getCurrentScene();
+IQHN.Scene.animate = function () {
+    var curr_scene = IQHN.Scene.getCurrentScene();
 
     if (!curr_scene || stop_flag)
         return;
 
 
-    requestAnimationFrame(GLVIS.Scene.animate);
+    requestAnimationFrame(IQHN.Scene.animate);
     curr_scene.render();
 
     if (animation_debugger)

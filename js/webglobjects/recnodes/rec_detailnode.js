@@ -1,13 +1,13 @@
 
-GLVIS = GLVIS || {};
+IQHN = IQHN || {};
 
 
 /**
  * Representing a detailed recommendation of a Collection in WebGl
- * @param {GLVIS.Recommendation} recommendation recommendation that node represents
+ * @param {IQHN.Recommendation} recommendation recommendation that node represents
  * @param {THREE.Object3D} mesh_parent
  */
-GLVIS.RecommendationDetailNode = function (recommendation, mesh_parent) {
+IQHN.RecommendationDetailNode = function (recommendation, mesh_parent) {
 
     this.dirty_ = true;
     this.recommendation_ = recommendation;
@@ -27,7 +27,7 @@ GLVIS.RecommendationDetailNode = function (recommendation, mesh_parent) {
     this.initAndRegisterGlObj(mesh_parent);
 
 
-    this.add_distance = GLVIS.config.collection.recommendation.detail_node.add_dinstance;
+    this.add_distance = IQHN.config.collection.recommendation.detail_node.add_dinstance;
 };
 
 /**
@@ -35,12 +35,12 @@ GLVIS.RecommendationDetailNode = function (recommendation, mesh_parent) {
  * All objects get added to a parent-mesh.
  * These objects are an outer circle with variable size (for visualizing the relevance)
  * an inner circle holding a preview image.
- * And several buttons with different actions @see{GLVIS.RecDetailNodeButton}
+ * And several buttons with different actions @see{IQHN.RecDetailNodeButton}
  * @param {THREE.Mesh} mesh_parent
  */
-GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_parent) {
+IQHN.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_parent) {
 
-    var config = GLVIS.config.collection.recommendation.detail_node;
+    var config = IQHN.config.collection.recommendation.detail_node;
 
 
     mesh_parent.add(this.webgl_objects_.group);
@@ -92,9 +92,9 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
         var preview_image = result.previewImage ? cors_proxy + result.previewImage : null;
 
         if (typeof (standalone_folder_prefix) !== "undefined")
-            GLVIS.config.scene.media_folder = "../../media/";
+            IQHN.config.scene.media_folder = "../../media/";
 
-        var image = preview_image || GLVIS.config.scene.media_folder + config.placeholder_img;
+        var image = preview_image || IQHN.config.scene.media_folder + config.placeholder_img;
 
         /**
          * Create inner circle with image texture
@@ -121,12 +121,12 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
         this.webgl_objects_.circle_inner = circle_inner;
 
 
-        GLVIS.Debugger.debug("RecommendationDetailNode", "Preview image exists... start loading", 5);
+        IQHN.Debugger.debug("RecommendationDetailNode", "Preview image exists... start loading", 5);
 
         THREE.ImageUtils.crossOrigin = '';
         THREE.ImageUtils.loadTexture(image, {}, function (texture) {
 
-            GLVIS.Debugger.debug("RecommendationDetailNode", "Preview loaded. Creating texture", 5);
+            IQHN.Debugger.debug("RecommendationDetailNode", "Preview loaded. Creating texture", 5);
             texture.minFilter = THREE.LinearFilter;
             
             //Could happen due to asynchronous call
@@ -148,8 +148,8 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
         }.bind(this));
     }
 
-    var forms = GLVIS.Scene.getCurrentScene().getForms();
-    var recdbhandler = GLVIS.Scene.getCurrentScene().getRecDashboardHandler();
+    var forms = IQHN.Scene.getCurrentScene().getForms();
+    var recdbhandler = IQHN.Scene.getCurrentScene().getRecDashboardHandler();
     //Add buttons
     var button_options = [
         {
@@ -180,7 +180,7 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
     ];
 
     for (var i = 0; i < button_options.length; i++) {
-        var button = new GLVIS.RecDetailNodeButton(this, button_options[i]);
+        var button = new IQHN.RecDetailNodeButton(this, button_options[i]);
         this.webgl_objects_.buttons.push(button);
     }
 
@@ -192,9 +192,9 @@ GLVIS.RecommendationDetailNode.prototype.initAndRegisterGlObj = function (mesh_p
 /**
  * Sets the position of the added buttons around the node
  */
-GLVIS.RecommendationDetailNode.prototype.calculateButtonPositions_ = function () {
+IQHN.RecommendationDetailNode.prototype.calculateButtonPositions_ = function () {
 
-    var config = GLVIS.config.collection.recommendation.detail_node.button;
+    var config = IQHN.config.collection.recommendation.detail_node.button;
     var b_count = this.webgl_objects_.buttons.length;
     var rad = config.distance_rad;
 
@@ -203,7 +203,7 @@ GLVIS.RecommendationDetailNode.prototype.calculateButtonPositions_ = function ()
     var curr_angle = 0;
     for (var i = 0; i < b_count; i++) {
 
-        /** @type {GLVIS.RecDetailNodeButton} **/
+        /** @type {IQHN.RecDetailNodeButton} **/
         var curr_button = this.webgl_objects_.buttons[i];
         var x = Math.cos(curr_angle) * rad;
         var y = Math.sin(curr_angle) * rad;
@@ -218,14 +218,14 @@ GLVIS.RecommendationDetailNode.prototype.calculateButtonPositions_ = function ()
 /**
  * Rendering all webgl-objects if node is dirty.
  */
-GLVIS.RecommendationDetailNode.prototype.render = function () {
+IQHN.RecommendationDetailNode.prototype.render = function () {
 
     if (!this.dirty_)
         return;
 
-    var config = GLVIS.config.collection.recommendation.detail_node;
+    var config = IQHN.config.collection.recommendation.detail_node;
 
-    GLVIS.Debugger.debug(
+    IQHN.Debugger.debug(
             "RecommendationDetailNode",
             "Rendering RECOMMENDATION DETAIL-NODE  for recommendation " + this.recommendation_.getId(),
             7);
@@ -268,9 +268,9 @@ GLVIS.RecommendationDetailNode.prototype.render = function () {
 
 /**
  * Returning the THREE-JS container holding all webgl-objects
- * @returns {GLVIS.RecommendationDetailNode.webgl_objects_.group}
+ * @returns {IQHN.RecommendationDetailNode.webgl_objects_.group}
  */
-GLVIS.RecommendationDetailNode.prototype.getGroupMesh = function () {
+IQHN.RecommendationDetailNode.prototype.getGroupMesh = function () {
     return this.webgl_objects_.group;
 };
 
@@ -278,14 +278,14 @@ GLVIS.RecommendationDetailNode.prototype.getGroupMesh = function () {
  * Setting the node's buttons visible or not.
  * @param {bool} visible
  */
-GLVIS.RecommendationDetailNode.prototype.setButtonsVisible = function (visible) {
+IQHN.RecommendationDetailNode.prototype.setButtonsVisible = function (visible) {
     for (var i = 0; i < this.webgl_objects_.buttons.length; i++) {
         this.webgl_objects_.buttons[i].setIsVisible(visible);
     }
 };
 
 
-GLVIS.RecommendationDetailNode.prototype.setIsDirty = function (dirty) {
+IQHN.RecommendationDetailNode.prototype.setIsDirty = function (dirty) {
 
     if (this.dirty_ === dirty)
         return;
@@ -294,7 +294,7 @@ GLVIS.RecommendationDetailNode.prototype.setIsDirty = function (dirty) {
     this.recommendation_.setIsDirty(dirty);
 };
 
-GLVIS.RecommendationDetailNode.prototype.getIsDirty = function () {
+IQHN.RecommendationDetailNode.prototype.getIsDirty = function () {
     return this.dirty_;
 };
 
@@ -302,14 +302,14 @@ GLVIS.RecommendationDetailNode.prototype.getIsDirty = function () {
  * Returns the mesh of the inner circle
  * @returns {THREE.Mesh}
  */
-GLVIS.RecommendationDetailNode.prototype.getCircle = function () {
+IQHN.RecommendationDetailNode.prototype.getCircle = function () {
     return this.webgl_objects_.circle_outer;
 };
 
 /**
  * Delete all GL-Objects and remove them from the scene
  */
-GLVIS.RecommendationDetailNode.prototype.delete = function () {
+IQHN.RecommendationDetailNode.prototype.delete = function () {
 
     this.mesh_parent_.remove(this.webgl_objects_.group);
 
