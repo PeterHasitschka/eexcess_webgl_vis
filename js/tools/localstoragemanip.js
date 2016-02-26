@@ -38,9 +38,14 @@ IQHN.LocalStorageManipulator.prototype.export = function () {
             continue;
 
         var idx = parseInt(key.replace("eexcess_query_", ""));
-        archive[idx] = localStorage.getItem(key);
+        var item = localStorage.getItem(key);
+        
+        console.log("LENGTH OF STORED QUERY "+idx+": " + JSON.stringify(item).length);
+        archive[idx] = item;
     }
-
+    
+    return;
+    
     var export_val = JSON.stringify(archive);
     
     jQuery('#localstoragemanip_importdata').val(export_val);
