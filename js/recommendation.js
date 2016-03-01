@@ -528,6 +528,7 @@ IQHN.Recommendation.prototype.setRelativePositionByRad = function (that, rad) {
     var node_type_secific_add_distance = this.vis_data_.gl_objects.center_node.add_distance;
 
     //this.updateNodeDistance();
+    //console.log("DIST-FACT: ", that.vis_data_.distance_factor);
     var distance = that.vis_data_.distance_factor * init_distance + node_type_secific_add_distance;
     var pos = IQHN.Tools.getPosFromRad(rad, distance);
     that.setRelativePosition(pos.x, pos.y, IQHN.config.collection.recommendation.init_z);
@@ -566,6 +567,7 @@ IQHN.Recommendation.prototype.toggleVisualizeRelevance = function (visualize) {
 
         var config = IQHN.config.collection.recommendation.relevance;
 
+        //console.log("RELEVANCE: ", relevance, config.sizefactor, config.sizeoffset, relevance * config.sizefactor + config.sizeoffset);
         this.setSizeFactor(relevance * config.sizefactor + config.sizeoffset, true);
     }
     else {
@@ -783,7 +785,7 @@ IQHN.Recommendation.prototype.updateNodeDistance = function () {
     var filter_positive = this.vis_data_.is_filter_positive;
 
     var filter_distance_fact = filter_positive ? 1 : IQHN.config.collection.recommendation.filter.distance_factor;
-    var dist_fact = IQHN.config.collection.recommendation.relevance.distfactor;
+    //var dist_config_fact = IQHN.config.collection.recommendation.relevance.distfactor;
 
     var dist_config = IQHN.config.collection.recommendation.distance;
 
@@ -791,8 +793,12 @@ IQHN.Recommendation.prototype.updateNodeDistance = function () {
     var min_dist = dist_config.min_dist_fct;
     var max_dist = dist_config.max_dist_fct;
 
-    if (this.vis_data_.relevance_shown)
-        goal_fact = dist_config.rel_offset + (dist_config.filter_offset + relevance * dist_fact) * filter_distance_fact;
+    if (this.vis_data_.relevance_shown) {
+        //goal_fact = dist_config.rel_offset + (dist_config.filter_offset + relevance * dist_config_fact) * filter_distance_fact;
+        
+        // New calculation of factor (1.3.16)
+        goal_fact = ((max_dist - min_dist) * relevance + min_dist) * filter_distance_fact;
+    }
     else
         goal_fact = 1 * filter_distance_fact;
 

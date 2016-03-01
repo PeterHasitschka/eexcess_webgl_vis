@@ -76,7 +76,7 @@ IQHN.DbHandlerLocalStorage.prototype.getCollections = function () {
             var rec = new IQHN.Recommendation(res_eexcess_data, collection);
 
             //Add relevance. The first has the highest
-            rec.setRelevance(1 - (j / curr_item.result.length));
+            rec.setRelevance(1 - (j / result_length));
 
             collection.addRecommendation(rec);
         }

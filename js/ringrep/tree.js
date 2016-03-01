@@ -118,9 +118,11 @@ IQHN.RingTree.prototype.getValue = function (rec, structure) {
              * Hack to prevent having 'IMAGE' and 'image' as separate values
              * inside the 'type' ring...
              * 28.01.16
+             * 
+             * REMOVED 29.02.16 - if case changed -> not filterable!
              */
-            if (id === "type")
-                val = val.toLowerCase();
+//            if (id === "type")
+//                val = val.toLowerCase();
 
             return val;
 
