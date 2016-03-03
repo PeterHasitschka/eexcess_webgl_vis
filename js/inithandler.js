@@ -131,9 +131,7 @@ IQHN.InitHandler.loadFiles = function (root_element, path, cb) {
             folder_prefix + "js/webglobjects/connection/collection_collection_line.js",
             folder_prefix + "js/webglobjects/connection/rec_rec_spline.js",
             folder_prefix + "js/recconnector.js",
-            folder_prefix + "js/scene.js",
-            
-            folder_prefix + 'js/tools/localstoragemanip.js'
+            folder_prefix + "js/scene.js"
         ],
                 //Callback after all files where loaded
                         function () {
@@ -203,10 +201,6 @@ IQHN.InitHandler.load_ = function (files, cb) {
 IQHN.InitHandler.initScene = function (scene, db_handler, cb) {
 
     scene = new IQHN.Scene(jQuery(IQHN.config.rec_dashboard.selector));
-    
-    
-    //FOR EXPORTING AND IMPORTING THE LOCAL STORAGE
-    IQHN.Scene.getCurrentScene().localstoragemanipulator = new IQHN.LocalStorageManipulator();
     
     var collections = null;
     if (!this.bookmarks_to_vis) {
