@@ -16,7 +16,7 @@ IQHN.config = {
     },
     debug: {
         active: true,
-        level: 5, // 1:Very important ... 10:Verbose story telling,
+        level: 1, // 1:Very important ... 10:Verbose story telling,
         prefix: "IQHN::"
     },
     three: {
