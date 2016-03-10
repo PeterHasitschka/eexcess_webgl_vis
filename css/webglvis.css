@@ -281,10 +281,14 @@ html, body {
 
 
 #eexcess_webglgraph_bookmarks {
-    width: 16px;
-    font-size: 0.9em;
-    padding-left: 2px;
+    width: auto;
+    padding-left: 4px;
     margin-left: 4px;
+    color: #008746;
+    font-size: 1em;
+    float: right;
+    margin-right: 18px;
+    margin-top: 3px;
 }  
 
 #webgl_bookmark_popup {
