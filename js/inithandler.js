@@ -216,6 +216,23 @@ IQHN.InitHandler.initScene = function (scene, db_handler, cb) {
         collections = bm_handler.getCollections();
     }
 
+    if (!collections.length) {
+        
+        var info = jQuery('<div/>', {
+            id: "webglvis_emptysceneinfocontainer"
+        }).append(
+                jQuery('<p/>', {
+                    text : "No queries or bookmarks available to visualize.\n\
+                        Please do a search-query or create a bookmark-collection first."
+                })
+            );
+        
+        jQuery('#eexcess_canvas').append(info);
+        return;
+    }
+
+
+
     for (var q_count = 0; q_count < collections.length; q_count++) {
         scene.addCollection(collections[q_count]);
     }
