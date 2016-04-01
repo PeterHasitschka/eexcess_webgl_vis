@@ -7,7 +7,7 @@ IQHN.config = {
         skip_empty_queries: true,
         circle_radius_ring: 2000,
         circle_radius_bow: 8000,
-        bow_empty_spaces_factor: 2,
+        coll_distance_degree : 6,
         media_folder: "../WebGlVisualization/media/",
         possible_vis_types: {
             BOW: 0x1,
