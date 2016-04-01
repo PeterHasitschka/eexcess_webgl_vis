@@ -118,10 +118,18 @@ IQHN.InteractionHandler = function (scene) {
 
 
         //MOUSE-WHEEL (ZOOM)
+        
+        //Chrome
         jQuery(canvas)[0].addEventListener("mousewheel", function (event) {
             nh.onMouseWheelMove(event, this.getIntersectedObjects_(event));
         }.bind(this));
-
+        
+        //Firefox (does not support mousewheel event)
+        jQuery(canvas)[0].addEventListener("DOMMouseScroll", function (event) {
+            nh.onMouseWheelMove(event, this.getIntersectedObjects_(event));
+        }.bind(this));
+        
+        
         /*
          * Not working in new dashboard
          jQuery(canvas).on('scroll', function (event) {
