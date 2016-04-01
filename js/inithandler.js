@@ -10,7 +10,7 @@ IQHN.InitHandler.setBookmarks = function (bms) {
 };
 
 IQHN.InitHandler.libs_loaded = false;
-
+IQHN.InitHandler.is_loaded = false;
 
 /**
  * 
@@ -21,16 +21,20 @@ IQHN.InitHandler.libs_loaded = false;
  * @returns {undefined}
  */
 IQHN.InitHandler.init = function (root_element, cb, bookmarks) {
-
+    
     if (bookmarks)
         this.bookmarks_to_vis = bookmarks;
     else
         this.bookmarks_to_vis = null;
 
     var path = "../WebGlVisualization/";
-
+    
     this.appendHtmlStuff(root_element);
-    this.loadFiles(root_element, path, cb);
+    
+    if (IQHN.Scene)
+        IQHN.InitHandler.initScene(this.scene, this.db_handler, cb);
+    else 
+        this.loadFiles(root_element, path, cb);
 
 };
 
@@ -199,9 +203,9 @@ IQHN.InitHandler.load_ = function (files, cb) {
  * @param {function} cb callback
  */
 IQHN.InitHandler.initScene = function (scene, db_handler, cb) {
-
-    scene = new IQHN.Scene(jQuery(IQHN.config.rec_dashboard.selector));
     
+    scene = new IQHN.Scene(jQuery(IQHN.config.rec_dashboard.selector));
+
     var collections = null;
     if (!this.bookmarks_to_vis) {
         db_handler = new IQHN.DbHandlerLocalStorage();
@@ -223,6 +227,7 @@ IQHN.InitHandler.initScene = function (scene, db_handler, cb) {
 
     if (cb)
         cb();
+    IQHN.InitHandler.is_loaded = true;
 };
 
 
@@ -234,4 +239,6 @@ IQHN.InitHandler.cleanup = function () {
 
     delete IQHN.Scene.getCurrentScene();
     IQHN.Scene.current_scene = null;
+
+    IQHN.InitHandler.is_loaded = false;
 };
