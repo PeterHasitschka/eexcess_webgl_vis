@@ -933,6 +933,11 @@ IQHN.Collection.prototype.getInitPos = function () {
     return this.vis_data_.init_pos;
 };
 
+IQHN.Collection.prototype.cleanup = function () {
+    
+};
+
+
 /******************
  * 
  * STATIC FUNCTIONS

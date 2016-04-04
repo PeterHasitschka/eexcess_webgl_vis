@@ -204,6 +204,9 @@ IQHN.InitHandler.load_ = function (files, cb) {
  */
 IQHN.InitHandler.initScene = function (scene, db_handler, cb) {
     
+    if (IQHN.Scene.getCurrentScene())
+        this.cleanup();
+    
     scene = new IQHN.Scene(jQuery(IQHN.config.rec_dashboard.selector));
 
     var collections = null;
@@ -253,7 +256,8 @@ IQHN.InitHandler.cleanup = function () {
     IQHN.Debugger.debug("InitHandler",
             "Cleaning up!",
             3);
-
+    
+    IQHN.Scene.getCurrentScene().cleanup();
     delete IQHN.Scene.getCurrentScene();
     IQHN.Scene.current_scene = null;
 

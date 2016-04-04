@@ -229,7 +229,23 @@ IQHN.Scene.prototype.initCollectionNetwork = function () {
 };
 
 
-
+/**
+ * Responsible for cleaning up before deleting the scene
+ */
+IQHN.Scene.prototype.cleanup = function(){
+    this.interaction_handler_.cleanup();
+    this.navigation_handler_.cleanup();
+    delete this.interaction_handler_;
+    delete this.navigation_handler_;
+   
+    this.webgl_handler_.cleanup();
+    
+    for (var i=0; i< this.getCollections().length; i++) {
+        this.getCollections()[i].cleanup();
+    }
+    
+    cancelAnimationFrame(IQHN.Scene.animate);
+};
 
 
 /******************
@@ -261,7 +277,7 @@ IQHN.Scene.getCurrentScene = function () {
 var stop_flag = false;
 
 var animation_debugger = null;
-animation_debugger = new IQHN.AnimationDebugger();
+// animation_debugger = new IQHN.AnimationDebugger();
 
 /**
  * Main entry-point for the animation

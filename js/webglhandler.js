@@ -138,3 +138,20 @@ IQHN.WebGlHandler.prototype.getCamera = function () {
 IQHN.WebGlHandler.prototype.getCanvas = function () {
     return this.canvas_;
 };
+
+
+IQHN.WebGlHandler.prototype.cleanup = function () {
+
+    this.three_.scene.traverse(function (node) {
+
+        if (node instanceof THREE.Mesh) {
+            node.scene_obj = undefined;
+            node.interaction = undefined;
+            node = undefined;
+        }
+    });
+
+    this.three_.scene = undefined;
+    this.three_.renderer = undefined;
+    this.three_.camera = undefined;
+};

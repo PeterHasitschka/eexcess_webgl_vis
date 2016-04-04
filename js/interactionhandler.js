@@ -295,3 +295,8 @@ IQHN.InteractionHandler.prototype.getIntersectedObjects_ = function (event) {
 IQHN.InteractionHandler.prototype.getEvents = function () {
     return this.events_;
 };
+
+
+IQHN.InteractionHandler.prototype.cleanup = function(){
+    this.scene_ = null;
+};

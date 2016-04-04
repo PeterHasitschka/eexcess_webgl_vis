@@ -664,3 +664,7 @@ IQHN.NavigationHandler.prototype.getPosZ = function () {
     return IQHN.Scene.getCurrentScene().getWebGlHandler().getCamera().position.z;
 };
 
+
+IQHN.NavigationHandler.prototype.cleanup = function(){
+    this.scene_ = null;
+};
