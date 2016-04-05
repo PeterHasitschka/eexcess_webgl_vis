@@ -201,7 +201,7 @@ IQHN.Scene.prototype.getVisType = function () {
 /**
  * 
  * @param {integer} collection_id
- * @returns {GLIVS.Collection || null}
+ * @returns {IQHN.Collection || null}
  */
 IQHN.Scene.prototype.getCollection = function (collection_id) {
 

@@ -1,4 +1,4 @@
-var GLIVS = IQHN || {};
+var IQHN = IQHN || {};
 
 
 IQHN.DirectCompareBar = function (collection, percent) {
