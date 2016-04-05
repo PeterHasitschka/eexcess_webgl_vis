@@ -147,9 +147,12 @@ IQHN.WebGlHandler.prototype.cleanup = function () {
         if (node instanceof THREE.Mesh) {
             node.scene_obj = undefined;
             node.interaction = undefined;
+
+            this.three_.scene.remove(node);
+            node.deallocate();
             node = undefined;
         }
-    });
+    }.bind(this));
 
     this.three_.scene = undefined;
     this.three_.renderer = undefined;

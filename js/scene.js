@@ -233,6 +233,9 @@ IQHN.Scene.prototype.initCollectionNetwork = function () {
  * Responsible for cleaning up before deleting the scene
  */
 IQHN.Scene.prototype.cleanup = function(){
+   
+    window.cancelAnimationFrame(IQHN.Scene.requ_anim_id);
+    
     this.interaction_handler_.cleanup();
     this.navigation_handler_.cleanup();
     delete this.interaction_handler_;
@@ -244,7 +247,6 @@ IQHN.Scene.prototype.cleanup = function(){
         this.getCollections()[i].cleanup();
     }
     
-    cancelAnimationFrame(IQHN.Scene.animate);
 };
 
 
@@ -289,7 +291,7 @@ IQHN.Scene.animate = function () {
         return;
 
 
-    requestAnimationFrame(IQHN.Scene.animate);
+    IQHN.Scene.requ_anim_id = window.requestAnimationFrame(IQHN.Scene.animate);
     curr_scene.render();
 
     if (animation_debugger)
