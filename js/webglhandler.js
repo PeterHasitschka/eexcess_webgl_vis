@@ -149,7 +149,6 @@ IQHN.WebGlHandler.prototype.cleanup = function () {
             node.interaction = undefined;
 
             this.three_.scene.remove(node);
-            node.deallocate();
             node = undefined;
         }
     }.bind(this));
