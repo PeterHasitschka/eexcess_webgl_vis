@@ -589,7 +589,7 @@ IQHN.NavigationHandler.prototype.onMouseWheelMove = function (e, intersected_obj
     var is_positive = null;
     if (e.deltaY === undefined)
         e.deltaY = e.detail; // FireFox (DOMMouseScroll event)
-    is_positive = e.deltaY < 0 ? true : false;
+    is_positive = e.deltaY < 0 ? false : true;
 
     for (var i = 0; i < intersected_objects.length; i++) {
         if (intersected_objects[i].object && intersected_objects[i].object.scene_obj) {

@@ -236,12 +236,12 @@ IQHN.Scene.prototype.cleanup = function(){
    
     window.cancelAnimationFrame(IQHN.Scene.requ_anim_id);
     
+    this.webgl_handler_.cleanup();
     this.interaction_handler_.cleanup();
     this.navigation_handler_.cleanup();
     delete this.interaction_handler_;
     delete this.navigation_handler_;
    
-    this.webgl_handler_.cleanup();
     
     for (var i=0; i< this.getCollections().length; i++) {
         this.getCollections()[i].cleanup();

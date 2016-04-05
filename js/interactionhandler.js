@@ -43,98 +43,93 @@ IQHN.InteractionHandler = function (scene) {
 
     var canvas = this.scene_.getWebGlHandler().getCanvas();
 
+
+
+    this.evt_keydown = function (e) {
+        this.handleKeyClick(e);
+    }.bind(this);
+
+    this.evt_canvas_mouseclick = function (e) {
+        this.events_.mc = e;
+        this.handleInteraction_(e, "mouseclick");
+    }.bind(this);
+
+
+    this.is_mouse_down_in_canvas = false;
+    this.mouse_x_prev = null;
+    this.mouse_y_prev = null;
+
+    this.evt_canvas_mousedown = function (e) {
+        this.events_.md = e;
+        this.is_mouse_down_in_canvas = true;
+        this.mouse_x_prev = e.clientX;
+        this.mouse_y_prev = e.clientY;
+    }.bind(this);
+
+    this.evt_mouseup = function (e) {
+        this.is_mouse_down_in_canvas = false;
+    }.bind(this);
+
+    this.evt_mouseleave = function (e) {
+        this.is_mouse_down_in_canvas = false;
+    }.bind(this);
+
+    this.evt_canvas_mousemove = function (e) {
+        this.handleInteraction_(e, "mouseover");
+
+        if (!this.is_mouse_down_in_canvas)
+            return;
+
+        var zoom_factor = 1 / nh.getZoomFactor();
+        var curr_mouse_x_diff = 0 - (e.clientX - this.mouse_x_prev) * zoom_factor;
+        var curr_mouse_y_diff = (e.clientY - this.mouse_y_prev) * zoom_factor;
+
+        nh.resetAnimationMovement();
+
+        var sensitivity_vals = config.mousesensitivy;
+
+        var df = nh.getDistanceFactor();
+
+        var max_df = null;
+        for (var max_df_key in sensitivity_vals) {
+            if (df <= max_df_key)
+                max_df = max_df_key;
+            else
+                break;
+        }
+
+        var sensitivity = sensitivity_vals[max_df];
+        nh.moveCameraAroundCircle(
+                curr_mouse_x_diff / sensitivity,
+                curr_mouse_y_diff / sensitivity,
+                true
+                );
+        this.mouse_x_prev = e.clientX;
+        this.mouse_y_prev = e.clientY;
+
+    }.bind(this);
+
+    this.evt_canvas_mousewheel = function (e) {
+        nh.onMouseWheelMove(e, this.getIntersectedObjects_(e));
+    }.bind(this);
+
     jQuery(document).ready(function () {
 
         //KEYDOWN
-        jQuery(window).keydown(function (e) {
-
-            this.handleKeyClick(e);
-
-        }.bind(this));
-
+        jQuery(window).on("keydown", this.evt_keydown);
 
         //MOUSE-CLICK ON SCENE  
-        jQuery(canvas).click(function (event) {
-            this.events_.mc = event;
-            this.handleInteraction_(event, "mouseclick");
-        }.bind(this));
-
+        jQuery(canvas).on("click", this.evt_canvas_mouseclick);
 
         //MOUSE-MOVE (DRAGGED)
-        var is_mouse_down_in_canvas = false;
-        var mouse_x_prev = null;
-        var mouse_y_prev = null;
-        jQuery(canvas).mousedown(function (event) {
-            this.events_.md = event;
-            is_mouse_down_in_canvas = true;
-            mouse_x_prev = event.clientX;
-            mouse_y_prev = event.clientY;
-        }.bind(this));
-
-        jQuery(window).mouseup(function (event) {
-            is_mouse_down_in_canvas = false;
-        });
-
-        jQuery(canvas).mouseleave(function (event) {
-            is_mouse_down_in_canvas = false;
-        });
-
-        jQuery(canvas).mousemove(function (event) {
-
-            this.handleInteraction_(event, "mouseover");
-
-
-            if (!is_mouse_down_in_canvas)
-                return;
-
-            var zoom_factor = 1 / nh.getZoomFactor();
-            var curr_mouse_x_diff = 0 - (event.clientX - mouse_x_prev) * zoom_factor;
-            var curr_mouse_y_diff = (event.clientY - mouse_y_prev) * zoom_factor;
-
-            nh.resetAnimationMovement();
-
-            var sensitivity_vals = config.mousesensitivy;
-
-            var df = nh.getDistanceFactor();
-
-            var max_df = null;
-            for (var max_df_key in sensitivity_vals) {
-                if (df <= max_df_key)
-                    max_df = max_df_key;
-                else
-                    break;
-            }
-
-            var sensitivity = sensitivity_vals[max_df];   
-            nh.moveCameraAroundCircle(
-                    curr_mouse_x_diff / sensitivity,
-                    curr_mouse_y_diff / sensitivity,
-                    true
-                    );
-            mouse_x_prev = event.clientX;
-            mouse_y_prev = event.clientY;
-
-        }.bind(this));
-
+        jQuery(canvas).on("mousedown", this.evt_canvas_mousedown);
+        jQuery(window).on("mouseup", this.evt_mouseup);
+        jQuery(window).on("mouseleave", this.evt_mouseleave);
+        jQuery(canvas).on("mousemove", this.evt_canvas_mousemove);
 
         //MOUSE-WHEEL (ZOOM)
+        jQuery(canvas).on("mousewheel", this.evt_canvas_mousewheel);
         
-        //Chrome
-        jQuery(canvas)[0].addEventListener("mousewheel", function (event) {
-            nh.onMouseWheelMove(event, this.getIntersectedObjects_(event));
-        }.bind(this));
-        
-        //Firefox (does not support mousewheel event)
-        jQuery(canvas)[0].addEventListener("DOMMouseScroll", function (event) {
-            nh.onMouseWheelMove(event, this.getIntersectedObjects_(event));
-        }.bind(this));
-        
-        
-        /*
-         * Not working in new dashboard
-         jQuery(canvas).on('scroll', function (event) {
-         }.bind(this));
-         */
     }.bind(this));
 };
 
@@ -297,6 +292,11 @@ IQHN.InteractionHandler.prototype.getEvents = function () {
 };
 
 
-IQHN.InteractionHandler.prototype.cleanup = function(){
+IQHN.InteractionHandler.prototype.cleanup = function () {
+   
+    var canvas = this.scene_.getWebGlHandler().getCanvas();
+    jQuery(canvas).off();
+    jQuery(window).off();
     this.scene_ = null;
+    this.raycaster_ = null;
 };

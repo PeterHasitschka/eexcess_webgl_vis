@@ -142,6 +142,7 @@ IQHN.WebGlHandler.prototype.getCanvas = function () {
 
 IQHN.WebGlHandler.prototype.cleanup = function () {
 
+/*
     this.three_.scene.traverse(function (node) {
 
         if (node instanceof THREE.Mesh) {
@@ -152,8 +153,9 @@ IQHN.WebGlHandler.prototype.cleanup = function () {
             node = undefined;
         }
     }.bind(this));
-
+*/
     this.three_.scene = undefined;
     this.three_.renderer = undefined;
     this.three_.camera = undefined;
+    this.canvas_ = undefined;
 };
