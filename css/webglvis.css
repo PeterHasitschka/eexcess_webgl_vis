@@ -297,15 +297,33 @@ html, body {
         padding-left:1px;
         font-size: 0.8em;
     }
-    
+
 }
 
 #webgl_bookmark_popup {
 
 }
 
+#webgl_bookmark_popup h1 {
+    font-size: 17px;
+    margin: 0 0 5px 0;
+    color: #008746;
+    border-bottom: 1px solid;
+}
+
+.webgl_bookmark_popup_container button {
+    margin:10px;
+}
+
+.webgl_bookmark_popup_col {
+    width: 50%;
+    float: left;
+}
+
+
 .webgl_bookmark_popup_list_element {
-    font-size:14px;
+    font-size: 12px;
+    height: 13px;
 }
 
 .webgl_bookmark_popup_list_element input {
@@ -314,6 +332,8 @@ html, body {
 
 .webgl_bookmark_popup_subtitle {
     font-size:13px;
+    color: grey;
+
 }
 
 
