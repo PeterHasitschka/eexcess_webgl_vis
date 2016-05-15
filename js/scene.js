@@ -63,7 +63,7 @@ IQHN.Scene = function (canvas) {
 /**
  * Rendering the whole scene and all its sub-objects
  */
-IQHN.Scene.prototype.preRender = function () {
+IQHN.Scene.prototype.render = function () {
 
     //this.getNavigationHandler().moveCameraAroundCircle(0.1, 0);
 
@@ -292,7 +292,7 @@ IQHN.Scene.animate = function () {
 
 
     IQHN.Scene.requ_anim_id = window.requestAnimationFrame(IQHN.Scene.animate);
-    curr_scene.preRender();
+    curr_scene.render();
 
     if (animation_debugger)
         animation_debugger.update();
