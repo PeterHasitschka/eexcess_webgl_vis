@@ -108,7 +108,7 @@ IQHN.RingRepresentation.prototype.initAndRegisterGlObj = function () {
  * Called by collection. Only performs if dirty flag is true
  * @returns {undefined}
  */
-IQHN.RingRepresentation.prototype.render = function () {
+IQHN.RingRepresentation.prototype.preRender = function () {
     if (!this.dirty_)
         return;
 
@@ -117,7 +117,7 @@ IQHN.RingRepresentation.prototype.render = function () {
             5);
 
     for (var i = 0; i < this.ring_segments_.length; i++) {
-        this.ring_segments_[i].render();
+        this.ring_segments_[i].preRender();
     }
 
     this.dirty_ = false;

@@ -61,7 +61,7 @@ IQHN.ConnectionCollectionCollection.prototype.initAndRegisterGlObj = function ()
 };
 
 
-IQHN.ConnectionCollectionCollection.prototype.render = function () {
+IQHN.ConnectionCollectionCollection.prototype.preRender = function () {
 
     if (!this.dirty_)
         return;

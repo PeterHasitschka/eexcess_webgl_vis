@@ -218,7 +218,7 @@ IQHN.RecommendationDetailNode.prototype.calculateButtonPositions_ = function () 
 /**
  * Rendering all webgl-objects if node is dirty.
  */
-IQHN.RecommendationDetailNode.prototype.render = function () {
+IQHN.RecommendationDetailNode.prototype.preRender = function () {
 
     if (!this.dirty_)
         return;
@@ -260,7 +260,7 @@ IQHN.RecommendationDetailNode.prototype.render = function () {
     }
 
     for (var i = 0; i < this.webgl_objects_.buttons.length; i++) {
-        this.webgl_objects_.buttons[i].render();
+        this.webgl_objects_.buttons[i].preRender();
     }
 
     this.dirty_ = false;

@@ -68,7 +68,7 @@ IQHN.CollectionPlane.prototype.initAndRegisterGlObj = function (mesh_parent) {
 
 
 
-IQHN.CollectionPlane.prototype.render = function () {
+IQHN.CollectionPlane.prototype.preRender = function () {
 
     if (!this.dirty_)
         return;

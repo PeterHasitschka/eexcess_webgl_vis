@@ -105,7 +105,7 @@ IQHN.WebGlHandler.prototype.createRenderer = function () {
 /**
  * Calling the THREE-JS Render function
  */
-IQHN.WebGlHandler.prototype.render = function () {
+IQHN.WebGlHandler.prototype.preRender = function () {
     this.three_.renderer.render(this.three_.scene, this.three_.camera);
     
     if (this.take_screenshot_now === true) {

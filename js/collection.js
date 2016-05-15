@@ -253,7 +253,7 @@ IQHN.Collection.prototype.initLabels = function () {
 /**
  * Render the collection and its sub-objects
  */
-IQHN.Collection.prototype.render = function () {
+IQHN.Collection.prototype.preRender = function () {
 
     if (!this.dirty_)
         return;
@@ -266,7 +266,7 @@ IQHN.Collection.prototype.render = function () {
     for (var key in this.vis_data_.gl_objects) {
         if (this.vis_data_.gl_objects.hasOwnProperty(key)) {
             if (this.vis_data_.gl_objects[key])
-                this.vis_data_.gl_objects[key].render();
+                this.vis_data_.gl_objects[key].preRender();
         }
     }
 
@@ -282,17 +282,17 @@ IQHN.Collection.prototype.render = function () {
     for (var i = 0; i < this.recommendations_.length; i++) {
         /** @type {IQHN.Recommendation} **/
         var curr_rec = this.recommendations_[i];
-        curr_rec.render();
+        curr_rec.preRender();
     }
 
     //If Ring representation -> render it.
     if (this.ring_representation_)
-        this.ring_representation_.render();
+        this.ring_representation_.preRender();
 
 
     //Render labels
     for (var i = 0; i < this.labels_.length; i++) {
-        this.labels_[i].render();
+        this.labels_[i].preRender();
     }
 
     this.dirty_ = false;

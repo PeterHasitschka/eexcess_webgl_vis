@@ -168,7 +168,7 @@ IQHN.RingSegment.prototype.getShortText_ = function (text) {
 /**
  * Rendering the ring segment
  */
-IQHN.RingSegment.prototype.render = function () {
+IQHN.RingSegment.prototype.preRender = function () {
 
     if (!this.dirty_)
         return;
@@ -202,7 +202,7 @@ IQHN.RingSegment.prototype.render = function () {
             pos.y + this.relative_pos_.y,
             null
             );
-    this.webgl_objects_.label.render();
+    this.webgl_objects_.label.preRender();
 
     //this.webgl_objects_.ring_seg.geometry.computeBoundingSphere();
     this.dirty_ = false;

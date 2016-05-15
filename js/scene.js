@@ -63,7 +63,7 @@ IQHN.Scene = function (canvas) {
 /**
  * Rendering the whole scene and all its sub-objects
  */
-IQHN.Scene.prototype.render = function () {
+IQHN.Scene.prototype.preRender = function () {
 
     //this.getNavigationHandler().moveCameraAroundCircle(0.1, 0);
 
@@ -75,9 +75,9 @@ IQHN.Scene.prototype.render = function () {
 
 
     for (var i = 0; i < this.collections_.length; i++) {
-        this.collections_[i].render();
+        this.collections_[i].preRender();
     }
-    this.webgl_handler_.render();
+    this.webgl_handler_.preRender();
 
 
     this.animation_.animate();
@@ -292,7 +292,7 @@ IQHN.Scene.animate = function () {
 
 
     IQHN.Scene.requ_anim_id = window.requestAnimationFrame(IQHN.Scene.animate);
-    curr_scene.render();
+    curr_scene.preRender();
 
     if (animation_debugger)
         animation_debugger.update();
