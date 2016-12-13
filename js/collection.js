@@ -183,7 +183,7 @@ IQHN.Collection.prototype.initLabels = function () {
             if (!text.length)
                 return;
 
-            var weight = curr_q_data.weight;
+            var weight = typeof curr_q_data.weight !== "undefined" ? curr_q_data.weight : 1;
 
             var fontsize = init_font_size * Math.pow(weight, 0.5);
             fontsize = Math.min(config.max_font_size, fontsize);
